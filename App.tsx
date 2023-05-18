@@ -1,7 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import { Box, Flex, NativeBaseProvider, Text } from 'native-base';
+import { NativeBaseProvider } from 'native-base';
 import { useFonts } from "expo-font";
 import { theme } from './src/styles/Theme';
+import { NavigationContainer } from '@react-navigation/native';
+import HomeNavigation from './src/navigation/HomeNavigation';
+
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,12 +24,9 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={theme}>
-      <Flex h={"full"} w={"full"} justifyContent={"center"} alignItems={"center"}>
-        <Box bg="primary.500" p="12" m={"16"} rounded="md">
-          <Text fontSize={"2xl"}>Open up App.tsx to start working on your app!</Text>
-        </Box>
-      </Flex>
-      <StatusBar style="auto" />
+      <NavigationContainer>
+        <HomeNavigation />
+      </NavigationContainer>
     </NativeBaseProvider>
-  );
+  )
 }

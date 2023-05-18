@@ -26,9 +26,10 @@ _additional folders will follow as the need arise_
 
 # Naming Conventions
 
-- Files and ComponentNames - (PascalCase)
-- variableType and objectInstances - (camelCase)
-- folders - (lower-case)
+- Files, ComponentNames and Types - (PascalCase)
+- variables and objectInstances - (camelCase)
+- folders - kebab_case
+- _use double quotes for JSX attributes and do not enclose string literals in curly braces_
 
 # Github
 
@@ -43,6 +44,7 @@ _additional folders will follow as the need arise_
 - do not 'git push' directly to main
 - create a branch for every module you are developing
   e.g. module-login, module-registration, module-add-product
+- before merge/pull requests, please remove unused imports
 - theming and other general configuration changes should be pushed to “theme-config-branch”
 - if your branch is done and is ready to merge to main, open a Pull Request, request lead as reviewer (or other members)
 - commit message convention: verb + noun
