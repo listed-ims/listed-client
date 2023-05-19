@@ -9,10 +9,11 @@ interface ScreenContainerProps {
 const ScreenContainer = ({ children }: ScreenContainerProps) => {
   return (
     <>
-      <StatusBar backgroundColor={"white"} barStyle={"dark-content"} /><Flex bgColor={"white"} justifyContent={"flex-end"}>
-        <Box height={"full"} paddingX={"4"}>
-          {children}
-        </Box>
+      <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
+      <Flex bgColor="white" height="full"
+        maxWidth="full"
+        paddingX="4">
+        {children}
       </Flex>
     </>
 
