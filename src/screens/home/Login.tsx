@@ -1,7 +1,8 @@
 import React from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
-import { Button, Text } from 'native-base'
+import { Text } from 'native-base'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import Button from '../../components/Button'
 
 interface LoginProps {
   navigation: NativeStackNavigationProp<any>,
