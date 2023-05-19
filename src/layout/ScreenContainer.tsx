@@ -1,4 +1,4 @@
-import { Box, Flex, StatusBar } from 'native-base'
+import { Flex, ScrollView, StatusBar } from 'native-base'
 import React, { ReactNode } from 'react'
 
 
@@ -12,8 +12,10 @@ const ScreenContainer = ({ children }: ScreenContainerProps) => {
       <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
       <Flex bgColor="white" height="full"
         maxWidth="full"
-        paddingX="4">
-        {children}
+        paddingX="4" paddingBottom="4">
+        <ScrollView>
+          {children}
+        </ScrollView>
       </Flex>
     </>
 
