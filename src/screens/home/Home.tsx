@@ -1,10 +1,13 @@
 import React from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Flex, Link, Text, VStack } from 'native-base'
+import { Link, Row, Text, VStack } from 'native-base'
 import Button from '../../components/Button'
 import TextField from '../../components/TextField'
 import FormControl from '../../components/FormControl'
+import MainButtons from '../../components/MainButtons'
+import SummaryCard from '../../components/SummaryCard'
+import TransactionActions from '../../components/TransactionButtons'
 
 
 interface HomeProps {
@@ -28,11 +31,22 @@ const Home = ({ navigation }: HomeProps) => {
         }}>
           Collaborators
         </Button>
-        <Flex flexDirection="row" >
-          <Button marginRight="2" flexGrow={1}>Hello</Button>
-          <Button marginLeft="2" flexGrow={1} variant="outline">Hi</Button>
-          <Button isDisabled marginLeft="2" flexGrow={1}>Disabled</Button>
-        </Flex>
+        <Row space={2} justifyContent="center" >
+          <Button flexGrow={1}>Hello</Button>
+          <Button flexGrow={1} isDisabled>Disabled</Button>
+          <Button flexGrow={1} variant="outline">Hi</Button>
+        </Row>
+        <SummaryCard totalItemsSold="100 pcs." totalRevenue="Php 10,000" />
+        <Row space="4" justifyContent="center">
+          <MainButtons type="inventory" />
+          <MainButtons type="products" />
+          <MainButtons type="collaborators" />
+          <MainButtons type="analytics" />
+        </Row>
+        <Row space="4">
+          <TransactionActions flexGrow={1} type="incoming">Incoming</TransactionActions>
+          <TransactionActions flexGrow={1} type="outgoing">Outgoing</TransactionActions>
+        </Row>
         <TextField isInvalid />
         <TextField />
         <TextField isDisabled />
@@ -53,7 +67,7 @@ const Home = ({ navigation }: HomeProps) => {
           <TextField placeholder="Input someting here" />
         </FormControl>
       </VStack>
-    </ScreenContainer>
+    </ScreenContainer >
   )
 }
 
