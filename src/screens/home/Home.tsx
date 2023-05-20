@@ -4,6 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Flex, Link, Text, VStack } from 'native-base'
 import Button from '../../components/Button'
 import TextField from '../../components/TextField'
+import FormControl from '../../components/FormControl'
 
 
 interface HomeProps {
@@ -30,6 +31,7 @@ const Home = ({ navigation }: HomeProps) => {
         <Flex flexDirection="row" >
           <Button marginRight="2" flexGrow={1}>Hello</Button>
           <Button marginLeft="2" flexGrow={1} variant="outline">Hi</Button>
+          <Button isDisabled marginLeft="2" flexGrow={1}>Disabled</Button>
         </Flex>
         <TextField isInvalid />
         <TextField />
@@ -41,6 +43,15 @@ const Home = ({ navigation }: HomeProps) => {
         }}>
           Hello, I'm a Link
         </Link>
+        <FormControl isRequired label="Input here">
+          <TextField placeholder="Input someting here" />
+        </FormControl>
+        <FormControl label="Input here" helperText="i'm a helper text">
+          <TextField placeholder="Input someting here" />
+        </FormControl>
+        <FormControl isInvalid label="Input here" errorMessage="error, sorry">
+          <TextField placeholder="Input someting here" />
+        </FormControl>
       </VStack>
     </ScreenContainer>
   )
