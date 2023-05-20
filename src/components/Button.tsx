@@ -6,14 +6,18 @@ interface ButtonProps extends IButtonProps {
   children: ReactNode,
 }
 
-const Button = ({ children, ...rest }: ButtonProps) => {
+const Button = ({ children, ...props }: ButtonProps) => {
 
   return (
-    <NBButton {...rest} maxWidth="full"
+    <NBButton {...props} maxWidth="full"
       borderColor="primary.700"
+      backgroundColor={`${props.variant === "outline" ? "white" : "primary.700"}`}
+      _pressed={{
+        background: `primary.600${props.variant === "outline" ? ":alpha.20" : ""}`
+      }}
       _text={{
         fontSize: "sm", fontWeight: "medium",
-        color: `${rest.variant === "outline" ? "primary.700" : "lightText"}`
+        color: `${props.variant === "outline" ? "primary.700" : "lightText"}`
       }}>
       {children}
     </NBButton >
