@@ -10,19 +10,21 @@ interface TransactionButtonsProps extends IPressableProps {
 
 const TransactionButtons = ({ children, type, ...props }: TransactionButtonsProps) => {
   return (
-    <Pressable {...props} height="24" paddingX="4"
-      display="flex" justifyContent="center"
-      background="primary.700" borderRadius="lg"
+    <Pressable {...props} height="20" paddingX="4"
+      display="flex"
+      justifyContent="center"
+      background="primary.700"
+      borderRadius="lg"
       _pressed={{
         background: "primary.600"
       }}>
-      <Row alignItems="center" justifyContent="space-between">
-        <Heading color="lightText" size="lg">
+      <Row alignItems="center" justifyContent="center" space="4">
+        <Heading color="lightText" size="sm">
           {children}
         </Heading>
         <Icon as={Ionicons}
           name={`${type === "outgoing" ? "log-out" : "log-in"}`}
-          size="10" color="white" />
+          size="8" color="white" />
       </Row>
     </Pressable>
   )
