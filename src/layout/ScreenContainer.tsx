@@ -13,9 +13,7 @@ const ScreenContainer = ({ children }: ScreenContainerProps) => {
       <Flex bgColor="white" height="full"
         maxWidth="full"
         paddingX="4" paddingBottom="4">
-        <ScrollView>
-          {children}
-        </ScrollView>
+        {children}
       </Flex>
     </>
 
