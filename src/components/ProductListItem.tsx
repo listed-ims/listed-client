@@ -11,7 +11,7 @@ interface ProductListItemProps extends IPressableProps {
 
 const ProductListItem = ({ variant, quantity, name, ...props }: ProductListItemProps) => {
   return (
-    <Pressable {...props} _pressed={{ background: "muted.200" }} >
+    <Pressable {...props} _pressed={{ background: "muted.200" }} paddingY="2" >
       <Row paddingX="6" paddingBottom="1"
         alignItems="center"
         justifyContent="space-between">
