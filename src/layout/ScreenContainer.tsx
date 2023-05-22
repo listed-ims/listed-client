@@ -1,4 +1,5 @@
-import { Flex, ScrollView, StatusBar } from 'native-base'
+import { Flex } from 'native-base'
+import { StatusBar } from 'expo-status-bar';
 import React, { ReactNode } from 'react'
 
 
@@ -9,7 +10,7 @@ interface ScreenContainerProps {
 const ScreenContainer = ({ children }: ScreenContainerProps) => {
   return (
     <>
-      <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
+      <StatusBar backgroundColor={"white"} />
       <Flex bgColor="white" height="full"
         maxWidth="full"
         paddingX="4" paddingBottom="4">

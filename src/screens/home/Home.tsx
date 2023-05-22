@@ -38,11 +38,11 @@ const Home = ({ navigation }: HomeProps) => {
             <Button flexGrow={1} variant="outline">Hi</Button>
           </Row>
           <SummaryCard totalItemsSold="100 pcs." totalRevenue="Php 10,000" />
-          <Row space="4" justifyContent="center">
-            <MainButtons type="inventory" />
-            <MainButtons type="products" />
-            <MainButtons type="collaborators" />
-            <MainButtons type="analytics" />
+          <Row space="2" justifyContent="center">
+            <MainButtons type="Inventory" />
+            <MainButtons type="Products" />
+            <MainButtons type="Collaborators" />
+            <MainButtons type="Analytics" />
           </Row>
           <Row space="4">
             <TransactionActions flexGrow={1} type="incoming">Incoming</TransactionActions>
