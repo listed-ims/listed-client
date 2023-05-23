@@ -1,9 +1,9 @@
 import React from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
 import { Column } from 'native-base'
-import ProductListItem from '../../components/ProductListItem'
 import { Product } from '../../types/Product'
 import ProductList from '../../components/ProductList'
+import SearchBar from '../../components/SearchBar'
 
 const Products: Product[] = [
   {
@@ -37,12 +37,10 @@ const ProductManagement = () => {
   return (
     <ScreenContainer>
       <Column space="2" height="full">
-        <ProductListItem quantity="100 bottles."
-          variant="100 ml"
-          name="Summit Water" />
+        <SearchBar onBarcodePress={() => console.log("hello")} onSearchPress={() => console.log("search")} />
         <ProductList data={Products} />
       </Column>
-    </ScreenContainer>
+    </ScreenContainer >
   )
 }
 
