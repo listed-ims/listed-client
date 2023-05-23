@@ -20,7 +20,7 @@ const HomeNavigation = () => {
           <Stack.Screen name="HomeTabs" component={TabNavigation}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="ProductManagement" component={ProductManagement} />
+          <Stack.Screen name="Products" component={ProductManagement} />
           <Stack.Screen name="Collaborators" component={Collaborators} />
         </>
       ) : (
