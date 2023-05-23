@@ -12,9 +12,9 @@ const ProductList = ({ data }: ProductListProps) => {
   return (
     <Column space="2" borderColor="muted.300"
       borderWidth="2"
-      padding="4"
-      borderRadius="lg"
-      maxHeight="600px">
+      paddingX="2"
+      paddingY="2"
+      borderRadius="lg">
       <FlatList data={data}
         renderItem={({ item, index }) => (
           <>
