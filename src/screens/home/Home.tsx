@@ -9,6 +9,7 @@ import MainButtons from '../../components/MainButtons'
 import SummaryCard from '../../components/SummaryCard'
 import TransactionActions from '../../components/TransactionButtons'
 import Select from '../../components/Select'
+import BarcodeField from '../../components/BarcodeField'
 
 
 interface HomeProps {
@@ -24,12 +25,12 @@ const Home = ({ navigation }: HomeProps) => {
         <VStack space="5" overflowX="auto">
           <Button width="1/2"
             onPress={() => {
-              navigation.navigate("Products");
+              navigation.navigate("ProductsRoot");
             }}>
             Product Management
           </Button>
           <Button onPress={() => {
-            navigation.navigate("Collaborators");
+            navigation.navigate("CollaboratorsRoot");
           }}>
             Collaborators
           </Button>
@@ -60,19 +61,23 @@ const Home = ({ navigation }: HomeProps) => {
             Hello, I'm a Link
           </Link>
           <FormControl isRequired label="Input here">
-            <TextField placeholder="Input someting here" />
+            <TextField placeholder="Input someting here" startDataLabel="Php" />
           </FormControl>
           <FormControl label="Size Variant">
             <TextField placeholder="Input someting here"
               endDataLabel="kg" />
           </FormControl>
+          <FormControl label="Purchase Price">
+            <TextField
+              placeholder="Input price"
+              startDataLabel="Php"
+              variant="underlined" />
+          </FormControl>
           <FormControl isInvalid label="Input here" errorMessage="error, sorry">
             <TextField placeholder="Input someting here" />
           </FormControl>
-          <FormControl label="Purchase Price">
-            <TextField
-              startDataLabel="Php"
-              variant="underlined" />
+          <FormControl label="Barcode">
+            <BarcodeField fieldType="input" placeholder="Input barcode" />
           </FormControl>
           <Select />
         </VStack>

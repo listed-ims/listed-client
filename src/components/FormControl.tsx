@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Icon, Box, IFormControlProps, FormControl as NBFormControl } from 'native-base'
+import { Icon, IFormControlProps, FormControl as NBFormControl } from 'native-base'
 import { Ionicons } from '@expo/vector-icons'
 
 

@@ -20,10 +20,10 @@ const HomeNavigation = () => {
           <Stack.Screen name="HomeTabs" component={TabNavigation}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Products" component={ProductsNavigation} 
+          <Stack.Screen name="ProductsRoot" component={ProductsNavigation}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Collaborators" component={Collaborators} />
+          <Stack.Screen name="CollaboratorsRoot" component={Collaborators} />
         </>
       ) : (
         <>
