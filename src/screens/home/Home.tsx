@@ -1,13 +1,14 @@
 import React from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Box, Link, Row, ScrollView, Text, VStack, useTheme } from 'native-base'
+import { Link, Row, ScrollView, Text, VStack, useTheme } from 'native-base'
 import Button from '../../components/Button'
 import TextField from '../../components/TextField'
 import FormControl from '../../components/FormControl'
 import MainButtons from '../../components/MainButtons'
 import SummaryCard from '../../components/SummaryCard'
 import TransactionActions from '../../components/TransactionButtons'
+import Select from '../../components/Select'
 
 
 interface HomeProps {
@@ -62,11 +63,18 @@ const Home = ({ navigation }: HomeProps) => {
             <TextField placeholder="Input someting here" />
           </FormControl>
           <FormControl label="Size Variant">
-            <TextField placeholder="Input someting here" dataLabel="kg" />
+            <TextField placeholder="Input someting here"
+              endDataLabel="kg" />
           </FormControl>
           <FormControl isInvalid label="Input here" errorMessage="error, sorry">
             <TextField placeholder="Input someting here" />
           </FormControl>
+          <FormControl label="Purchase Price">
+            <TextField
+              startDataLabel="Php"
+              variant="underlined" />
+          </FormControl>
+          <Select />
         </VStack>
       </ScrollView>
     </ScreenContainer >
