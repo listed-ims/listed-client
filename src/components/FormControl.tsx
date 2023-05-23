@@ -16,9 +16,7 @@ const FormControl = ({ label, helperText, errorMessage, children, ...props }: Fo
       <NBFormControl.Label _text={{ color: "darkText", fontWeight: "medium" }}>
         {label}
       </NBFormControl.Label>
-      <Box>
-        {children}
-      </Box>
+      {children}
       {
         props.isInvalid ?
           <NBFormControl.ErrorMessage leftIcon={
