@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react'
 import { stackHeaderStyles } from '../styles/HeaderBar';
-import ProductManagement from '../screens/product_management/ProductManagement';
 import Collaborators from '../screens/collaborators/Collaborators';
 import TabNavigation from './TabNavigation';
 import Login from '../screens/home/Login';
 import Registration from '../screens/home/Registration';
+import ProductsNavigation from './ProductsNavigation';
 
 
 const Stack = createNativeStackNavigator();
@@ -20,7 +20,9 @@ const HomeNavigation = () => {
           <Stack.Screen name="HomeTabs" component={TabNavigation}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Products" component={ProductManagement} />
+          <Stack.Screen name="Products" component={ProductsNavigation} 
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="Collaborators" component={Collaborators} />
         </>
       ) : (
