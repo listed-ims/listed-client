@@ -1,4 +1,4 @@
-import { IInputProps, Icon, IconButton, Input, Pressable, Row } from 'native-base'
+import { IInputProps, Icon, IconButton, Input, Pressable, Row, useTheme } from 'native-base'
 import React from 'react'
 import { GestureResponderEvent, Keyboard } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
@@ -10,9 +10,12 @@ interface SearchBarProps extends IInputProps {
 }
 
 const SearchBar = ({ onSearchPress, onBarcodePress, ...props }: SearchBarProps) => {
+  const { colors } = useTheme();
+  
   return (
     <Row space="2">
       <Input {...props}
+        selectionColor= {colors.coolGray[400]}
         variant="outline"
         placeholder="Search"
         size="lg"
