@@ -71,6 +71,11 @@ interface ProductManagementProps {
 
 
 const ProductManagement = ({ navigation }: ProductManagementProps) => {
+
+  const handleItemPress = () => {
+    navigation.navigate("ProductDetails");
+  }
+
   return (
     <ScreenContainer>
       <Column space="4" height="full" paddingTop="4">
@@ -78,7 +83,7 @@ const ProductManagement = ({ navigation }: ProductManagementProps) => {
         <Column flex={1} space={2}>
           <Text fontSize="sm" fontWeight="bold" color="muted.500">PRODUCTS</Text>
           <Box flex={1}>
-            <ProductList data={Products}/>
+            <ProductList onItemPress={handleItemPress} data={Products} />
           </Box>
         </Column>
         <Box width="full">
