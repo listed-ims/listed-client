@@ -1,18 +1,32 @@
-import { IInputProps, Input, useTheme } from 'native-base'
+import { IInputProps, Input, useTheme, Text } from 'native-base'
 import React from 'react'
 
 
-const TextField = ({ ...props }: IInputProps) => {
+interface TextFieldProps extends IInputProps {
+  dataLabel?: string,
+}
+
+const TextField = ({ dataLabel, ...props }: TextFieldProps) => {
   const { colors } = useTheme();
 
   return (
     <Input {...props}
       variant="filled"
       size="lg"
-      _input={{ background: "offWhite.200", selectionColor: colors.coolGray[400] }}
+      backgroundColor="offWhite.200"
+      _input={{ selectionColor: colors.coolGray[400] }}
       _focus={{ borderColor: "muted.300" }}
       _invalid={{ background: "error.50", _focus: { backgroundColor: "error.50" } }}
       _disabled={{ backgroundColor: "muted.300" }}
+      InputRightElement={
+        <Text
+          fontSize="sm"
+          fontWeight="medium"
+          color="muted.500"
+          marginX="8">
+          {dataLabel}
+        </Text>
+      }
     />
   )
 }

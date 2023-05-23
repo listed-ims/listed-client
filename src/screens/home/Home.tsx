@@ -1,7 +1,7 @@
 import React from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Link, Row, ScrollView, Text, VStack } from 'native-base'
+import { Box, Link, Row, ScrollView, Text, VStack, useTheme } from 'native-base'
 import Button from '../../components/Button'
 import TextField from '../../components/TextField'
 import FormControl from '../../components/FormControl'
@@ -15,7 +15,7 @@ interface HomeProps {
 }
 
 const Home = ({ navigation }: HomeProps) => {
-
+  const theme = useTheme();
   return (
     <ScreenContainer>
       <ScrollView>
@@ -61,8 +61,8 @@ const Home = ({ navigation }: HomeProps) => {
           <FormControl isRequired label="Input here">
             <TextField placeholder="Input someting here" />
           </FormControl>
-          <FormControl label="Input here" helperText="i'm a helper text">
-            <TextField placeholder="Input someting here" />
+          <FormControl label="Size Variant">
+            <TextField placeholder="Input someting here" dataLabel="kg" />
           </FormControl>
           <FormControl isInvalid label="Input here" errorMessage="error, sorry">
             <TextField placeholder="Input someting here" />
