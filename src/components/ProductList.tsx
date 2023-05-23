@@ -6,9 +6,15 @@ import { Product } from '../types/Product'
 
 interface ProductListProps {
   data: ArrayLike<Product>,
+  onItemPress: () => void;
 }
 
-const ProductList = ({ data }: ProductListProps) => {
+const ProductList = ({ data, onItemPress }: ProductListProps) => {
+
+  const handleItemPress = () => {
+    onItemPress();
+  }
+
   return (
     <Column space="2" borderColor="muted.300"
       borderWidth="2"
@@ -21,7 +27,11 @@ const ProductList = ({ data }: ProductListProps) => {
             <ProductListItem
               name={item.name}
               variant={item.variant}
-              quantity={item.quantity} />
+              quantity={item.quantity}
+              onPress={() => {
+                handleItemPress();
+              }}
+            />
             {
               index !== data.length - 1 ?
                 <Divider thickness="1.5" /> :

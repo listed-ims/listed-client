@@ -24,12 +24,12 @@ const Home = ({ navigation }: HomeProps) => {
         <VStack space="5" overflowX="auto">
           <Button width="1/2"
             onPress={() => {
-              navigation.navigate("Products");
+              navigation.navigate("ProductsRoot");
             }}>
             Product Management
           </Button>
           <Button onPress={() => {
-            navigation.navigate("Collaborators");
+            navigation.navigate("CollaboratorsRoot");
           }}>
             Collaborators
           </Button>
