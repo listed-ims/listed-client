@@ -4,11 +4,10 @@ import NavigationIcon from '../components/icons/NavigationIcon';
 import { tabHeaderStyles } from '../styles/HeaderBar';
 import Home from '../screens/home/Home';
 import { Text, useTheme } from 'native-base';
-import Transactions from '../screens/transactions/Transactions';
 import TransactionsNavigation from './TransactionsNavigation';
 
-const Tab = createBottomTabNavigator();
 
+const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
 
