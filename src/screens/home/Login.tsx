@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
-import { Box, Center, Column, Flex, Icon, Link, Pressable, Text } from 'native-base'
+import { Box, Center, Column, Flex, Icon, Link, Pressable, Text, Image } from 'native-base'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import Button from '../../components/Button'
 import TextField from '../../components/TextField'
@@ -20,12 +20,16 @@ const Login = ({ navigation }: LoginProps) => {
 
   return (
     <ScreenContainer>
-    <Flex flexDirection="column" height="full" paddingTop="4">
-      
-        <Text bold alignSelf="center" fontSize="md" >Get your inventory listed.</Text>
+    <Flex flexDirection="column" height="full">
+      <Center padding="12" >
+      <Image size="32"
+        alt="listed logo"
+        source={require("../../assets/images/logo/listed.png")} />
+      <Text bold fontSize="xs" >Get your inventory listed.</Text>
+      </Center>
       
       <Box flexGrow={1}>
-        <Column space="5">
+        <Column space="4">
           <FormControl label="Username">
             <TextField value={username} onChangeText={setUsername} placeholder="Enter username..."/>
           </FormControl>
@@ -33,7 +37,7 @@ const Login = ({ navigation }: LoginProps) => {
             <TextField value={password} onChangeText={setPassword} placeholder="Enter password..." 
               type={show ? "text" : "password"}
               rightElement={<Pressable onPress={() => setShow(!show)}>
-              <Icon as={<Ionicons name={show ? "eye-outline" : "eye-off-outline"} />} size={5} mr="2" color="muted.400" />
+              <Icon as={<Ionicons name={show ? "eye" : "eye-off"} />} size={5} mr="2" color="muted.500" />
             </Pressable>}
             />
           </FormControl>
@@ -48,11 +52,11 @@ const Login = ({ navigation }: LoginProps) => {
       </Box>
 
       <Box width="full">
-        <Button onPress={() => { navigation.navigate("Registration") }}> Login </Button>
+        <Button onPress={() => { navigation.navigate("Home") }}> Login </Button>
         <Center marginTop="5">
           <Text>Don't have an account?
             <Link onPress={() =>  {
-              navigation.navigate("Home")
+              navigation.navigate("Registration")
             }}
                 _text={{
                 fontSize: "sm",
