@@ -12,8 +12,8 @@ const ProductsNavigation = () => {
   return (
     <Stack.Navigator screenOptions={stackHeaderStyles}>
       <Stack.Screen name="Products" component={ProductManagement} />
-      <Stack.Screen name="AddProduct" component={AddProduct} options={{ title: "Add Product" }} />
-      <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ title: "Product Details" }} />
+      <Stack.Screen name="Add Product" component={AddProduct} />
+      <Stack.Screen name="Product Details" component={ProductDetails} />
     </Stack.Navigator>
   )
 }
