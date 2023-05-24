@@ -22,12 +22,11 @@ const Login = ({ navigation }: LoginProps) => {
     <ScreenContainer>
     <Flex flexDirection="column" height="full">
       <Center padding="12" >
-      <Image size="32"
-        alt="listed logo"
-        source={require("../../assets/images/logo/listed.png")} />
-      <Text bold fontSize="xs" >Get your inventory listed.</Text>
+        <Image size="32"
+          alt="listed logo"
+          source={require("../../assets/images/logo/listed.png")} />
+        <Text bold fontSize="xs" >Get your inventory listed.</Text>
       </Center>
-      
       <Box flexGrow={1}>
         <Column space="4">
           <FormControl label="Username">
@@ -41,7 +40,6 @@ const Login = ({ navigation }: LoginProps) => {
             </Pressable>}
             />
           </FormControl>
-
           <Link isUnderlined={false} alignSelf="center" _text={{
               fontSize: "sm",
               color: "primary.700",
@@ -50,11 +48,10 @@ const Login = ({ navigation }: LoginProps) => {
           </Link>
         </Column>
       </Box>
-
       <Box width="full">
         <Button onPress={() => { navigation.navigate("Home") }}> Login </Button>
-        <Center padding="4">
-          <Text>Don't have an account?
+        <Center>
+          <Text marginTop="4">Don't have an account?
             <Link onPress={() =>  {
               navigation.navigate("Registration")
             }}
