@@ -1,12 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
-import { Text } from 'native-base'
+import { Product } from '../../types/Product'
+import ProductList from '../../components/ProductList'
+import ProductServices from '../../services/ProductServices'
 
 
 const Collaborators = () => {
+  const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJveSIsImV4cCI6MTY4NTAwNzgzMiwidXNlciI6NywiaWF0IjoxNjg0OTIxNDMyfQ.2i9dknDYPfOwPnsPOVQnKepJPmUfOrBuRWAPQFtSZFWJZ8tn9zk7_QD5skkMXd4FUPiphpg5M8qB_lNk14YaVA";
+
+  const [products, setProducts] = useState(Array<Product>)
+  useEffect(() => {
+    ProductServices.getProducts(token).then((response) => {
+      setProducts(response.data);
+    })
+      .catch((error: any) => (console.log(error)))
+  }, [])
+
+
   return (
     <ScreenContainer>
-      <Text fontSize="xs">Hello</Text>
+      <ProductList data={products} onItemPress={() => { }} />
     </ScreenContainer>
   )
 }
