@@ -5,7 +5,7 @@ import React from 'react'
 
 interface ProductListItemProps extends IPressableProps {
   name: string,
-  variant: string,
+  variant?: string,
   quantity: number,
   unit: string,
 }

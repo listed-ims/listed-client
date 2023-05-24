@@ -1,8 +1,9 @@
 export type Product = {
   id: number,
   name: string;
-  variant: string;
+  barcode?: string;
+  variant?: string;
   salePrice: number;
-  threshold: number;
+  threshold?: number;
   unit: string;
 };
