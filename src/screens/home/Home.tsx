@@ -10,6 +10,7 @@ import SummaryCard from '../../components/SummaryCard'
 import TransactionActions from '../../components/TransactionButtons'
 import Select from '../../components/Select'
 import BarcodeField from '../../components/BarcodeField'
+import { Picker } from '@react-native-picker/picker'
 
 
 interface HomeProps {
@@ -69,6 +70,8 @@ const Home = ({ navigation }: HomeProps) => {
           </FormControl>
           <FormControl label="Purchase Price">
             <TextField
+              value="100.00"
+              isReadOnly={true}
               placeholder="Input price"
               startDataLabel="Php"
               variant="underlined" />
@@ -76,10 +79,15 @@ const Home = ({ navigation }: HomeProps) => {
           <FormControl isInvalid label="Input here" errorMessage="error, sorry">
             <TextField placeholder="Input someting here" />
           </FormControl>
+          <FormControl label="Product Unit">
+            <Select >
+              <Picker.Item label="Kilogram" value="kg" />
+              <Picker.Item label="Liters" value="L" />
+            </Select>
+          </FormControl>
           <FormControl label="Barcode">
             <BarcodeField fieldType="input" placeholder="Input barcode" />
           </FormControl>
-          <Select />
         </VStack>
       </ScrollView>
     </ScreenContainer >

@@ -15,3 +15,9 @@ export const theme = extendTheme({
     offWhite: offWhite,
   },
 });
+
+type theme = typeof theme;
+
+declare module "native-base" {
+  interface ICustomTheme extends theme {}
+}

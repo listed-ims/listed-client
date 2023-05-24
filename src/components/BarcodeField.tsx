@@ -1,6 +1,6 @@
 import { IInputProps, Icon, IconButton, Input, Pressable, Row, useTheme } from 'native-base'
 import React from 'react'
-import { GestureResponderEvent, Keyboard } from 'react-native'
+import { GestureResponderEvent, Keyboard, ReturnKeyTypeOptions } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 
@@ -16,11 +16,13 @@ const BarcodeField = ({ fieldType, onSearchPress, onBarcodePress, ...props }: Ba
   let variant = "outline";
   let backgroundColor = "white";
   let focus: any = { backgroundColor: "muted.50" }
+  let returnKeyType: ReturnKeyTypeOptions | undefined = "search";
 
   if (fieldType === "input") {
     variant = "filled";
     backgroundColor = "offWhite.200";
     focus = { borderColor: "muted.300" };
+    returnKeyType = undefined;
   }
 
   return (
@@ -30,7 +32,7 @@ const BarcodeField = ({ fieldType, onSearchPress, onBarcodePress, ...props }: Ba
         variant={variant}
         size="lg"
         flexGrow="1"
-        returnKeyType="search"
+        returnKeyType={returnKeyType}
         backgroundColor={backgroundColor}
         _focus={focus}
         onBlur={() => Keyboard.dismiss()}
