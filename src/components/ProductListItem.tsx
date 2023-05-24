@@ -6,10 +6,10 @@ import React from 'react'
 interface ProductListItemProps extends IPressableProps {
   name: string,
   variant: string,
-  quantity: string,
+  // quantity: string,
 }
 
-const ProductListItem = ({ variant, quantity, name, ...props }: ProductListItemProps) => {
+const ProductListItem = ({ variant, name, ...props }: ProductListItemProps) => {
   return (
     <Pressable {...props} _pressed={{ background: "muted.200" }} paddingY="1" >
       <Row paddingX="1" paddingBottom="1"
@@ -18,7 +18,7 @@ const ProductListItem = ({ variant, quantity, name, ...props }: ProductListItemP
         <Column>
           <Text fontSize="lg" fontWeight="semibold" color="darkText">{name}</Text>
           <Text fontSize="sm" fontWeight="semibold" color="muted.500">{variant}</Text>
-          <Text fontSize="sm" fontWeight="semibold" color="muted.500">{quantity}</Text>
+          {/* <Text fontSize="sm" fontWeight="semibold" color="muted.500">{quantity}</Text> */}
         </Column>
         <Icon color="muted.500" size="lg"
           as={Ionicons}
