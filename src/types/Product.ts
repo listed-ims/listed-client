@@ -1,5 +1,8 @@
-export type Product = {
+export interface Product {
+  barcode: string;
   name: string;
   variant: string;
-  quantity: string;
-};
+  salePrice: string;
+  unit: string;
+  threshold?: number;
+}
