@@ -31,7 +31,7 @@ const MainButtons = ({ type, ...props }: MainButtonsProps) => {
             source={iconSource[type]} />
         </Center>
       </Pressable>
-      <Text fontSize="xs" fontWeight="bold" alignSelf="center">{type}</Text>
+      <Text fontSize="2xs" fontWeight="bold" alignSelf="center">{type}</Text>
     </Flex>
   )
 }
