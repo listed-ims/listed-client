@@ -50,7 +50,7 @@ const Home = ({ navigation }: HomeProps) => {
                 </Row>
             </Column>
           </Box>
-          <Row space="4">
+          <Row paddingTop="2" space="4">
             <TransactionActions flexGrow={1} type="incoming">Incoming</TransactionActions>
             <TransactionActions flexGrow={1} type="outgoing">Outgoing</TransactionActions>
           </Row>
