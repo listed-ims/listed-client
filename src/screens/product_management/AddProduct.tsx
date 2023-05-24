@@ -33,7 +33,7 @@ const AddProduct = () => {
               <FormControl label="Size Variant" isRequired>
                 <TextField placeholder="Enter size..." />
               </FormControl>
-              <FormControl label="Product Unit">
+              <FormControl label="Product Unit" isRequired>
                 <Select >
                   <Picker.Item label="Pieces" value="pcs" />
                   <Picker.Item label="Kilogram" value="kg" />
@@ -46,7 +46,7 @@ const AddProduct = () => {
                   startDataLabel="Php"
                   placeholder="Enter sale price..." />
               </FormControl>
-              <FormControl label="Low Warning Point" isRequired>
+              <FormControl label="Low Warning Point">
                 <TextField 
                   keyboardType="numeric"
                   placeholder="Enter low warning point..." />
