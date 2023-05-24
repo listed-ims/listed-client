@@ -1,16 +1,10 @@
 import React from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Box, Column, Heading, Link, Row, ScrollView, Text, VStack, useTheme } from 'native-base'
-import Button from '../../components/Button'
-import TextField from '../../components/TextField'
-import FormControl from '../../components/FormControl'
+import { Box, Column, Heading, Row, ScrollView, Text, VStack, useTheme } from 'native-base'
 import MainButtons from '../../components/MainButtons'
 import SummaryCard from '../../components/SummaryCard'
 import TransactionActions from '../../components/TransactionButtons'
-import Select from '../../components/Select'
-import BarcodeField from '../../components/BarcodeField'
-import { Picker } from '@react-native-picker/picker'
 
 
 interface HomeProps {
