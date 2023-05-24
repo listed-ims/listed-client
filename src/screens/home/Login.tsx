@@ -59,6 +59,8 @@ const Login = ({ navigation }: LoginProps) => {
                 fontSize: "sm",
                 color: "primary.700",
                 fontWeight: "medium"
+            }}mt={-0.5} _web={{
+              mb: -2
             }}> Sign Up.
             </Link>
           </Text>
