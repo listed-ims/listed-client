@@ -1,5 +1,5 @@
 import ScreenContainer from "../../layout/ScreenContainer";
-import { Box, Button, Column, ScrollView } from "native-base";
+import { Box, Column, ScrollView } from "native-base";
 import FormControl from "../../components/FormControl";
 import TextField from "../../components/TextField";
 import { Keyboard } from "react-native";
@@ -8,6 +8,7 @@ import Select from "../../components/Select";
 import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Button from "../../components/Button";
 
 interface AddProductProps {
   navigation: NativeStackNavigationProp<any>;
