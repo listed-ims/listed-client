@@ -16,8 +16,8 @@ const ProductList = ({ data, onItemPress }: ProductListProps) => {
   }
 
   return (
-    <Column space="2" borderColor="muted.300"
-      borderWidth="2"
+    <Column space="2" borderColor="muted.200"
+      borderWidth="1"
       paddingX="2"
       paddingY="2"
       borderRadius="lg">
@@ -27,14 +27,15 @@ const ProductList = ({ data, onItemPress }: ProductListProps) => {
             <ProductListItem
               name={item.name}
               variant={item.variant}
-              quantity={item.quantity}
+              quantity={0}
+              unit={item.unit}
               onPress={() => {
                 handleItemPress();
               }}
             />
             {
               index !== data.length - 1 ?
-                <Divider thickness="1.5" /> :
+                <Divider thickness="1" /> :
                 <></>
             }
           </>
