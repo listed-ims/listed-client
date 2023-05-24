@@ -53,7 +53,7 @@ const Login = ({ navigation }: LoginProps) => {
 
       <Box width="full">
         <Button onPress={() => { navigation.navigate("Home") }}> Login </Button>
-        <Center marginTop="5">
+        <Center padding="4">
           <Text>Don't have an account?
             <Link onPress={() =>  {
               navigation.navigate("Registration")
