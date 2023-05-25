@@ -27,7 +27,7 @@ const ProductList = ({ data, onItemPress }: ProductListProps) => {
             <ProductListItem
               name={item.name}
               variant={item.variant}
-              quantity={0}
+              quantity="0"
               unit={item.unit}
               onPress={() => {
                 handleItemPress();

@@ -15,8 +15,8 @@ const Products: Product[] = [
     name: "Gatorade Blue",
     barcode: "123456789",
     variant: "500 ml",
-    salePrice: 70.0,
-    threshold: 10,
+    salePrice: "70.0",
+    threshold: "10",
     unit: "pcs",
   },
   {
@@ -24,8 +24,8 @@ const Products: Product[] = [
     name: "Gatorade Red",
     barcode: "987654321",
     variant: "500 ml",
-    salePrice: 70.0,
-    threshold: 10,
+    salePrice: "70.0",
+    threshold: "10",
     unit: "pcs",
   },
 ];
