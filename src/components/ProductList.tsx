@@ -6,13 +6,13 @@ import { Product } from '../types/Product'
 
 interface ProductListProps {
   data: ArrayLike<Product>,
-  onItemPress: () => void;
+  onItemPress: (item: Product) => void;
 }
 
 const ProductList = ({ data, onItemPress }: ProductListProps) => {
 
-  const handleItemPress = () => {
-    onItemPress();
+  const handleItemPress = (item: Product) => {
+    onItemPress(item);
   }
 
   return (
@@ -30,7 +30,7 @@ const ProductList = ({ data, onItemPress }: ProductListProps) => {
               quantity={0}
               unit={item.unit}
               onPress={() => {
-                handleItemPress();
+                handleItemPress(item);
               }}
             />
             {
