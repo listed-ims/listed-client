@@ -67,17 +67,14 @@ const Login = ({ navigation }: LoginProps) => {
         <Box width="full">
           <Button onPress={() => { handleLogin() }}> Login </Button>
           <Center>
-            <Text marginTop="4">Don't have an account?
-              <Link onPress={() => {
-                navigation.navigate("Registration")
-              }}
-                _text={{
-                  fontSize: "sm",
-                  color: "primary.700",
-                  fontWeight: "medium"
-                }}> Sign Up.
-              </Link>
-            </Text>
+            <Row justifyContent="center" alignItems="center" marginTop="4">
+              <Text>Don't have an account? </Text>
+              <Link onPress={() => { navigation.navigate("Registration") }} _text={{
+                fontSize: "sm",
+                color: "primary.700",
+                fontWeight: "medium" 
+              }}>Sign Up. </Link> 
+            </Row>
           </Center>
         </Box>
     </Flex>
