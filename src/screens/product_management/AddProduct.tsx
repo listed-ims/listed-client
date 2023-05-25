@@ -9,6 +9,8 @@ import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Button from "../../components/Button";
+import { getToken } from "../../services/TokenStorage";
+import { addProductService } from "../../services/ProductServices";
 
 interface AddProductProps {
   navigation: NativeStackNavigationProp<any>;
@@ -70,9 +72,27 @@ const AddProduct = ({ navigation }: AddProductProps) => {
 
   const handleSave = () => {
     if (validate()) {
-      // add product
-      console.log("Submitted");
-      navigation.navigate("Products");
+      const fetchData = async () => {
+        const token = await getToken();
+        if(token) {
+          addProductService({
+            id: -1,
+            name: formData.name,
+            barcode: formData.barcode,
+            variant: formData.variant,
+            salePrice: formData.salePrice,
+            threshold: formData.threshold,
+            unit: formData.unit,
+          }, token).then(() => {
+            console.log("Submitted");
+            navigation.navigate("Products");
+          }).catch((error) => {
+            console.error(error);
+          })
+        }
+      }
+      
+      fetchData();
     }
   };
 
