@@ -11,6 +11,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Button from "../../components/Button";
 import { getToken } from "../../services/TokenStorage";
 import { addProductService } from "../../services/ProductServices";
+import { validateBarcodeService } from "../../services/ProductServices";
 
 interface AddProductProps {
   navigation: NativeStackNavigationProp<any>;
@@ -39,6 +40,8 @@ const AddProduct = ({ navigation }: AddProductProps) => {
     if (formData.name === "") {
       handleErrors("Please enter product name.", "name");
       return false;
+    } else if (errors.barcode !== "") {
+      return false;
     } else if (formData.unit === "") {
       handleErrors("Please select product unit.", "unit");
       return false;
@@ -62,6 +65,27 @@ const AddProduct = ({ navigation }: AddProductProps) => {
     }
   };
 
+  const handleBarcodeValidation = (barcode: string) => {
+    const fetchData = async () => {
+      const token = await getToken();
+      if (token) {
+        validateBarcodeService(token, barcode)
+          .then((response) => {
+            if (response.data) {
+              handleErrors("", "barcode");
+            } else {
+              handleErrors("Barcode cannot be duplicated", "barcode");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    };
+
+    fetchData();
+  };
+
   const handleErrors = (error: string, data: string) => {
     setErrors({ ...errors, [data]: error });
   };
@@ -74,24 +98,29 @@ const AddProduct = ({ navigation }: AddProductProps) => {
     if (validate()) {
       const fetchData = async () => {
         const token = await getToken();
-        if(token) {
-          addProductService({
-            id: -1,
-            name: formData.name,
-            barcode: formData.barcode,
-            variant: formData.variant,
-            salePrice: formData.salePrice,
-            threshold: formData.threshold,
-            unit: formData.unit,
-          }, token).then(() => {
-            console.log("Submitted");
-            navigation.navigate("Products");
-          }).catch((error) => {
-            console.error(error);
-          })
+        if (token) {
+          addProductService(
+            {
+              id: -1,
+              name: formData.name,
+              barcode: formData.barcode,
+              variant: formData.variant,
+              salePrice: Number(formData.salePrice),
+              threshold: Number(formData.threshold),
+              unit: formData.unit,
+            },
+            token
+          )
+            .then(() => {
+              console.log("Submitted");
+              navigation.navigate("Products");
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         }
-      }
-      
+      };
+
       fetchData();
     }
   };
@@ -116,7 +145,7 @@ const AddProduct = ({ navigation }: AddProductProps) => {
             >
               <TextField
                 placeholder="Enter product name..."
-                onFocus={() => handleErrors("", "name")}
+                onEndEditing={() => handleErrors("", "name")}
                 onChangeText={(value) => handleOnchange(value, "name")}
               />
             </FormControl>
@@ -128,7 +157,7 @@ const AddProduct = ({ navigation }: AddProductProps) => {
               <BarcodeField
                 fieldType="input"
                 placeholder="Scan barcode"
-                onFocus={() => handleErrors("", "barcode")}
+                onEndEditing={() => handleBarcodeValidation(formData.barcode)}
                 onChangeText={(value) => handleOnchange(value, "barcode")}
               />
             </FormControl>
@@ -139,7 +168,7 @@ const AddProduct = ({ navigation }: AddProductProps) => {
             >
               <TextField
                 placeholder="Enter size..."
-                onFocus={() => handleErrors("", "variant")}
+                onEndEditing={() => handleErrors("", "variant")}
                 onChangeText={(value) => handleOnchange(value, "variant")}
               />
             </FormControl>
@@ -170,7 +199,7 @@ const AddProduct = ({ navigation }: AddProductProps) => {
                 keyboardType="numeric"
                 startDataLabel="Php"
                 placeholder="Enter sale price..."
-                onFocus={() => handleErrors("", "salePrice")}
+                onEndEditing={() => handleErrors("", "salePrice")}
                 onChangeText={(value) => handleOnchange(value, "salePrice")}
               />
             </FormControl>
@@ -182,7 +211,7 @@ const AddProduct = ({ navigation }: AddProductProps) => {
               <TextField
                 keyboardType="numeric"
                 placeholder="Enter low warning point..."
-                onFocus={() => handleErrors("", "threshold")}
+                onEndEditing={() => handleErrors("", "threshold")}
                 onChangeText={(value) => handleOnchange(value, "threshold")}
               />
             </FormControl>
