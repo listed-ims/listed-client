@@ -27,7 +27,8 @@ const getProductsService = (
   pageNumber?: number,
   pageSize?: number,
   barcode?: string,
-  keyword?: string
+  keyword?: string,
+  sort?: string,
 ) => {
   return axios.get(`${productsUrl}`, {
     params: {
@@ -35,6 +36,7 @@ const getProductsService = (
       pageSize: pageSize,
       barocde: barcode,
       keyword: keyword,
+      sort: sort,
     },
     headers: {
       Authorization: token,
