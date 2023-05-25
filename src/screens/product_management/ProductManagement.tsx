@@ -5,9 +5,9 @@ import { Product } from "../../types/Product";
 import ProductList from "../../components/ProductList";
 import BarcodeField from "../../components/BarcodeField";
 import Button from "../../components/Button";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getToken } from "../../services/TokenStorage";
 import { getProductsService } from "../../services/ProductServices";
+import { ProductManagementNavigationProp } from "../../types/navigation/NavigationScreenProps";
 
 const Products: Product[] = [
   {
@@ -30,16 +30,16 @@ const Products: Product[] = [
   },
 ];
 
-interface ProductManagementProps {
-  navigation: NativeStackNavigationProp<any>;
+type ProductManagementProps = {
+  navigation: ProductManagementNavigationProp;
 }
 
 const ProductManagement = ({ navigation }: ProductManagementProps) => {
-  const handleItemPress = () => {
-    navigation.navigate("Product Details");
+  const handleItemPress = (item: Product) => {
+    navigation.navigate("ProductDetails", item);
   };
 
-  const [products, setProducts] = useState(Products);
+  const [products, setProducts] = useState(Array<Product>);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,11 +68,11 @@ const ProductManagement = ({ navigation }: ProductManagementProps) => {
             PRODUCTS
           </Text>
           <Box flex={1}>
-            <ProductList onItemPress={handleItemPress} data={products} />
+            <ProductList onItemPress={(item) => { handleItemPress(item) }} data={products} />
           </Box>
         </Column>
         <Box width="full">
-          <Button onPress={() => navigation.navigate("Add Product")}>
+          <Button onPress={() => navigation.navigate("AddProduct")}>
             Add Product
           </Button>
         </Box>
