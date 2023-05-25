@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import { theme } from './src/styles/Theme';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeNavigation from './src/navigation/HomeNavigation';
+import AuthProvider from './src/utils/context/AuthProvider';
 
 
 export default function App() {
@@ -24,9 +25,11 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={theme}>
-      <NavigationContainer>
-        <HomeNavigation />
-      </NavigationContainer>
+      <AuthProvider>
+        <NavigationContainer>
+          <HomeNavigation />
+        </NavigationContainer>
+      </AuthProvider>
     </NativeBaseProvider>
   )
 }
