@@ -49,8 +49,8 @@ const Login = ({ navigation }: LoginProps) => {
         </Column>
       </Box>
       <Box width="full">
-        <Button onPress={() => { navigation.navigate("Home") }}> Login </Button>
-        <Center>
+          <Button onPress={() => { handleLogin() }}> Login </Button>
+          <Center>
           <Row justifyContent="center" alignItems="center" marginTop="4">
             <Text>Don't have an account? </Text>
             <Link onPress={() => { navigation.navigate("Registration") }} _text={{
@@ -59,8 +59,8 @@ const Login = ({ navigation }: LoginProps) => {
               fontWeight: "medium" 
             }}>Sign Up. </Link> 
           </Row>
-        </Center>
-      </Box>
+          </Center>
+        </Box>
     </Flex>
     </ScreenContainer>
   )
