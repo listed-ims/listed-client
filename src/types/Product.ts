@@ -3,7 +3,7 @@ export interface Product {
   name: string;
   barcode?: string;
   variant?: string;
-  salePrice: string;
-  threshold?: string;
+  salePrice: number;
+  threshold?: number;
   unit: string;
 };
