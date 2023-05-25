@@ -113,7 +113,7 @@ const AddProduct = ({ navigation }: AddProductProps) => {
           )
             .then(() => {
               console.log("Submitted");
-              navigation.navigate("Products");
+              navigation.goBack();
             })
             .catch((error) => {
               console.error(error);
