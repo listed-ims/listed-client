@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ScreenContainer from "../../layout/ScreenContainer";
 import { Box, Column, Text } from "native-base";
 import { Product } from "../../types/Product";
@@ -8,6 +8,7 @@ import Button from "../../components/Button";
 import { getToken } from "../../services/TokenStorage";
 import { getProductsService } from "../../services/ProductServices";
 import { ProductManagementNavigationProp } from "../../types/navigation/NavigationScreenProps";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface ProductManagementProps {
   navigation: ProductManagementNavigationProp;
@@ -20,7 +21,7 @@ const ProductManagement = ({ navigation }: ProductManagementProps) => {
     navigation.navigate("ProductDetails", item);
   };
 
-  useEffect(() => {
+  useFocusEffect(() => {
     const fetchData = async () => {
       const token = await getToken();
       if (token) {
@@ -35,7 +36,7 @@ const ProductManagement = ({ navigation }: ProductManagementProps) => {
     };
 
     fetchData();
-  }, []);
+  });
 
   const handleOnChange = (keyword: string) => {
     const fetchData = async () => {
