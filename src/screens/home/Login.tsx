@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
-import { Box, Center, Column, Flex, Icon, Link, Pressable, Text, Image } from 'native-base'
+import { Box, Center, Column, Flex, Icon, Link, Pressable, Text, Image, Row } from 'native-base'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import Button from '../../components/Button'
 import TextField from '../../components/TextField'
@@ -80,7 +80,7 @@ const Login = ({ navigation }: LoginProps) => {
             </Text>
           </Center>
         </Box>
-      </Flex>
+    </Flex>
     </ScreenContainer>
   )
 }
