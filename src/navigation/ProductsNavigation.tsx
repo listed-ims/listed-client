@@ -4,16 +4,17 @@ import { stackHeaderStyles } from '../styles/HeaderBar';
 import ProductManagement from '../screens/product_management/ProductManagement';
 import AddProduct from '../screens/product_management/AddProduct';
 import ProductDetails from '../screens/product_management/ProductDetails';
+import { ProductsNavigationParams } from '../types/navigation/ParamsList';
 
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<ProductsNavigationParams>();
 
 const ProductsNavigation = () => {
   return (
     <Stack.Navigator screenOptions={stackHeaderStyles}>
       <Stack.Screen name="Products" component={ProductManagement} />
-      <Stack.Screen name="Add Product" component={AddProduct} />
-      <Stack.Screen name="Product Details" component={ProductDetails} />
+      <Stack.Screen name="AddProduct" component={AddProduct} />
+      <Stack.Screen name="ProductDetails" component={ProductDetails} />
     </Stack.Navigator>
   )
 }
