@@ -15,7 +15,7 @@ interface ProductManagementProps {
 
 const ProductManagement = ({ navigation }: ProductManagementProps) => {
   const [products, setProducts] = useState(Array<Product>);
-  
+
   const handleItemPress = (item: Product) => {
     navigation.navigate("ProductDetails", item);
   };
@@ -30,12 +30,12 @@ const ProductManagement = ({ navigation }: ProductManagementProps) => {
           })
           .catch((error) => {
             console.error(error);
-          })
+          });
       }
-    }
+    };
 
     fetchData();
-  }, [])
+  }, []);
 
   const handleOnChange = (keyword: string) => {
     const fetchData = async () => {
@@ -47,23 +47,32 @@ const ProductManagement = ({ navigation }: ProductManagementProps) => {
           })
           .catch((error) => {
             console.error(error);
-          })
+          });
       }
-    }
+    };
 
     fetchData();
-  }
+  };
 
   return (
     <ScreenContainer>
       <Column space="4" height="full" paddingTop="4">
-        <BarcodeField fieldType="search" placeholder="Search" onChangeText={(value) => handleOnChange(value)} />
+        <BarcodeField
+          fieldType="search"
+          placeholder="Search"
+          onChangeText={(value) => handleOnChange(value)}
+        />
         <Column flex={1} space={2}>
           <Text fontSize="sm" fontWeight="bold" color="muted.500">
             PRODUCTS
           </Text>
           <Box flex={1}>
-            <ProductList onItemPress={(item) => { handleItemPress(item) }} data={products} />
+            <ProductList
+              onItemPress={(item) => {
+                handleItemPress(item);
+              }}
+              data={products}
+            />
           </Box>
         </Column>
         <Box width="full">
