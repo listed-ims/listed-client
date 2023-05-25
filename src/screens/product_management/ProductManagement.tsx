@@ -9,37 +9,16 @@ import { getToken } from "../../services/TokenStorage";
 import { getProductsService } from "../../services/ProductServices";
 import { ProductManagementNavigationProp } from "../../types/navigation/NavigationScreenProps";
 
-const Products: Product[] = [
-  {
-    id: 1,
-    name: "Gatorade Blue",
-    barcode: "123456789",
-    variant: "500 ml",
-    salePrice: 70.0,
-    threshold: 10,
-    unit: "pcs",
-  },
-  {
-    id: 2,
-    name: "Gatorade Red",
-    barcode: "987654321",
-    variant: "500 ml",
-    salePrice: 70.0,
-    threshold: 10,
-    unit: "pcs",
-  },
-];
-
-type ProductManagementProps = {
+interface ProductManagementProps {
   navigation: ProductManagementNavigationProp;
 }
 
 const ProductManagement = ({ navigation }: ProductManagementProps) => {
+  const [products, setProducts] = useState(Array<Product>);
+  
   const handleItemPress = (item: Product) => {
     navigation.navigate("ProductDetails", item);
   };
-
-  const [products, setProducts] = useState(Array<Product>);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,11 +37,27 @@ const ProductManagement = ({ navigation }: ProductManagementProps) => {
     fetchData();
   }, [])
 
+  const handleOnChange = (keyword: string) => {
+    const fetchData = async () => {
+      const token = await getToken();
+      if (token) {
+        getProductsService(token, 1, 10, "", keyword)
+          .then((response) => {
+            setProducts(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      }
+    }
+
+    fetchData();
+  }
 
   return (
     <ScreenContainer>
       <Column space="4" height="full" paddingTop="4">
-        <BarcodeField fieldType="search" placeholder="Search" />
+        <BarcodeField fieldType="search" placeholder="Search" onChangeText={(value) => handleOnChange(value)} />
         <Column flex={1} space={2}>
           <Text fontSize="sm" fontWeight="bold" color="muted.500">
             PRODUCTS
