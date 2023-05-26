@@ -6,13 +6,14 @@ import TextField from "../../components/TextField";
 import Button from "../../components/Button";
 import { Keyboard } from "react-native";
 import BarcodeField from "../../components/BarcodeField";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { ProductDetailsNavigationProp, ProductDetailsRouteProp } from "../../types/navigation/NavigationScreenProps";
 
 interface ProductDetailsProps {
-  navigation: NativeStackNavigationProp<any>;
+  navigation: ProductDetailsNavigationProp;
+  route: ProductDetailsRouteProp;
 }
 
-const ProductDetails = ({ navigation }: ProductDetailsProps) => {
+const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
   const [errors, setErrors] = useState({
     name: "",
     barcode: "",
@@ -22,12 +23,14 @@ const ProductDetails = ({ navigation }: ProductDetailsProps) => {
   });
   const [editable, setEditable] = useState(false);
   const [formData, setFormData] = useState({
-    name: "Gatorade Blue",
-    barcode: "123456789",
-    variant: "500 ml",
-    salePrice: "70.00",
-    threshold: "10",
+    name: route.params.name,
+    barcode: route.params.barcode,
+    variant: route.params.variant,
+    salePrice: String(route.params.salePrice),
+    threshold: route.params.threshold,
   });
+
+  // const [formData, setFormData] = useState(route.params);
 
   const validate = () => {
     Keyboard.dismiss();
@@ -102,7 +105,8 @@ const ProductDetails = ({ navigation }: ProductDetailsProps) => {
                   isInvalid={errors.name !== ""}
                 >
                   <TextField
-                    defaultValue="Gatorade Blue"
+                    // defaultValue="Gatorade Blue"
+                    value={formData.name}
                     onFocus={() => handleErrors("", "name")}
                     onChangeText={(value) => handleOnchange(value, "name")}
                   />
@@ -113,7 +117,8 @@ const ProductDetails = ({ navigation }: ProductDetailsProps) => {
                   isInvalid={errors.barcode !== ""}
                 >
                   <BarcodeField
-                    defaultValue="123456789"
+                    // defaultValue="123456789"
+                    value={formData.barcode}
                     fieldType="input"
                     placeholder="Scan barcode"
                     onFocus={() => handleErrors("", "barcode")}
@@ -126,7 +131,8 @@ const ProductDetails = ({ navigation }: ProductDetailsProps) => {
                   isInvalid={errors.variant !== ""}
                 >
                   <TextField
-                    defaultValue="500 ml"
+                    // defaultValue="500 ml"
+                    value={formData.variant}
                     onFocus={() => handleErrors("", "variant")}
                     onChangeText={(value) => handleOnchange(value, "variant")}
                   />
@@ -138,7 +144,8 @@ const ProductDetails = ({ navigation }: ProductDetailsProps) => {
                   isInvalid={errors.salePrice !== ""}
                 >
                   <TextField
-                    defaultValue="70.00"
+                    // defaultValue="70.00"
+                    value={formData.salePrice}
                     keyboardType="numeric"
                     startDataLabel="Php"
                     onFocus={() => handleErrors("", "salePrice")}
@@ -151,7 +158,8 @@ const ProductDetails = ({ navigation }: ProductDetailsProps) => {
                   isInvalid={errors.threshold !== ""}
                 >
                   <TextField
-                    defaultValue="10"
+                    // defaultValue="10"
+                    value={String(formData.threshold)}
                     keyboardType="numeric"
                     endDataLabel="pcs"
                     onFocus={() => handleErrors("", "threshold")}
@@ -168,24 +176,30 @@ const ProductDetails = ({ navigation }: ProductDetailsProps) => {
                   <TextField
                     variant="underlined"
                     isReadOnly
-                    value="Gatorade Blue"
+                    value={formData.name}
+                  // value="Gatorade Blue"  
                   />
                 </FormControl>
                 <FormControl label="Barcode">
                   <TextField
                     variant="underlined"
                     isReadOnly
-                    value="123456789"
+                    // value="123456789"
+                    value={formData.barcode}
                   />
                 </FormControl>
                 <FormControl label="Size Variant">
-                  <TextField variant="underlined" isReadOnly value="500 ml" />
+                  <TextField variant="underlined" isReadOnly
+                    // value="500 ml"
+                    value={formData.variant}
+                  />
                 </FormControl>
                 <FormControl label="Sale Price">
                   <TextField
                     variant="underlined"
                     isReadOnly
-                    value="70.00"
+                    value={formData.salePrice}
+                    // value="70.00"
                     startDataLabel="Php"
                   />
                 </FormControl>
@@ -193,7 +207,8 @@ const ProductDetails = ({ navigation }: ProductDetailsProps) => {
                   <TextField
                     variant="underlined"
                     isReadOnly
-                    value="10"
+                    value={String(formData.threshold)}
+                    // value="10"
                     endDataLabel="pcs"
                   />
                 </FormControl>

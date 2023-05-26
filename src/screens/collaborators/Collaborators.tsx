@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
 import { Product } from '../../types/Product'
 import ProductList from '../../components/ProductList'
-import ProductServices from '../../services/ProductServices'
+import { getProductsService } from '../../services/ProductServices'
 
 
 const Collaborators = () => {
@@ -10,7 +10,7 @@ const Collaborators = () => {
 
   const [products, setProducts] = useState(Array<Product>)
   useEffect(() => {
-    ProductServices.getProducts(token).then((response) => {
+    getProductsService(token).then((response) => {
       setProducts(response.data);
     })
       .catch((error: any) => (console.log(error)))
