@@ -14,7 +14,8 @@ interface HomeProps {
 }
 
 const Home = ({ navigation }: HomeProps) => {
-  const [username, setUsername] = useState("");
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
 
   useEffect(() => { 
     const fetchData = async () => {
@@ -22,9 +23,10 @@ const Home = ({ navigation }: HomeProps) => {
       if (token) {
         getUserService(token)
           .then((response) => {
-            const username = response.data.username;
-            setUsername(username);
-            console.log(username);
+            const firstname = response.data.firstname;
+            const lastname = response.data.lastname;
+            setFirstName(firstname);
+            setLastName(lastname);
           })
           .catch((error) => {
             console.error(error);
@@ -39,7 +41,7 @@ const Home = ({ navigation }: HomeProps) => {
     <ScreenContainer>
     <Column space="4" height="full" paddingTop="5">
       <ScrollView>
-        <Text fontWeight="bold" color="muted.400" fontSize="lg">Hi, {username}.</Text>
+        <Text fontWeight="bold" color="muted.400" fontSize="lg">Hi, {firstname} {lastname}.</Text>
         <Text fontWeight="bold" fontSize="2xl">Welcome!</Text>
         <VStack space="7" overflowX="auto">
           <Box paddingTop="6">
