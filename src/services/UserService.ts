@@ -15,4 +15,12 @@ const validateUsernameService = (username: string) => {
   return axios.post(`${BASE_URL}username-validation?username=${username}`);
 };
 
-export { loginService, registerService, validateUsernameService };
+const getUserService = (token: string) => {
+  return axios.get(`${BASE_URL}`, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export { loginService, registerService, validateUsernameService, getUserService };
