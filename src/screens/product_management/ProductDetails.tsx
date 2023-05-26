@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ScreenContainer from "../../layout/ScreenContainer";
 import { Column, Row, ScrollView } from "native-base";
 import FormControl from "../../components/FormControl";
 import TextField from "../../components/TextField";
 import Button from "../../components/Button";
-import { Keyboard } from "react-native";
 import BarcodeField from "../../components/BarcodeField";
 import { ProductDetailsNavigationProp, ProductDetailsRouteProp } from "../../types/navigation/NavigationScreenProps";
+import { getToken } from "../../services/TokenStorage";
+import { updateProductService, validateBarcodeService, deleteProductService } from "../../services/ProductServices";
 
 interface ProductDetailsProps {
   navigation: ProductDetailsNavigationProp;
@@ -21,7 +22,6 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
     salePrice: "",
     threshold: "",
   });
-  const [editable, setEditable] = useState(false);
   const [formData, setFormData] = useState({
     name: route.params.name,
     barcode: route.params.barcode,
@@ -29,13 +29,18 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
     salePrice: String(route.params.salePrice),
     threshold: route.params.threshold,
   });
+  const [initialBarcode] = useState(route.params.barcode);
+  const [editable, setEditable] = useState(false);
 
-  // const [formData, setFormData] = useState(route.params);
+  useEffect(() => {
+    navigation.setOptions({ title: "Poduct Details"});
+  }, [])
 
   const validate = () => {
-    Keyboard.dismiss();
     if (formData.name === "") {
       handleErrors("Please enter product name.", "name");
+      return false;
+    } else if (errors.barcode !== "") {
       return false;
     } else if (formData.salePrice === "") {
       handleErrors("Please enter sale price.", "salePrice");
@@ -57,6 +62,31 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
     }
   };
 
+  const handleBarcodeValidation = (barcode: string = "") => {
+    const fetchData = async () => {
+      const token = await getToken();
+      if (token) {
+        validateBarcodeService(token, barcode)
+          .then((response) => {
+            if (response.data) {
+              handleErrors("", "barcode");
+            } else {
+              handleErrors("Barcode cannot be duplicated", "barcode");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    };
+    
+    if(initialBarcode === barcode) {
+      handleErrors("", "barcode");
+    } else {
+      fetchData();
+    }
+  };
+
   const handleErrors = (error: string, data: string) => {
     setErrors({ ...errors, [data]: error });
   };
@@ -71,16 +101,51 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
   };
 
   const handleDelete = () => {
-    // delete product
-    console.log("Deleted");
+    const fetchData = async () => {
+      const token = await getToken();
+      if (token) {
+        deleteProductService(token, route.params.id)
+          .then((response) => {
+            console.log("Deleted");
+            navigation.goBack();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    };
+
+    fetchData();
   };
 
   const handleSave = () => {
     if (validate()) {
-      // update product
-      console.log("Submitted");
-      navigation.setOptions({ title: "Product Details" });
-      setEditable(false);
+      const fetchData = async () => {
+        const token = await getToken();
+        if (token) {
+          updateProductService( token, route.params.id, 
+            {
+              id: -1,
+              name: formData.name,
+              barcode: formData.barcode,
+              variant: formData.variant,
+              salePrice: Number(formData.salePrice),
+              threshold: Number(formData.threshold),
+              unit: route.params.unit,
+            },
+          )
+            .then(() => {
+              console.log("Submitted");
+              navigation.setOptions({ title: "Product Details" });
+              setEditable(false);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      };
+
+      fetchData();
     }
   };
 
@@ -105,9 +170,8 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
                   isInvalid={errors.name !== ""}
                 >
                   <TextField
-                    // defaultValue="Gatorade Blue"
                     value={formData.name}
-                    onFocus={() => handleErrors("", "name")}
+                    onEndEditing={() => handleErrors("", "name")}
                     onChangeText={(value) => handleOnchange(value, "name")}
                   />
                 </FormControl>
@@ -117,11 +181,10 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
                   isInvalid={errors.barcode !== ""}
                 >
                   <BarcodeField
-                    // defaultValue="123456789"
                     value={formData.barcode}
                     fieldType="input"
                     placeholder="Scan barcode"
-                    onFocus={() => handleErrors("", "barcode")}
+                    onEndEditing={() => handleBarcodeValidation(formData.barcode)}
                     onChangeText={(value) => handleOnchange(value, "barcode")}
                   />
                 </FormControl>
@@ -131,9 +194,8 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
                   isInvalid={errors.variant !== ""}
                 >
                   <TextField
-                    // defaultValue="500 ml"
                     value={formData.variant}
-                    onFocus={() => handleErrors("", "variant")}
+                    onEndEditing={() => handleErrors("", "variant")}
                     onChangeText={(value) => handleOnchange(value, "variant")}
                   />
                 </FormControl>
@@ -144,11 +206,10 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
                   isInvalid={errors.salePrice !== ""}
                 >
                   <TextField
-                    // defaultValue="70.00"
                     value={formData.salePrice}
                     keyboardType="numeric"
                     startDataLabel="Php"
-                    onFocus={() => handleErrors("", "salePrice")}
+                    onEndEditing={() => handleErrors("", "salePrice")}
                     onChangeText={(value) => handleOnchange(value, "salePrice")}
                   />
                 </FormControl>
@@ -158,16 +219,15 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
                   isInvalid={errors.threshold !== ""}
                 >
                   <TextField
-                    // defaultValue="10"
                     value={String(formData.threshold)}
                     keyboardType="numeric"
                     endDataLabel="pcs"
-                    onFocus={() => handleErrors("", "threshold")}
+                    onEndEditing={() => handleErrors("", "threshold")}
                     onChangeText={(value) => handleOnchange(value, "threshold")}
                   />
                 </FormControl>
                 <FormControl label="Total Quantity" isDisabled isReadOnly>
-                  <TextField value="100" endDataLabel="pcs" />
+                  <TextField value="0" endDataLabel="pcs" />
                 </FormControl>
               </>
             ) : (
@@ -176,21 +236,18 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
                   <TextField
                     variant="underlined"
                     isReadOnly
-                    value={formData.name}
-                  // value="Gatorade Blue"  
+                    value={formData.name} 
                   />
                 </FormControl>
                 <FormControl label="Barcode">
                   <TextField
                     variant="underlined"
                     isReadOnly
-                    // value="123456789"
                     value={formData.barcode}
                   />
                 </FormControl>
                 <FormControl label="Size Variant">
                   <TextField variant="underlined" isReadOnly
-                    // value="500 ml"
                     value={formData.variant}
                   />
                 </FormControl>
@@ -199,7 +256,6 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
                     variant="underlined"
                     isReadOnly
                     value={formData.salePrice}
-                    // value="70.00"
                     startDataLabel="Php"
                   />
                 </FormControl>
@@ -208,7 +264,6 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
                     variant="underlined"
                     isReadOnly
                     value={String(formData.threshold)}
-                    // value="10"
                     endDataLabel="pcs"
                   />
                 </FormControl>
@@ -216,7 +271,7 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
                   <TextField
                     variant="underlined"
                     isReadOnly
-                    value="100"
+                    value="0"
                     endDataLabel="pcs"
                   />
                 </FormControl>
