@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import ScreenContainer from "../../layout/ScreenContainer";
 import { Box, Column, Text } from "native-base";
 import { Product } from "../../types/Product";
@@ -21,7 +21,7 @@ const ProductManagement = ({ navigation }: ProductManagementProps) => {
     navigation.navigate("ProductDetails", item);
   };
 
-  useFocusEffect(() => {
+  useFocusEffect(useCallback(() => {
     const fetchData = async () => {
       const token = await getToken();
       if (token) {
@@ -33,10 +33,10 @@ const ProductManagement = ({ navigation }: ProductManagementProps) => {
             console.error(error);
           });
       }
-    };
+    }
 
     fetchData();
-  });
+  }, []))
 
   const handleOnChange = (keyword: string) => {
     const fetchData = async () => {
