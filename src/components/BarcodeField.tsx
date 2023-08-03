@@ -34,6 +34,7 @@ const BarcodeField = ({ fieldType, onSearchPress, onBarcodePress, ...props }: Ba
         flexGrow="1"
         returnKeyType={returnKeyType}
         backgroundColor={backgroundColor}
+        _input={{ selectionColor: colors.coolGray[400] }}
         _focus={focus}
         onBlur={() => Keyboard.dismiss()}
         InputRightElement={
