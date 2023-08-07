@@ -12,7 +12,7 @@ import { loginService } from '../../services/UserService'
 interface LoginProps {
   navigation: NativeStackNavigationProp<any>,
 }
-
+// this is a comment
 const Login = ({ navigation }: LoginProps) => {
 
   const [errors, setErrors] = React.useState({
@@ -30,10 +30,10 @@ const Login = ({ navigation }: LoginProps) => {
 
 
   const validate = () => {
-    if (formData.username === ""){
+    if (formData.username === "") {
       handleErrors("Please enter username.", "username");
       return false;
-    } else if(formData.password === ""){
+    } else if (formData.password === "") {
       handleErrors("Please enter password.", "password")
       return false;
     } else {
@@ -74,22 +74,22 @@ const Login = ({ navigation }: LoginProps) => {
         </Center>
         <Box flexGrow={1}>
           <Column space="4">
-          <FormControl
-            label="Username"
-            errorMessage={errors.username}
-            isInvalid={errors.username !== ""}
+            <FormControl
+              label="Username"
+              errorMessage={errors.username}
+              isInvalid={errors.username !== ""}
             >
               <TextField
-                onFocus={() => handleErrors("", "username")} 
+                onFocus={() => handleErrors("", "username")}
                 onChangeText={(value) => handleOnchange(value, "username")}
                 placeholder="Enter username..." />
             </FormControl>
-            <FormControl 
+            <FormControl
               label="Password"
               errorMessage={errors.password}
               isInvalid={errors.password !== ""}
             >
-              <TextField 
+              <TextField
                 onFocus={() => handleErrors("", "password")}
                 onChangeText={(value) => handleOnchange(value, "password")}
                 placeholder="Enter password..."
@@ -115,12 +115,12 @@ const Login = ({ navigation }: LoginProps) => {
               <Link onPress={() => { navigation.navigate("Registration") }} _text={{
                 fontSize: "sm",
                 color: "primary.700",
-                fontWeight: "medium" 
-              }}>Sign Up. </Link> 
+                fontWeight: "medium"
+              }}>Sign Up. </Link>
             </Row>
           </Center>
         </Box>
-    </Flex>
+      </Flex>
     </ScreenContainer>
   )
 }
