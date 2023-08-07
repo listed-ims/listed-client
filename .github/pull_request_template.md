@@ -8,9 +8,7 @@
 
 <!-- List the files modified in this PR -->
 
-```
-Transactions.tsx, Home.tsx, etc.
-```
+`Transactions.tsx, Home.tsx, etc.`
 
 ## Screenshots or Screen Recording (_if applicable_)
 
