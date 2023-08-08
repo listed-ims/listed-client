@@ -1,7 +1,7 @@
 import axios from "axios";
-import { BASE_URL } from "../utils/constants/Api";
+import { API_BASE_URL } from "../utils/constants/Api";
 import { Product } from "../types/Product";
-const productsUrl = `${BASE_URL}products`;
+const productsUrl = `${API_BASE_URL}products`;
 
 const addProductService = (product: Product, token: string) => {
   return axios.post(`${productsUrl}`, product, {
@@ -28,7 +28,7 @@ const getProductsService = (
   pageSize?: number,
   barcode?: string,
   keyword?: string,
-  sort?: string,
+  sort?: string
 ) => {
   return axios.get(`${productsUrl}`, {
     params: {
