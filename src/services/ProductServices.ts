@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_BASE_URL } from "../utils/constants/Api";
+import { API_BASE_URL } from "../constants/Api";
 import { Product } from "../types/Product";
 const productsUrl = `${API_BASE_URL}products`;
 

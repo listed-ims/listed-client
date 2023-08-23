@@ -6,7 +6,7 @@ import TabNavigation from './TabNavigation';
 import Login from '../screens/home/Login';
 import Registration from '../screens/home/Registration';
 import ProductsNavigation from './ProductsNavigation';
-import { AuthContext } from '../utils/context/AuthProvider';
+import { AuthContext } from '../context/AuthProvider';
 
 
 const Stack = createNativeStackNavigator();

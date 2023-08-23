@@ -1,5 +1,5 @@
 import React, { ReactNode, createContext, useState } from 'react'
-import { clearToken, storeToken } from '../../services/TokenStorage';
+import { clearToken, storeToken } from '../services/TokenStorage';
 
 
 interface AuthContextProps {

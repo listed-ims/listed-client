@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_BASE_URL } from "../utils/constants/Api";
+import { API_BASE_URL } from "../constants/Api";
 import { LoginCredentials } from "../types/Logins";
 import { User } from "../types/User";
 

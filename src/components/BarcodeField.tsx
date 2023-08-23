@@ -15,7 +15,7 @@ const BarcodeField = ({ fieldType, onSearchPress, onBarcodePress, ...props }: Ba
 
   let variant = "outline";
   let backgroundColor = "white";
-  let focus: any = { backgroundColor: "muted.50" }
+  let focus: Partial<IInputProps> = { backgroundColor: "muted.50" }
   let returnKeyType: ReturnKeyTypeOptions | undefined = "search";
 
   if (fieldType === "input") {

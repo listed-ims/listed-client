@@ -3,7 +3,7 @@ import { useFonts } from "expo-font";
 import { theme } from './src/styles/Theme';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeNavigation from './src/navigation/HomeNavigation';
-import AuthProvider from './src/utils/context/AuthProvider';
+import AuthProvider from './src/context/AuthProvider';
 
 
 export default function App() {
