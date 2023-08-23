@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
 import { Product } from '../../types/product'
 import ProductList from '../../components/ProductList'
-import { getProductsService } from '../../services/ProductServices'
+import { getProductsService } from '../../services/productServices'
 
 
 const Collaborators = () => {

@@ -8,7 +8,7 @@ import FormControl from '../../components/FormControl'
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from '../../context/AuthProvider'
 import { LoginCredentials } from '../../types/logins'
-import { loginService } from '../../services/UserService'
+import { loginService } from '../../services/userService'
 interface LoginProps {
   navigation: NativeStackNavigationProp<any>,
 }

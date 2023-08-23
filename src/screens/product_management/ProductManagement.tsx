@@ -5,8 +5,8 @@ import { Product } from "../../types/product";
 import ProductList from "../../components/ProductList";
 import BarcodeField from "../../components/BarcodeField";
 import Button from "../../components/Button";
-import { getToken } from "../../services/TokenStorage";
-import { getProductsService } from "../../services/ProductServices";
+import { getToken } from "../../services/tokenStorage";
+import { getProductsService } from "../../services/productServices";
 import { ProductManagementNavigationProp } from "../../types/navigation/navigationScreenProps";
 import { useFocusEffect } from "@react-navigation/native";
 

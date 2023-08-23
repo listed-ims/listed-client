@@ -6,8 +6,8 @@ import TextField from "../../components/TextField";
 import Button from "../../components/Button";
 import BarcodeField from "../../components/BarcodeField";
 import { ProductDetailsNavigationProp, ProductDetailsRouteProp } from "../../types/navigation/navigationScreenProps";
-import { getToken } from "../../services/TokenStorage";
-import { updateProductService, validateBarcodeService, deleteProductService } from "../../services/ProductServices";
+import { getToken } from "../../services/tokenStorage";
+import { updateProductService, validateBarcodeService, deleteProductService } from "../../services/productServices";
 
 interface ProductDetailsProps {
   navigation: ProductDetailsNavigationProp;

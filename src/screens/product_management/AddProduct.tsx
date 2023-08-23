@@ -9,9 +9,9 @@ import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Button from "../../components/Button";
-import { getToken } from "../../services/TokenStorage";
-import { addProductService } from "../../services/ProductServices";
-import { validateBarcodeService } from "../../services/ProductServices";
+import { getToken } from "../../services/tokenStorage";
+import { addProductService } from "../../services/productServices";
+import { validateBarcodeService } from "../../services/productServices";
 
 interface AddProductProps {
   navigation: NativeStackNavigationProp<any>;
