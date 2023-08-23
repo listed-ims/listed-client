@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
 import ScreenContainer from "../../layout/ScreenContainer";
 import { Box, Column, Text } from "native-base";
-import { Product } from "../../types/Product";
+import { Product } from "../../types/product";
 import ProductList from "../../components/ProductList";
 import BarcodeField from "../../components/BarcodeField";
 import Button from "../../components/Button";
 import { getToken } from "../../services/TokenStorage";
 import { getProductsService } from "../../services/ProductServices";
-import { ProductManagementNavigationProp } from "../../types/navigation/NavigationScreenProps";
+import { ProductManagementNavigationProp } from "../../types/navigation/navigationScreenProps";
 import { useFocusEffect } from "@react-navigation/native";
 
 interface ProductManagementProps {

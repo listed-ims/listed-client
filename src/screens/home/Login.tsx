@@ -7,7 +7,7 @@ import TextField from '../../components/TextField'
 import FormControl from '../../components/FormControl'
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from '../../context/AuthProvider'
-import { LoginCredentials } from '../../types/Logins'
+import { LoginCredentials } from '../../types/logins'
 import { loginService } from '../../services/UserService'
 interface LoginProps {
   navigation: NativeStackNavigationProp<any>,

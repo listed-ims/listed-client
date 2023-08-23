@@ -1,7 +1,7 @@
 import axios from "axios";
-import { API_BASE_URL } from "../constants/Api";
-import { LoginCredentials } from "../types/Logins";
-import { User } from "../types/User";
+import { API_BASE_URL } from "../constants/api";
+import { LoginCredentials } from "../types/logins";
+import { User } from "../types/user";
 
 const loginService = (loginCredentials: LoginCredentials) => {
   return axios.post(`${API_BASE_URL}login`, loginCredentials);

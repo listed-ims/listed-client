@@ -1,6 +1,6 @@
 import { NativeBaseProvider } from 'native-base';
 import { useFonts } from "expo-font";
-import { theme } from './src/styles/Theme';
+import { theme } from './src/styles/theme';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeNavigation from './src/navigation/HomeNavigation';
 import AuthProvider from './src/context/AuthProvider';

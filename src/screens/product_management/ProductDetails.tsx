@@ -5,7 +5,7 @@ import FormControl from "../../components/FormControl";
 import TextField from "../../components/TextField";
 import Button from "../../components/Button";
 import BarcodeField from "../../components/BarcodeField";
-import { ProductDetailsNavigationProp, ProductDetailsRouteProp } from "../../types/navigation/NavigationScreenProps";
+import { ProductDetailsNavigationProp, ProductDetailsRouteProp } from "../../types/navigation/navigationScreenProps";
 import { getToken } from "../../services/TokenStorage";
 import { updateProductService, validateBarcodeService, deleteProductService } from "../../services/ProductServices";
 
@@ -33,7 +33,7 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
   const [editable, setEditable] = useState(false);
 
   useEffect(() => {
-    navigation.setOptions({ title: "Poduct Details"});
+    navigation.setOptions({ title: "Poduct Details" });
   }, [])
 
   const validate = () => {
@@ -79,8 +79,8 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
           });
       }
     };
-    
-    if(initialBarcode === barcode) {
+
+    if (initialBarcode === barcode) {
       handleErrors("", "barcode");
     } else {
       fetchData();
@@ -123,7 +123,7 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
       const fetchData = async () => {
         const token = await getToken();
         if (token) {
-          updateProductService( token, route.params.id, 
+          updateProductService(token, route.params.id,
             {
               id: -1,
               name: formData.name,
@@ -236,7 +236,7 @@ const ProductDetails = ({ route, navigation }: ProductDetailsProps) => {
                   <TextField
                     variant="underlined"
                     isReadOnly
-                    value={formData.name} 
+                    value={formData.name}
                   />
                 </FormControl>
                 <FormControl label="Barcode">
