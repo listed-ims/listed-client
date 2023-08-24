@@ -1,12 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useContext } from 'react'
-import { stackHeaderStyles } from '../styles/HeaderBar';
+import { stackHeaderStyles } from '../styles/headerBar';
 import Collaborators from '../screens/collaborators/Collaborators';
 import TabNavigation from './TabNavigation';
 import Login from '../screens/home/Login';
 import Registration from '../screens/home/Registration';
 import ProductsNavigation from './ProductsNavigation';
-import { AuthContext } from '../utils/context/AuthProvider';
+import { AuthContext } from '../context/AuthProvider';
 
 
 const Stack = createNativeStackNavigator();

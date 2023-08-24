@@ -1,6 +1,6 @@
 import axios from "axios";
-import { API_BASE_URL } from "../utils/constants/Api";
-import { Product } from "../types/Product";
+import { API_BASE_URL } from "../constants/api";
+import { Product } from "../types/product";
 const productsUrl = `${API_BASE_URL}products`;
 
 const addProductService = (product: Product, token: string) => {

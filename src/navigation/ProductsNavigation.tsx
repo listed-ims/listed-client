@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react'
-import { stackHeaderStyles } from '../styles/HeaderBar';
+import { stackHeaderStyles } from '../styles/headerBar';
 import ProductManagement from '../screens/product_management/ProductManagement';
 import AddProduct from '../screens/product_management/AddProduct';
 import ProductDetails from '../screens/product_management/ProductDetails';
-import { ProductsNavigationParams } from '../types/navigation/ParamsList';
+import { ProductsNavigationParams } from '../types/navigation/paramsList';
 
 
 const Stack = createNativeStackNavigator<ProductsNavigationParams>();

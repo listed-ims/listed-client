@@ -1,7 +1,7 @@
 import { Column, Divider, FlatList } from 'native-base'
 import React from 'react'
 import ProductListItem from './ProductListItem'
-import { Product } from '../types/Product'
+import { Product } from '../types/product'
 
 
 interface ProductListProps {

@@ -1,6 +1,6 @@
 import { extendTheme } from "native-base";
-import { inter } from "./FontFamily";
-import { offWhite, primary } from "./Colors";
+import { inter } from "./fontFamily";
+import { offWhite, primary } from "./colors";
 
 export const theme = extendTheme({
   fontConfig: {

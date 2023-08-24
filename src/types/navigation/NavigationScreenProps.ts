@@ -1,5 +1,5 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { ProductsNavigationParams } from "./ParamsList";
+import { ProductsNavigationParams } from "./paramsList";
 import { RouteProp } from "@react-navigation/native";
 
 export type ProductManagementNavigationProp = NativeStackNavigationProp<

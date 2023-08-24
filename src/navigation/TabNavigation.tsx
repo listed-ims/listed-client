@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react'
 import NavigationIcon from '../components/icons/NavigationIcon';
-import { tabHeaderStyles } from '../styles/HeaderBar';
+import { tabHeaderStyles } from '../styles/headerBar';
 import Home from '../screens/home/Home';
 import { Text, useTheme } from 'native-base';
 import TransactionsNavigation from './TransactionsNavigation';
