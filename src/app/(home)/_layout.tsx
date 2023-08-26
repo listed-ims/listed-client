@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs } from 'expo-router';
 import { tabHeaderStyles } from '../../styles/headerBar';
-import { theme, Text } from 'native-base';
+import { Text } from 'native-base';
 import HomeIcon from '../../assets/icons/HomeIcon';
 import StoresIcon from '../../assets/icons/StoresIcon';
 import NotificationsIcon from '../../assets/icons/NotificationsIcon';
@@ -26,8 +26,8 @@ const HomeStack = () => {
     <Tabs screenOptions={
       ({ route }) => ({
         ...tabHeaderStyles,
-        tabBarActiveTintColor: theme.colors.primary[700],
-        tabBarInactiveTintColor: theme.colors.black,
+        tabBarActiveTintColor: "primary.700",
+        tabBarInactiveTintColor: "black",
         tabBarLabel: ({ color }) => { return getTabBarLabel(route.name, color) },
         headerShown: false,
         tabBarStyle: {
