@@ -8,7 +8,7 @@ import NotificationsIcon from '../../assets/icons/NotificationsIcon';
 import AccountIcon from '../../assets/icons/AccountIcon';
 
 
-const HomeStack = () => {
+const HomeTabsNav = () => {
 
   const getTabBarLabel = (name: string, color: string) => {
     if (name === "index") {
@@ -58,4 +58,4 @@ const HomeStack = () => {
   )
 }
 
-export default HomeStack
+export default HomeTabsNav
