@@ -1,5 +1,7 @@
-import { Box, StatusBar } from 'native-base'
+import { StatusBar } from 'expo-status-bar'
+import { Box } from 'native-base'
 import React, { ReactNode } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 interface ScreenContainerProps {
@@ -8,15 +10,14 @@ interface ScreenContainerProps {
 
 const ScreenContainer = ({ children }: ScreenContainerProps) => {
   return (
-    <>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
+    <SafeAreaView>
+      <StatusBar backgroundColor='white' />
       <Box bgColor="white" height="full"
         maxWidth="full"
         paddingX="4" paddingBottom="4">
         {children}
       </Box>
-    </>
-
+    </SafeAreaView>
   )
 }
 
