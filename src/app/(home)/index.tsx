@@ -1,0 +1,85 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react'
+import { getToken } from '../../services/tokenStorage';
+import { getUserService } from '../../services/userService';
+import { Column, VStack, Box, Heading, Row, Text } from 'native-base';
+import { ScrollView } from 'react-native';
+import MainButtons from '../../components/MainButtons';
+import SummaryCard from '../../components/SummaryCard';
+import TransactionButtons from '../../components/TransactionButtons';
+import ScreenContainer from '../../layout/ScreenContainer';
+
+interface HomeProps {
+  navigation?: NativeStackNavigationProp<any>,
+}
+
+const Home = ({ navigation }: HomeProps) => {
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const params = useLocalSearchParams();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = await getToken();
+      if (token) {
+        getUserService(token)
+          .then((response) => {
+            const firstname = response.data.firstname;
+            const lastname = response.data.lastname;
+            setFirstName(firstname);
+            setLastName(lastname);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    }
+    fetchData();
+  }, [])
+
+
+  return (
+    <ScreenContainer>
+      <Column space="4" height="full" paddingTop="5">
+        <ScrollView>
+          <Text fontWeight="bold" color="muted.400" fontSize="lg">Hi, {firstname} {lastname}.</Text>
+          <Text fontWeight="bold" fontSize="2xl">Welcome!</Text>
+          <VStack space="7" overflowX="auto">
+            <Box paddingTop="6">
+              <SummaryCard totalItemsSold="100 pcs." totalRevenue="Php 10,000" />
+            </Box>
+            <Box borderWidth="1" borderRadius="2xl" borderColor="muted.200">
+              <Column padding="6" display="flex">
+                <Heading flex="1" fontWeight="bold" fontSize="sm" marginBottom="8">
+                  {params.iconName}
+                </Heading>
+                <Row justifyContent="center">
+                  <MainButtons type="Inventory" />
+                  <MainButtons type="Products"
+                    onPress={() => {
+                      router.push("/products");
+                    }}
+                  />
+                  <MainButtons type="Collaborators"
+                  // onPress={() => {
+                  //   navigation.navigate("CollaboratorsRoot");
+                  // }}
+                  />
+                  <MainButtons type="Analytics" />
+                </Row>
+              </Column>
+            </Box>
+            <Row paddingTop="2" space="4">
+              <TransactionButtons flexGrow={1} type="incoming">Incoming</TransactionButtons>
+              <TransactionButtons flexGrow={1} type="outgoing">Outgoing</TransactionButtons>
+            </Row>
+          </VStack>
+        </ScrollView>
+      </Column>
+    </ScreenContainer >
+  )
+}
+
+
+export default Home
