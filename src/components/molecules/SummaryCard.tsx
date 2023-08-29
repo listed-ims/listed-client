@@ -2,7 +2,7 @@ import { Column, Row, Text, View } from 'native-base'
 import React from 'react'
 import StoreNameIcon from '../atoms/StoreNameIcon'
 import DataSummaryIcon from '../atoms/DataSummaryIcon'
-import Button from '../Button'
+import Button from '../atoms/Button'
 
 
 interface SummaryCardProps {
