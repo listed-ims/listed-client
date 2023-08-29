@@ -7,7 +7,7 @@ import { Column, VStack, Box, Heading, Row, Text } from 'native-base';
 import { ScrollView } from 'react-native';
 import MainButtons from '../../components/MainButtons';
 import SummaryCard from '../../components/molecules/SummaryCard';
-import TransactionButtons from '../../components/TransactionButtons';
+import TransactionButtons from '../../components/TransactionButton';
 import ScreenContainer from '../../layout/ScreenContainer';
 
 interface HomeProps {
