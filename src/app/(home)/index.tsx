@@ -6,7 +6,7 @@ import { getUserService } from '../../services/userService';
 import { Column, VStack, Box, Heading, Row, Text } from 'native-base';
 import { ScrollView } from 'react-native';
 import MainButtons from '../../components/MainButtons';
-import SummaryCard from '../../components/SummaryCard';
+import SummaryCard from '../../components/molecules/SummaryCard';
 import TransactionButtons from '../../components/TransactionButtons';
 import ScreenContainer from '../../layout/ScreenContainer';
 
@@ -47,7 +47,7 @@ const Home = ({ navigation }: HomeProps) => {
           <Text fontWeight="bold" fontSize="2xl">Welcome!</Text>
           <VStack space="7" overflowX="auto">
             <Box paddingTop="6">
-              <SummaryCard totalItemsSold="100 pcs." totalRevenue="Php 10,000" />
+              <SummaryCard totalItemsSold="100" totalRevenue="10000" />
             </Box>
             <Box borderWidth="1" borderRadius="2xl" borderColor="muted.200">
               <Column padding="6" display="flex">
