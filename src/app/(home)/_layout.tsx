@@ -6,6 +6,7 @@ import AccountIcon from '../../components/atoms/AccountIcon';
 import HomeIcon from '../../components/atoms/HomeIcon';
 import NotificationsIcon from '../../components/atoms/NotificationsIcon';
 import StoresIcon from '../../components/atoms/StoresIcon';
+import capitalize from '../../utils/capitalize';
 
 
 const HomeTabsNav = () => {
@@ -17,7 +18,7 @@ const HomeTabsNav = () => {
     return (
       <Text fontSize="xs" fontWeight="medium"
         color={color}>
-        {name.charAt(0).toUpperCase() + name.slice(1)}
+        {capitalize(name)}
       </Text>
     )
   }

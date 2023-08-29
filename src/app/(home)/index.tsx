@@ -5,7 +5,7 @@ import { getToken } from '../../services/tokenStorage';
 import { getUserService } from '../../services/userService';
 import { Column, VStack, Box, Heading, Row, Text } from 'native-base';
 import { ScrollView } from 'react-native';
-import MainButtons from '../../components/MainButtons';
+import MainButtons from '../../components/molecules/MainButtons';
 import SummaryCard from '../../components/molecules/SummaryCard';
 import TransactionButtons from '../../components/molecules/TransactionButton';
 import ScreenContainer from '../../layout/ScreenContainer';
@@ -55,18 +55,18 @@ const Home = ({ navigation }: HomeProps) => {
                   {params.iconName}
                 </Heading>
                 <Row justifyContent="center">
-                  <MainButtons type="Inventory" />
-                  <MainButtons type="Products"
+                  <MainButtons type="inventory" />
+                  <MainButtons type="products"
                     onPress={() => {
                       router.push("/products");
                     }}
                   />
-                  <MainButtons type="Collaborators"
+                  <MainButtons type="collaborators"
                   // onPress={() => {
                   //   navigation.navigate("CollaboratorsRoot");
                   // }}
                   />
-                  <MainButtons type="Analytics" />
+                  <MainButtons type="transactions" />
                 </Row>
               </Column>
             </Box>
