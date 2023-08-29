@@ -1,12 +1,14 @@
-import React from 'react'
-import { Stack } from 'expo-router'
+import React, { useEffect } from 'react'
+import { SplashScreen, Stack } from 'expo-router'
 import { stackHeaderStyles } from '../styles/headerBar'
 import { NativeBaseProvider } from 'native-base'
 import { theme } from '../styles/theme'
 import AuthProvider from '../context/AuthProvider'
 import { useFonts } from 'expo-font'
 
-const HomeStack = () => {
+SplashScreen.preventAutoHideAsync();
+
+const RootLayout = () => {
   const [fontsLoaded] = useFonts({
     "Inter-Thin": require("../assets/fonts/Inter-Thin.otf"),
     "Inter-ExtraLight": require("../assets/fonts/Inter-ExtraLight.otf"),
@@ -19,6 +21,12 @@ const HomeStack = () => {
     "Inter-Black": require("../assets/fonts/Inter-Black.otf"),
   });
 
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) {
     return null;
   }
@@ -27,6 +35,7 @@ const HomeStack = () => {
     <NativeBaseProvider theme={theme}>
       <AuthProvider>
         <Stack screenOptions={stackHeaderStyles}>
+          <Stack.Screen name="auth/login" options={{ headerShown: false }} />
           <Stack.Screen name="(home)" options={{ headerShown: false }} />
           <Stack.Screen name="products" options={{ headerShown: false }} />
         </Stack>
@@ -36,4 +45,4 @@ const HomeStack = () => {
   )
 }
 
-export default HomeStack
+export default RootLayout
