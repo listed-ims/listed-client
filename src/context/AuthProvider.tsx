@@ -52,7 +52,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       if (
         !isLoggedIn && !inAuthRoute
       ) {
-        router.replace('/auth/login');
+        router.replace('/auth/register');
       } else if (isLoggedIn && inAuthRoute) {
         router.replace('/');
       }
