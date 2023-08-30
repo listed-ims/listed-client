@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ScreenContainer from '../../layout/ScreenContainer'
 import { Box, Center, Column, Flex, Icon, Link, Pressable, Text, Image, Row } from 'native-base'
-import Button from '../../components/Button'
+import Button from '../../components/atoms/Button'
 import TextField from '../../components/TextField'
 import FormControl from '../../components/FormControl'
 import { Ionicons } from "@expo/vector-icons";

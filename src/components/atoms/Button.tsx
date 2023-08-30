@@ -13,7 +13,7 @@ const Button = ({ children, ...props }: ButtonProps) => {
       borderColor="primary.700"
       backgroundColor={`${props.variant === "outline" ? "white" : "primary.700"}`}
       _pressed={{
-        background: `primary.600${props.variant === "outline" ? ":alpha.20" : ""}`
+        background: `${props.variant === "outline" ? "offWhite.300" : "primary.600"}`
       }}
       _text={{
         fontSize: "sm", fontWeight: "medium",

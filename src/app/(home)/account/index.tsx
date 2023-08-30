@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import AccountIcon from '../../../assets/icons/AccountIcon'
+import AccountIcon from '../../../components/atoms/AccountIcon'
 
 const Account = () => {
   return (
