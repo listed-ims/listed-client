@@ -1,6 +1,7 @@
 import { IPressableProps, Pressable, Row, Text } from 'native-base'
 import React from 'react'
 import { IncomingIcon, OutgoingIcon } from '@listed-components'
+import { toTitleCase } from '@listed-utils'
 
 
 interface TransactionButtonsProps extends IPressableProps {
@@ -20,7 +21,7 @@ const TransactionButton = ({ children, type, ...props }: TransactionButtonsProps
         <Row space="2">
           {type === "incoming" && <IncomingIcon />}
           <Text fontSize="md" fontWeight="semibold" color="darkText"
-          >{type === "incoming" ? "Incoming" : "Outgoing"}</Text>
+          >{toTitleCase(type)}</Text>
           {type === "outgoing" && <OutgoingIcon />}
         </Row>
       </Row>
