@@ -1,24 +1,19 @@
 import React from 'react'
 import { Tabs } from 'expo-router';
-import { tabHeaderStyles } from '../../styles/headerBar';
 import { Text } from 'native-base';
-import AccountIcon from '../../components/atoms/AccountIcon';
-import HomeIcon from '../../components/atoms/HomeIcon';
-import NotificationsIcon from '../../components/atoms/NotificationsIcon';
-import StoresIcon from '../../components/atoms/StoresIcon';
-import capitalize from '../../utils/capitalize';
+import { toTitleCase } from '@listed-utils'
+import { AccountIcon, HomeIcon, NotificationsIcon, StoresIcon } from '@listed-components';
+import { tabHeaderStyles } from '@listed-styles';
 
 
 const HomeTabsNav = () => {
 
   const getTabBarLabel = (name: string, color: string) => {
-    if (name === "index") {
-      name = "home"
-    }
+    const tabLabel = name === "index" ? "home" : name
     return (
       <Text fontSize="xs" fontWeight="medium"
         color={color}>
-        {capitalize(name)}
+        {toTitleCase(tabLabel)}
       </Text>
     )
   }

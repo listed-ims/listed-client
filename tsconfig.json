@@ -1,6 +1,16 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@listed-components": ["./src/components"],
+      "@listed-constants": ["./src/constants"],
+      "@listed-contexts": ["./src/context"],
+      "@listed-services": ["./src/services"],
+      "@listed-styles": ["./src/styles"],
+      "@listed-types": ["./src/types"],
+      "@listed-utils": ["./src/utils"]
+    }
   }
 }
