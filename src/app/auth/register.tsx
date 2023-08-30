@@ -1,10 +1,7 @@
 import React from 'react'
 import { Button, Row, Text, View } from 'native-base'
-import ScreenContainer from '../../layout/ScreenContainer'
 import { Stack, router } from 'expo-router'
-import SummaryCard from '../../components/molecules/SummaryCard'
-import TransactionButton from '../../components/molecules/TransactionButton'
-import MainButtons from '../../components/molecules/MainButtons'
+import { MainButtons, ScreenContainer, SummaryCard, TransactionButton } from '@listed-components'
 
 
 const Registration = () => {

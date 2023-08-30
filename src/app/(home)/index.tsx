@@ -1,14 +1,10 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react'
-import { getToken } from '../../services/tokenStorage';
-import { getUserService } from '../../services/userService';
 import { Column, VStack, Box, Heading, Row, Text } from 'native-base';
 import { ScrollView } from 'react-native';
-import MainButtons from '../../components/molecules/MainButtons';
-import SummaryCard from '../../components/molecules/SummaryCard';
-import TransactionButtons from '../../components/molecules/TransactionButton';
-import ScreenContainer from '../../layout/ScreenContainer';
+import { MainButtons, ScreenContainer, SummaryCard, TransactionButton } from '@listed-components';
+import { getToken, getUserService } from '@listed-services';
 
 interface HomeProps {
   navigation?: NativeStackNavigationProp<any>,
@@ -71,8 +67,8 @@ const Home = ({ navigation }: HomeProps) => {
               </Column>
             </Box>
             <Row paddingTop="2" space="4">
-              <TransactionButtons flexGrow={1} type="incoming">Incoming</TransactionButtons>
-              <TransactionButtons flexGrow={1} type="outgoing">Outgoing</TransactionButtons>
+              <TransactionButton flexGrow={1} type="incoming">Incoming</TransactionButton>
+              <TransactionButton flexGrow={1} type="outgoing">Outgoing</TransactionButton>
             </Row>
           </VStack>
         </ScrollView>

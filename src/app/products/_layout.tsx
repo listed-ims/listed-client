@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack } from 'expo-router'
-import { stackHeaderStyles } from '../../styles/headerBar'
+import { stackHeaderStyles } from '@listed-styles'
 
 const ProductsStackNav = () => {
   return (

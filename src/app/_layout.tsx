@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
 import { SplashScreen, Stack } from 'expo-router'
-import { stackHeaderStyles } from '../styles/headerBar'
 import { NativeBaseProvider } from 'native-base'
-import { theme } from '../styles/theme'
-import AuthProvider from '../context/AuthProvider'
 import { useFonts } from 'expo-font'
+import { stackHeaderStyles, theme } from '@listed-styles';
+import { AuthProvider } from '@listed-contexts';
 
 SplashScreen.preventAutoHideAsync();
 

@@ -1,11 +1,8 @@
 import React, { ReactNode, useState } from 'react'
 import { Center, IPressableProps, Pressable, Text } from 'native-base'
 import { LayoutChangeEvent } from 'react-native';
-import InventorIcon from '../atoms/InventoryIcon';
-import ProductIcon from '../atoms/ProductIcon';
-import CollaboratorIcon from '../atoms/CollaboratorIcon';
-import TransactionIcon from '../atoms/TransactionIcon';
-import capitalize from '../../utils/capitalize';
+import { CollaboratorIcon, InventoryIcon, ProductIcon, TransactionIcon } from '@listed-components';
+import { toTitleCase } from '@listed-utils';
 
 
 interface MainButtonsProps extends IPressableProps {
@@ -16,7 +13,7 @@ const MainButtons = ({ type, ...props }: MainButtonsProps) => {
   const [width, setWidth] = useState(0);
 
   const icon: Record<MainButtonsProps["type"], ReactNode> = {
-    inventory: <InventorIcon />,
+    inventory: <InventoryIcon />,
     products: <ProductIcon />,
     collaborators: <CollaboratorIcon />,
     transactions: <TransactionIcon />,
@@ -39,7 +36,7 @@ const MainButtons = ({ type, ...props }: MainButtonsProps) => {
         {icon[type]}
         <Text fontSize="2xs" fontWeight="medium"
           color="darkText">
-          {capitalize(type)}
+          {toTitleCase(type)}
         </Text>
       </Center>
     </Pressable>
