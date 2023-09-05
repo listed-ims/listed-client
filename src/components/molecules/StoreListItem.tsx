@@ -8,6 +8,7 @@ import {
   Row,
   Text,
 } from "native-base";
+import { toTitleCase } from "@listed-utils";
 
 interface StoreListItemProps extends IPressableProps {
   name: string;
@@ -51,10 +52,10 @@ const StoreListItem = ({
             </Badge>
           )}
           <Text fontSize="sm" fontWeight="semibold" color="darkText">
-            {name}
+            {toTitleCase(name)}
           </Text>
           <Text fontSize="xs" color="muted.500">
-            {userRole}
+            {toTitleCase(userRole)}
           </Text>
         </Column>
         <Column flex="1" alignItems="flex-end">
@@ -65,7 +66,7 @@ const StoreListItem = ({
             colorScheme={status === "open" ? "info" : "error"}
             variant="solid"
           >
-            {status}
+            {toTitleCase(status)}
           </Badge>
         </Column>
       </Row>
