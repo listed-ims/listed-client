@@ -7,3 +7,4 @@ export { default as BarcodeField } from "./BarcodeField";
 export { default as Select } from "./Select";
 export { default as ProductListItem } from "./ProductListItem";
 export { default as StoreListItem } from "./StoreListItem";
+export { default as StoreListFilterGroup } from "./StoreListFilterGroup";
