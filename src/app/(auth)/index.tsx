@@ -49,6 +49,7 @@ const Login = () => {
         .then((response) => {
           const token = response.data.token;
           login(token);
+          router.push("/home");
           console.log("Login success.");
         })
         .catch((error) => {
@@ -108,7 +109,7 @@ const Login = () => {
           <Center>
             <Row justifyContent="center" alignItems="center" marginTop="4">
               <Text>Don't have an account? </Text>
-              <Link onPress={() => router.push("/auth/register")} _text={{
+              <Link onPress={() => router.push("/register")} _text={{
                 fontSize: "sm",
                 color: "primary.700",
                 fontWeight: "medium"

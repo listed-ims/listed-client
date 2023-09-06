@@ -1,16 +1,12 @@
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { router, useLocalSearchParams } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react'
 import { Column, VStack, Box, Heading, Row, Text } from 'native-base';
 import { ScrollView } from 'react-native';
 import { MainButtons, ScreenContainer, SummaryCard, TransactionButton } from '@listed-components';
 import { getToken, getUserService } from '@listed-services';
 
-interface HomeProps {
-  navigation?: NativeStackNavigationProp<any>,
-}
 
-const Home = ({ navigation }: HomeProps) => {
+const Home = () => {
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const params = useLocalSearchParams();
@@ -37,6 +33,7 @@ const Home = ({ navigation }: HomeProps) => {
 
   return (
     <ScreenContainer>
+      <Stack.Screen options={{ headerShown: false }} />
       <Column space="4" height="full" paddingTop="5">
         <ScrollView>
           <Text fontWeight="bold" color="muted.400" fontSize="lg">Hi, {firstname} {lastname}.</Text>

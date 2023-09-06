@@ -7,7 +7,7 @@ import {
   StoreListFilterGroup,
   StoreListItem,
 } from "@listed-components";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 
 // to be deleted
 // mock-data
@@ -40,7 +40,7 @@ const Stores = () => {
             px="4"
             startIcon={<AddIcon />}
             borderRadius="full"
-            onPress={() => {}}
+            onPress={() => { router.push("/stores/create") }}
           >
             Add Store
           </Button>
@@ -58,7 +58,7 @@ const Stores = () => {
                 userRole={item.role}
                 status={item.status == "OPEN" ? "open" : "closed"}
                 current={index == 0}
-                onPress={() => {}}
+                onPress={() => { }}
               />
             )}
           />
