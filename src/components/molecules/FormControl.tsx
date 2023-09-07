@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons'
 
 interface FormControlProps extends IFormControlProps {
   children: ReactNode,
-  label: String,
+  label?: String,
   helperText?: String,
   errorMessage?: String,
 }
