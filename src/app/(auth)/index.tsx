@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Box, Center, Column, Flex, Icon, Link, Pressable, Text, Image, Row } from 'native-base'
+import { Box, Center, Column, View, Icon, Link, Pressable, Text, Row } from 'native-base'
 import { Stack, router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useAuth } from '@listed-contexts';
 import { loginService } from '@listed-services';
 import { LoginCredentials } from '@listed-types';
-import { Button, FormControl, ScreenContainer, TextField } from '@listed-components';
+import { Button, FormControl, ListedLogo, ScreenContainer, TextField } from '@listed-components';
 
 
 const Login = () => {
@@ -62,46 +62,42 @@ const Login = () => {
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      <Flex flexDirection="column" height="full">
-        <Center padding="12" >
-          <Image size="32"
-            alt="listed logo"
-            source={require("../../assets/images/logo/listed.png")} />
-          <Text bold fontSize="xs" >Get your inventory listed.</Text>
+      <Column height="full">
+        <Center paddingTop="16" paddingBottom="12">
+          <ListedLogo/>
+          <View marginY={3} />
+          <Text fontSize="lg" italic>
+            <Text bold>Sign in</Text> to listed.
+          </Text>
         </Center>
         <Box flexGrow={1}>
-          <Column space="4">
+          <Column alignItems="flex-start">
             <FormControl
-              label="Username"
               errorMessage={errors.username}
               isInvalid={errors.username !== ""}
             >
               <TextField
                 onFocus={() => handleErrors("", "username")}
                 onChangeText={(value) => handleOnchange(value, "username")}
-                placeholder="Enter username..." />
+                placeholder="Username" />
             </FormControl>
             <FormControl
-              label="Password"
               errorMessage={errors.password}
               isInvalid={errors.password !== ""}
             >
               <TextField
                 onFocus={() => handleErrors("", "password")}
                 onChangeText={(value) => handleOnchange(value, "password")}
-                placeholder="Enter password..."
+                placeholder="Password"
                 type={show ? "text" : "password"}
                 rightElement={<Pressable onPress={() => setShow(!show)}>
-                  <Icon as={<Ionicons name={show ? "eye" : "eye-off"} />} size={5} mr="2" color="muted.500" />
+                  <Icon as={<Ionicons name={show ? "eye" : "eye-off"} />} 
+                  size={5}
+                  mr="2"
+                  color="muted.500" />
                 </Pressable>}
               />
             </FormControl>
-            <Link isUnderlined={false} alignSelf="center" _text={{
-              fontSize: "sm",
-              color: "primary.700",
-              fontWeight: "medium"
-            }}>Forgot your password?
-            </Link>
           </Column>
         </Box>
         <Box width="full">
@@ -109,7 +105,7 @@ const Login = () => {
           <Center>
             <Row justifyContent="center" alignItems="center" marginTop="4">
               <Text>Don't have an account? </Text>
-              <Link onPress={() => router.push("/register")} _text={{
+              <Link onPress={() => router.push("/auth/register")} _text={{
                 fontSize: "sm",
                 color: "primary.700",
                 fontWeight: "medium"
@@ -117,7 +113,7 @@ const Login = () => {
             </Row>
           </Center>
         </Box>
-      </Flex>
+      </Column>
     </ScreenContainer>
   )
 }
