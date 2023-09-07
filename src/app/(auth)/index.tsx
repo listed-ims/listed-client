@@ -66,9 +66,10 @@ const Login = () => {
         <Center paddingTop="16" paddingBottom="12">
           <ListedLogo/>
           <View marginY={3} />
-          <Text fontSize="lg" italic>
-            <Text bold>Sign in</Text> to listed.
-          </Text>
+          <Row>
+            <Text bold fontSize="lg">Sign in </Text>
+            <Text fontSize="lg">to listed.</Text>
+          </Row>
         </Center>
         <Box flexGrow={1}>
           <Column alignItems="flex-start">
@@ -105,7 +106,7 @@ const Login = () => {
           <Center>
             <Row justifyContent="center" alignItems="center" marginTop="4">
               <Text>Don't have an account? </Text>
-              <Link onPress={() => router.push("/auth/register")} _text={{
+              <Link onPress={() => router.push("/register")} _text={{
                 fontSize: "sm",
                 color: "primary.700",
                 fontWeight: "medium"
