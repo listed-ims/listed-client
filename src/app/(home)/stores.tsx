@@ -40,7 +40,7 @@ const Stores = () => {
             px="4"
             startIcon={<AddIcon />}
             borderRadius="full"
-            onPress={() => { router.push("/stores/create") }}
+            onPress={() => { router.push("/stores/new") }}
           >
             Add Store
           </Button>
