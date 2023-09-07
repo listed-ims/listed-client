@@ -22,7 +22,7 @@ const NewStore = () => {
           headerLeft: () => <BackIcon onPress={() => router.back()} />,
         }}
       />
-      <Column space="6" height="full" pb="4">
+      <Column space="6" height="full" pb="6">
         <HStack py="4">
           <Text fontSize="xl" fontWeight="semibold">
             New Store
