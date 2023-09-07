@@ -33,11 +33,7 @@ const RootLayout = () => {
   return (
     <NativeBaseProvider theme={theme}>
       <AuthProvider>
-        <Stack screenOptions={stackHeaderStyles}>
-          <Stack.Screen name="auth/login" options={{ headerShown: false }} />
-          <Stack.Screen name="(home)" options={{ headerShown: false }} />
-          <Stack.Screen name="products" options={{ headerShown: false }} />
-        </Stack>
+        <Stack screenOptions={stackHeaderStyles} />
       </AuthProvider>
     </NativeBaseProvider>
 

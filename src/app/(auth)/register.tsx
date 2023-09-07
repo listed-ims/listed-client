@@ -10,7 +10,7 @@ const Registration = () => {
       <Stack.Screen options={{ headerShown: false }} />
       <Text fontSize="xs">Registration</Text>
       <Button
-        onPress={() => router.push("/auth/login")}>
+        onPress={() => router.push("/")}>
         Registration
       </Button>
       <View marginY={4} />

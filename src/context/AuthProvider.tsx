@@ -1,5 +1,5 @@
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react'
-import { clearToken, storeToken } from '../services/tokenStorage';
+import { clearToken, getToken, storeToken } from '@listed-services';
 import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 
 interface AuthContextProps {
@@ -52,12 +52,25 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       if (
         !isLoggedIn && !inAuthRoute
       ) {
-        router.replace('/auth/login');
-      } else if (isLoggedIn && inAuthRoute) {
         router.replace('/');
+      } else if (isLoggedIn && inAuthRoute) {
+        router.replace('/home');
       }
     }, [isLoggedIn, segments, isNavigationReady]);
   }
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await getToken();
+      if (token) {
+        setIsLoggedIn(true);
+      }
+    };
+
+    checkToken();
+  }, []);
+
+  // handle token expiration and refresh
 
   const login = (token: string) => {
     storeToken(token);
