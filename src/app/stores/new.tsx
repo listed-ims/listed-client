@@ -1,22 +1,22 @@
 import React from 'react'
 import { Stack, router } from 'expo-router'
-import { Column, View, Text, HStack } from 'native-base'
+import { Column, Text, HStack } from 'native-base'
 import { BackIcon, Button, FormControl, NewStoreIcon, ScreenContainer, TextField } from '@listed-components'
 
 const CreateStore = () => {
   return (
-    <ScreenContainer>
-      <Stack.Screen options={{ 
+    <ScreenContainer withHeader>
+      <Stack.Screen options={{
         headerBackVisible: false,
         headerShown: true,
         title: "",
         headerShadowVisible: false,
         headerLeft: () => (
-          <BackIcon onPress={() => router.back()}/>
+          <BackIcon onPress={() => router.back()} />
         )
       }} />
       <Column space="6" height="full">
-        <HStack py="4"> 
+        <HStack py="4">
           <Text fontSize="xl" fontWeight="semibold">New Store</Text>
         </HStack>
         <HStack justifyContent="center">
