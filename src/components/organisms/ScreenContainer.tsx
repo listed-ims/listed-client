@@ -1,23 +1,26 @@
 import { StatusBar } from 'expo-status-bar'
-import { Box } from 'native-base'
 import React, { ReactNode } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Edges, SafeAreaView } from 'react-native-safe-area-context'
 
 
 interface ScreenContainerProps {
   children: ReactNode,
+  withHeader?: boolean
 }
 
-const ScreenContainer = ({ children }: ScreenContainerProps) => {
+const ScreenContainer = ({ children, withHeader = false }: ScreenContainerProps) => {
+  const edges: Edges = withHeader ? ['bottom', 'left', 'right'] : ['top', 'bottom', 'left', 'right'];
   return (
-    <SafeAreaView>
-      <StatusBar backgroundColor='white' />
-      <Box bgColor="white" height="full"
-        maxWidth="full"
-        paddingX="4" paddingBottom="4">
-        {children}
-      </Box>
-    </SafeAreaView>
+    <SafeAreaView style={{
+      flex: 1,
+      backgroundColor: "white",
+      paddingHorizontal: 16,
+    }}
+      edges={edges}
+    >
+      <StatusBar backgroundColor="white" />
+      {children}
+    </SafeAreaView >
   )
 }
 
