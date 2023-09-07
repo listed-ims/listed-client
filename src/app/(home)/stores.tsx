@@ -30,7 +30,7 @@ const Stores = () => {
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      <Column space="4" height="full" pt="4">
+      <Column space="4" height="full" py="4">
         <HStack justifyContent="space-between" alignItems="center">
           <Text fontSize="xl" fontWeight="semibold">
             Stores
