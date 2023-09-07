@@ -14,3 +14,5 @@ export { default as TransactionIcon } from "./TransactionIcon";
 export { default as AddIcon } from "./AddIcon";
 export { default as ClearFilterIcon } from "./ClearFilterIcon";
 export { default as FilterButton } from "./FilterButton";
+export { default as BackIcon } from "./BackIcon";
+export { default as NewStoreIcon } from "./NewStoreIcon";
