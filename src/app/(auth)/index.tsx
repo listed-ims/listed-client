@@ -6,7 +6,7 @@ import { useAuth } from '@listed-contexts';
 import { loginService } from '@listed-services';
 import { LoginCredentials } from '@listed-types';
 import { Button, FormControl, ListedLogo, ScreenContainer, TextField } from '@listed-components';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Login = () => {
   const [errors, setErrors] = React.useState({
@@ -62,17 +62,17 @@ const Login = () => {
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      <Column height="full">
-        <Center paddingTop="16" paddingBottom="12">
-          <ListedLogo/>
-          <View marginY={3} />
-          <Row>
-            <Text bold fontSize="lg">Sign in </Text>
-            <Text fontSize="lg">to listed.</Text>
-          </Row>
-        </Center>
-        <Box flexGrow={1}>
-          <Column alignItems="flex-start">
+      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <Column flexGrow="1" justifyContent="center" marginBottom="12">
+          <Center marginBottom="12">
+            <ListedLogo />
+            <View marginY={3} />
+            <Row>
+              <Text bold fontSize="lg">Sign in </Text>
+              <Text fontSize="lg">to listed.</Text>
+            </Row>
+          </Center>
+          <Column>
             <FormControl
               errorMessage={errors.username}
               isInvalid={errors.username !== ""}
@@ -92,29 +92,27 @@ const Login = () => {
                 placeholder="Password"
                 type={show ? "text" : "password"}
                 rightElement={<Pressable onPress={() => setShow(!show)}>
-                  <Icon as={<Ionicons name={show ? "eye" : "eye-off"} />} 
-                  size={5}
-                  mr="2"
-                  color="muted.500" />
+                  <Icon as={<Ionicons name={show ? "eye" : "eye-off"} />}
+                    size={5}
+                    mr="2"
+                    color="muted.500" />
                 </Pressable>}
               />
             </FormControl>
           </Column>
-        </Box>
-        <Box width="full">
-          <Button onPress={() => { handleLogin() }}> Login </Button>
-          <Center>
-            <Row justifyContent="center" alignItems="center" marginTop="4">
-              <Text>Don't have an account? </Text>
-              <Link onPress={() => router.push("/register")} _text={{
-                fontSize: "sm",
-                color: "primary.700",
-                fontWeight: "medium"
-              }}>Sign Up. </Link>
-            </Row>
-          </Center>
-        </Box>
-      </Column>
+        </Column>
+        <Row justifyContent="center" alignItems="center" paddingY="4">
+          <Text>Don't have an account? </Text>
+          <Link onPress={() => router.push("/register")} _text={{
+            fontSize: "sm",
+            color: "primary.700",
+            fontWeight: "medium"
+          }}>Sign Up. </Link>
+        </Row>
+      </KeyboardAwareScrollView>
+      <Box background="white" paddingY="4">
+        <Button onPress={() => { handleLogin() }}> Login </Button>
+      </Box>
     </ScreenContainer>
   )
 }
