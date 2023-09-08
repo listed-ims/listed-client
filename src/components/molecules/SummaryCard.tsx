@@ -38,7 +38,7 @@ const SummaryCard = ({ totalItemsSold, totalRevenue }: SummaryCardProps) => {
         </Column>
         <DataSummaryIcon />
       </Row>
-      <Button variant="outline" width="full">View Full Analytics</Button>
+      <Button variant="white" width="full">View Full Analytics</Button>
     </Column>
   )
 }
