@@ -4,6 +4,7 @@ import { NativeBaseProvider } from 'native-base'
 import { useFonts } from 'expo-font'
 import { stackHeaderStyles, theme } from '@listed-styles';
 import { AuthProvider } from '@listed-contexts';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -30,11 +31,15 @@ const RootLayout = () => {
     return null;
   }
 
+  const queryClient = new QueryClient();
+
   return (
     <NativeBaseProvider theme={theme}>
-      <AuthProvider>
-        <Stack screenOptions={stackHeaderStyles} />
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Stack screenOptions={stackHeaderStyles} />
+        </AuthProvider>
+      </QueryClientProvider>
     </NativeBaseProvider>
 
   )

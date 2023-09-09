@@ -3,10 +3,10 @@ import { Box, Center, Column, View, Icon, Link, Pressable, Text, Row } from 'nat
 import { Stack, router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useAuth } from '@listed-contexts';
-import { loginService } from '@listed-services';
-import { LoginCredentials } from '@listed-types';
+import { AuthenticationResponse, LoginCredentials } from '@listed-types';
 import { Button, FormControl, ListedLogo, ScreenContainer, TextField } from '@listed-components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useUserLoginMutation } from 'src/hooks/mutations/userMutations';
 
 const Login = () => {
   const [errors, setErrors] = React.useState({
@@ -45,19 +45,22 @@ const Login = () => {
 
   const handleLogin = () => {
     if (validate()) {
-      loginService({ username: formData.username, password: formData.password } as LoginCredentials)
-        .then((response) => {
-          const token = response.data.token;
-          login(token);
-          router.push("/home");
-          console.log("Login success.");
-        })
-        .catch((error) => {
-          console.log('Login error.')
-          console.error({ ...error });
-        });
+      loginService({ username: formData.username, password: formData.password } as LoginCredentials);
     }
   }
+
+  const { mutate: loginService, isError, isLoading } = useUserLoginMutation({
+    onSuccess: (data: AuthenticationResponse) => {
+      const token = data.token;
+      login(token);
+      router.push("/home");
+    },
+    onError: (error) => {
+      console.log('Login error.')
+      console.error({ ...error });
+    }
+  });
+
 
   return (
     <ScreenContainer>
