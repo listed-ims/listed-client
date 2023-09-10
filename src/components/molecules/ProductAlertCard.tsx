@@ -4,22 +4,35 @@ import { InterfaceViewProps } from "native-base/lib/typescript/components/basic/
 
 interface ProductAlertCardProps extends InterfaceViewProps {
   type: "stocks" | "expiration",
+  value: number
 }
 
-const ProductAlertCard = ({ type, ...props }: ProductAlertCardProps) => {
+const ProductAlertCard = ({ value, type, ...props }: ProductAlertCardProps) => {
   const theme = useTheme();
+
+  const alertTitleText = type === "stocks" ? "Stocks" : "Expirations";
+  const alertDescription = type === "stocks" ? "Low Stock" : "Near Expiry";
+
   return (
-    <Column {...props} space="1" padding="3" borderColor="muted.300" borderWidth="1" borderRadius="lg">
+    <Column {...props} space="1"
+      padding="3"
+      borderColor="muted.300"
+      borderWidth="1"
+      borderRadius="lg">
       <Row space="1">
         <AlertOutlineIcon color={theme.colors.warning[500]} />
-        <Text fontSize="xs" color="warning.500">Stocks</Text>
+        <Text fontSize="xs" color="warning.500">
+          {alertTitleText}
+        </Text>
       </Row>
-      <Row alignItems="center" paddingX="4" justifyContent="space-between" marginBottom="2">
-        <Text fontSize="2xl" fontWeight="bold" color="darkText">24</Text>
-        <View>
-          <Text fontSize="md" fontWeight="xs" color="darkText">Low Stock</Text>
-          <Text fontSize="md" fontWeight="xs" color="darkText">Products</Text>
-        </View>
+      <Row alignItems="center"
+        space="2"
+        marginBottom="2"
+        justifyContent="space-evenly">
+        <Text fontSize="2xl" fontWeight="bold" color="darkText">{value}</Text>
+        <Text fontSize="md" fontWeight="xs" color="darkText">
+          {alertDescription + "\nProducts"}
+        </Text>
       </Row>
     </Column>
   )
