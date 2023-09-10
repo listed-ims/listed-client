@@ -17,3 +17,4 @@ export { default as FilterButton } from "./FilterButton";
 export { default as BackIcon } from "./BackIcon";
 export { default as NewStoreIcon } from "./NewStoreIcon";
 export { default as ListedLogo } from "./ListedLogo";
+export { default as AlertOutlineIcon } from "./AlertOutlineIcon";
