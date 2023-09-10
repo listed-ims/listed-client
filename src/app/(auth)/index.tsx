@@ -65,7 +65,7 @@ const Login = () => {
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <Column flexGrow="1" justifyContent="center" marginBottom="12">
           <Center marginBottom="12">
             <ListedLogo />
