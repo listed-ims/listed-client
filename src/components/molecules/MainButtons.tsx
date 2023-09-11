@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useCallback, useState } from 'react'
 import { Center, IPressableProps, Pressable, Text } from 'native-base'
 import { LayoutChangeEvent } from 'react-native';
 import { CollaboratorIcon, InventoryIcon, ProductIcon, TransactionIcon } from '@listed-components';
@@ -6,11 +6,11 @@ import { toTitleCase } from '@listed-utils';
 
 
 interface MainButtonsProps extends IPressableProps {
-  type: "inventory" | "products" | "collaborators" | "transactions",
+  type: "inventory" | "products" | "collaborators" | "transactions" | string
 }
 
 const MainButtons = ({ type, ...props }: MainButtonsProps) => {
-  const [width, setWidth] = useState(0);
+  const [dimension, setDimension] = useState(0);
 
   const icon: Record<MainButtonsProps["type"], ReactNode> = {
     inventory: <InventoryIcon />,
@@ -19,10 +19,14 @@ const MainButtons = ({ type, ...props }: MainButtonsProps) => {
     transactions: <TransactionIcon />,
   }
 
-  const onLayout = (event: LayoutChangeEvent) => {
-    const { width } = event.nativeEvent.layout;
-    setWidth(width);
-  }
+  const onLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      const { width, height } = event.nativeEvent.layout;
+      console.log(width, height, type)
+      setDimension(width);
+    },
+    [],
+  )
 
   return (
     <Pressable {...props}
@@ -30,8 +34,11 @@ const MainButtons = ({ type, ...props }: MainButtonsProps) => {
       backgroundColor="offWhite.500"
       _pressed={{
         backgroundColor: "offWhite.800"
-      }}>
-      <Center width="full" height={width}
+      }}
+      >
+      <Center 
+        width="full"
+        height={dimension}
         onLayout={onLayout}>
         {icon[type]}
         <Text fontSize="2xs" fontWeight="medium"
