@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
-import { Icon, IFormControlProps, FormControl as NBFormControl } from 'native-base'
+import { Icon, IFormControlProps, FormControl as NBFormControl, useTheme } from 'native-base'
 import { Ionicons } from '@expo/vector-icons'
+import { AlertOutlineIcon } from '../atoms'
 
 
 interface FormControlProps extends IFormControlProps {
@@ -11,6 +12,7 @@ interface FormControlProps extends IFormControlProps {
 }
 
 const FormControl = ({ label, helperText, errorMessage, children, ...props }: FormControlProps) => {
+  const theme = useTheme();
   return (
     <NBFormControl {...props}>
       <NBFormControl.Label _text={{ color: "darkText", fontWeight: "medium" }}>
@@ -20,7 +22,7 @@ const FormControl = ({ label, helperText, errorMessage, children, ...props }: Fo
       {
         props.isInvalid ?
           <NBFormControl.ErrorMessage leftIcon={
-            <Icon as={Ionicons} name="alert-circle-outline" color="error.600" />
+            <AlertOutlineIcon color={theme.colors.error[600]} />
           }>
             {errorMessage}
           </NBFormControl.ErrorMessage>
