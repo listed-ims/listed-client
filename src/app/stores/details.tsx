@@ -1,8 +1,8 @@
 import React from "react";
 import {
+  AlertOutlineIcon,
   BackIcon,
   Button,
-  CloseStoreAlertIcon,
   ScreenContainer,
   StoreDetailsIcon,
   StoreDetailsInviteIcon,
@@ -18,8 +18,11 @@ import {
   Divider,
   ScrollView,
 } from "native-base";
+import {  useTheme } from "native-base"
 
 const StoreDetails = () => {
+  const theme = useTheme();
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen
@@ -179,7 +182,7 @@ const StoreDetails = () => {
             p="4"
           >
             <HStack space="1">
-              <CloseStoreAlertIcon />
+              <AlertOutlineIcon color={theme.colors.error[500]}/>
               <Text fontSize="xs" fontWeight="semibold" color="error.500">
                 CLOSE STORE
               </Text>
