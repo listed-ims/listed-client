@@ -58,7 +58,7 @@ const Stores = () => {
                 userRole={item.role}
                 status={item.status == "OPEN" ? "open" : "closed"}
                 current={index == 0}
-                onPress={() => { }}
+                onPress={() => {router.push("/stores/details")}}
               />
             )}
           />
