@@ -11,7 +11,7 @@ interface InvalidLoginModalProps extends InterfaceModalProps {
 const InvalidLoginModal: React.FC<InvalidLoginModalProps> = ({ modalContent, onClose, ...props }) => {
     
   return (
-    <Modal {...props} paddingX="4">
+    <Modal {...props} paddingX="4" onClose={onClose}>
       <Modal.Content width="full">
           <Modal.Header alignItems="center">
             {modalContent.header}
