@@ -2,8 +2,8 @@ import React from 'react'
 import { Stack, Tabs } from 'expo-router';
 import { Text } from 'native-base';
 import { toTitleCase } from '@listed-utils'
-import { AccountIcon, HomeIcon, NotificationsIcon, StoresIcon } from '@listed-components';
 import { tabHeaderStyles } from '@listed-styles';
+import { AccountIcon, HomeIcon, NotificationsIcon, StoresIcon } from '@listed-components/atoms';
 
 
 const HomeTabsNav = () => {

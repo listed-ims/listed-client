@@ -1,5 +1,5 @@
-import { Column, Row, Text, View, useTheme } from "native-base"
-import { AlertOutlineIcon } from "../atoms";
+import { AlertOutlineIcon } from "@listed-components/atoms";
+import { Column, Row, Text, useTheme } from "native-base"
 import { InterfaceViewProps } from "native-base/lib/typescript/components/basic/View/types";
 
 interface ProductAlertCardProps extends InterfaceViewProps {

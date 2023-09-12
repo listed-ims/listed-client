@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import { Box, Column, FlatList, HStack, Text } from "native-base";
-import {
-  AddIcon,
-  Button,
-  ScreenContainer,
-  StoreListFilterGroup,
-  StoreListItem,
-} from "@listed-components";
 import { Stack, router } from "expo-router";
+import { ScreenContainer } from "@listed-components/organisms";
+import { AddIcon, Button } from "@listed-components/atoms";
+import { StoreListFilterGroup, StoreListItem } from "@listed-components/molecules";
+import { Routes } from "@listed-constants";
 
 // to be deleted
 // mock-data
@@ -40,7 +37,7 @@ const Stores = () => {
             px="4"
             startIcon={<AddIcon />}
             borderRadius="full"
-            onPress={() => { router.push("/stores/new") }}
+            onPress={() => { router.push(Routes.NEW_STORE) }}
           >
             Add Store
           </Button>
@@ -54,11 +51,12 @@ const Stores = () => {
             data={stores}
             renderItem={({ item, index }) => (
               <StoreListItem
+                key={item.id}
                 name={item.name}
                 userRole={item.role}
                 status={item.status == "OPEN" ? "open" : "closed"}
                 current={index == 0}
-                onPress={() => {router.push("/stores/details")}}
+                onPress={() => { router.push(`${Routes.STORES}/1}`) }}
               />
             )}
           />

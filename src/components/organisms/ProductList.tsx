@@ -1,7 +1,7 @@
+import { ProductListItem } from '@listed-components/molecules';
+import { Product } from '@listed-types';
 import { Column, Divider, FlatList } from 'native-base'
 import React from 'react'
-import ProductListItem from '../molecules/ProductListItem'
-import { Product } from '../../types/product'
 
 
 interface ProductListProps {

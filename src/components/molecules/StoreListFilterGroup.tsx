@@ -1,12 +1,11 @@
-import { View, Text } from "react-native";
 import React from "react";
 import { HStack } from "native-base";
-import { ClearFilterIcon, FilterButton } from "@listed-components";
 import Animated, {
   useAnimatedStyle,
   withDelay,
   withTiming,
 } from "react-native-reanimated";
+import { ClearFilterIcon, FilterButton } from "@listed-components/atoms";
 
 interface StoreListFilterGroup {
   filter: "all" | "open" | "closed";
@@ -44,8 +43,8 @@ const StoreListFilterGroup = ({
             filter === "all"
               ? withTiming(-40)
               : filter === "open"
-              ? withTiming(0)
-              : withTiming(-72),
+                ? withTiming(0)
+                : withTiming(-72),
         },
       ],
       zIndex: filter === "closed" ? -1 : 0,
@@ -64,8 +63,8 @@ const StoreListFilterGroup = ({
             filter === "all"
               ? withTiming(-40)
               : filter === "open"
-              ? withTiming(0)
-              : withTiming(-72),
+                ? withTiming(0)
+                : withTiming(-72),
         },
       ],
     };

@@ -3,10 +3,13 @@ import { Box, Center, Column, View, Icon, Link, Pressable, Text, Row } from 'nat
 import { Stack, router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useAuth } from '@listed-contexts';
-import { AuthenticationResponse, LoginCredentials } from '@listed-types';
-import { Button, FormControl, ListedLogo, ScreenContainer, TextField } from '@listed-components';
+import { LoginCredentials } from '@listed-types';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useUserLoginMutation } from 'src/hooks/mutations/userMutations';
+import { ScreenContainer } from '@listed-components/organisms';
+import { Button, ListedLogo } from '@listed-components/atoms';
+import { FormControl, TextField } from '@listed-components/molecules';
+import { useUserLoginMutation } from '@listed-hooks';
+import { Routes } from '@listed-constants';
 
 const Login = () => {
   const [errors, setErrors] = React.useState({
@@ -50,10 +53,10 @@ const Login = () => {
   }
 
   const { mutate: loginService, isError, isLoading } = useUserLoginMutation({
-    onSuccess: (data: AuthenticationResponse) => {
+    onSuccess: (data) => {
       const token = data.token;
       login(token);
-      router.push("/home");
+      router.push(Routes.HOME);
     },
     onError: (error) => {
       console.log('Login error.')
@@ -106,7 +109,7 @@ const Login = () => {
         </Column>
         <Row justifyContent="center" alignItems="center" paddingY="4">
           <Text>Don't have an account? </Text>
-          <Link onPress={() => router.push("/register")} _text={{
+          <Link onPress={() => router.push(Routes.REGISTER)} _text={{
             fontSize: "sm",
             color: "primary.700",
             fontWeight: "medium"

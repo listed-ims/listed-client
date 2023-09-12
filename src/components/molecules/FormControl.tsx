@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react'
-import { Icon, IFormControlProps, FormControl as NBFormControl, useTheme } from 'native-base'
-import { Ionicons } from '@expo/vector-icons'
-import { AlertOutlineIcon } from '../atoms'
+import { IFormControlProps, FormControl as NBFormControl, useTheme } from 'native-base'
+import { AlertOutlineIcon } from '@listed-components/atoms';
 
 
 interface FormControlProps extends IFormControlProps {

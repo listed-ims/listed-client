@@ -1,14 +1,10 @@
 import React from "react";
 import { Stack, router } from "expo-router";
 import { Column, Text, HStack } from "native-base";
-import {
-  BackIcon,
-  Button,
-  FormControl,
-  NewStoreIcon,
-  ScreenContainer,
-  TextField,
-} from "@listed-components";
+import { ScreenContainer } from "@listed-components/organisms";
+import { BackIcon, Button, NewStoreIcon } from "@listed-components/atoms";
+import { FormControl, TextField } from "@listed-components/molecules";
+
 
 const NewStore = () => {
   return (

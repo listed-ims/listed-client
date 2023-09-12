@@ -38,6 +38,7 @@ const StoreListItem = ({
       <Row alignItems="center" justifyContent="space-between" space="2">
         {current && (
           <Checkbox
+            aria-label="current store"
             colorScheme="success"
             size="sm"
             defaultIsChecked

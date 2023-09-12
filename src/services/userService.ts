@@ -1,13 +1,23 @@
-import axios from "axios";
-import { API_BASE_URL } from "../constants/api";
-import { LoginCredentials } from "../types/logins";
-import { User } from "../types/user";
-import { authAxiosInstance } from "./axios";
+import { authAxiosInstance, axiosInstance } from "./axios";
+import {
+  UserResponse,
+  AuthenticationResponse,
+  LoginCredentials,
+} from "@listed-types";
 
 export const loginService = async (loginCredentials: LoginCredentials) => {
   try {
     const response = await authAxiosInstance.post("login", loginCredentials);
-    return response.data;
+    return response.data as AuthenticationResponse;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserService = async () => {
+  try {
+    const response = await axiosInstance.get("users");
+    return response.data as UserResponse;
   } catch (error) {
     throw error;
   }
@@ -19,21 +29,21 @@ export const loginService = async (loginCredentials: LoginCredentials) => {
 //   return axios.post(`${API_BASE_URL}login`, loginCredentials);
 // };
 
-const registerService = (userDetails: User) => {
-  return axios.post(`${API_BASE_URL}register`, userDetails);
-};
+// const registerService = (userDetails: User) => {
+//   return axios.post(`${API_BASE_URL}register`, userDetails);
+// };
 
-const validateUsernameService = (username: string) => {
-  return axios.post(`${API_BASE_URL}username-validation?username=${username}`);
-};
+// const validateUsernameService = (username: string) => {
+//   return axios.post(`${API_BASE_URL}username-validation?username=${username}`);
+// };
 
-const getUserService = (token: string) => {
-  return axios.get(`${API_BASE_URL}`, {
-    headers: {
-      Authorization: token,
-    },
-  });
-};
+// const getUserService = (token: string) => {
+//   return axios.get(`${API_BASE_URL}`, {
+//     headers: {
+//       Authorization: token,
+//     },
+//   });
+// };
 
 // export {
 //   loginService,
