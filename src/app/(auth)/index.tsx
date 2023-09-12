@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
-import { Box, Center, Column, View, Icon, Link, Pressable, Text, Row } from 'native-base'
+import { Box, Center, Column, View, Icon, Link, Pressable, Text, Row, Modal } from 'native-base'
 import { Stack, router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useAuth } from '@listed-contexts';
-import { LoginCredentials } from '@listed-types';
+import { LoginCredentials, ModalContent } from '@listed-types';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ScreenContainer } from '@listed-components/organisms';
+import { ScreenContainer, InvalidLoginModal } from '@listed-components/organisms';
 import { Button, ListedLogo } from '@listed-components/atoms';
 import { FormControl, TextField } from '@listed-components/molecules';
 import { useUserLoginMutation } from '@listed-hooks';
 import { Routes } from '@listed-constants';
 
 const Login = () => {
+  const[modalContent, setModalContent] = useState<ModalContent>({} as ModalContent)
+
   const [errors, setErrors] = React.useState({
     username: "",
     password: "",
@@ -25,6 +27,15 @@ const Login = () => {
 
   const { login } = useAuth();
 
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   const validate = () => {
     if (formData.username === "") {
@@ -33,7 +44,8 @@ const Login = () => {
     } else if (formData.password === "") {
       handleErrors("Please enter password.", "password")
       return false;
-    } else {
+    }
+    else {
       return true;
     }
   };
@@ -50,7 +62,7 @@ const Login = () => {
     if (validate()) {
       loginService({ username: formData.username, password: formData.password } as LoginCredentials);
     }
-  }
+  };
 
   const { mutate: loginService, isError, isLoading } = useUserLoginMutation({
     onSuccess: (data) => {
@@ -59,6 +71,18 @@ const Login = () => {
       router.push(Routes.HOME);
     },
     onError: (error) => {
+      if (error.code === "ERR_BAD_REQUEST") {
+        setModalContent({
+          header: "We couldn't log you in.",
+          body: "The username and password you entered is incorrect. Please try again."
+        })
+      } else {
+        setModalContent({
+          header: "Connection Timeout.",
+          body: "Please check your internet connection."
+        })
+      }
+      setShowModal(true)
       console.log('Login error.')
       console.error({ ...error });
     }
@@ -117,8 +141,15 @@ const Login = () => {
         </Row>
       </KeyboardAwareScrollView>
       <Box background="white" paddingY="4">
-        <Button onPress={() => { handleLogin() }}> Login </Button>
+        <Button onPress={() => { handleLogin() }}> SIGN IN </Button>
       </Box>
+      <Modal isOpen={showModal}>
+        <InvalidLoginModal
+          modalContent={modalContent}
+          isOpen={showModal} 
+          onClose={closeModal}
+        />
+      </Modal>
     </ScreenContainer>
   )
 }
