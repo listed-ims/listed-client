@@ -5,9 +5,3 @@ export interface StoreResponse {
   name: string;
   status: StoreStatus;
 }
-
-export interface StoreListRequest {
-  status: StoreStatus;
-  pageNumber?: number;
-  pageSize?: number;
-}
