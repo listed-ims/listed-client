@@ -52,9 +52,8 @@ const Stores = () => {
               if (b.id === userDetails?.currentStoreId) return 1;
               return 0;
             })}
-            renderItem={({item}) => (
+            renderItem={({ item}) => (
               <StoreListItem
-                key={item.id}
                 name={item.name}
                 userRole={"Owner"}
                 status={item.status == "OPEN" ? "open" : "closed"}
