@@ -41,7 +41,9 @@ const Home = () => {
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
         <Column marginTop="6" space="2">
           <Text fontWeight="medium" fontSize="md">
             <Text color="muted.400">Welcome</Text> {userDetails?.username}
