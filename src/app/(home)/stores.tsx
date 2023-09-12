@@ -4,25 +4,11 @@ import { Stack, router } from "expo-router";
 import { ScreenContainer } from "@listed-components/organisms";
 import { AddIcon, Button } from "@listed-components/atoms";
 import { StoreListFilterGroup, StoreListItem } from "@listed-components/molecules";
-import { Routes } from "@listed-constants";
+import { Routes, StoreStatus } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
-
-// to be deleted
-// mock-data
-const mockData = [
-  { id: 1, name: "Mueller-Fisher", status: "OPEN", role: "Owner" },
-  { id: 2, name: "Kshlerin-Rutherford", status: "OPEN", role: "Collaborator" },
-  { id: 3, name: "Rogahn-Kohler", status: "CLOSED", role: "Collaborator" },
-  { id: 5, name: "Jaskolski-Waelchi", status: "OPEN", role: "Collaborator" },
-  { id: 6, name: "Ratke and Sons", status: "CLOSED", role: "Owner" },
-  { id: 7, name: "Gulgowski, Kiehn and Bruen", status: "OPEN", role: "Owner" },
-  { id: 8, name: "Nicolas-Barrows", status: "OPEN", role: "Collaborator" },
-  { id: 9, name: "Jakubowski LLC", status: "CLOSED", role: "Collaborator" },
-  { id: 10, name: "Mertz LLC", status: "OPEN", role: "Collaborator" },
-];
+import { useGetStoreList } from "@listed-hooks";
 
 const Stores = () => {
-  const [stores, setStores] = useState(mockData);
   const [filter, setFilter] = useState<"all" | "open" | "closed">("all");
 
   const { userDetails } = useAuth();
@@ -30,6 +16,12 @@ const Stores = () => {
   useEffect(() => {
     console.log({ ...userDetails })
   }, [])
+
+  const {
+    data: storeList,
+    isError: storeListError,
+    isFetching: storeListFetching } = useGetStoreList(
+      filter === "all" ? undefined : (filter === "open" ? StoreStatus.OPEN : StoreStatus.CLOSED), 1, 100);
 
   return (
     <ScreenContainer>
@@ -55,15 +47,18 @@ const Stores = () => {
         />
         <Box flex={1}>
           <FlatList
-            data={stores}
-            renderItem={({ item, index }) => (
+            data={storeList?.sort((a, b) => {
+              if (a.id === userDetails?.currentStoreId) return -1;
+              if (b.id === userDetails?.currentStoreId) return 1;
+              return 0;
+            })}
+            renderItem={({ item}) => (
               <StoreListItem
-                key={item.id}
                 name={item.name}
-                userRole={item.role}
+                userRole={"Owner"}
                 status={item.status == "OPEN" ? "open" : "closed"}
-                current={index == 0}
-                onPress={() => { router.push(`${Routes.STORES}/1}`) }}
+                current={userDetails?.currentStoreId === item.id}
+                onPress={() => { router.push(`${Routes.STORES}/${item.id}}`) }}
               />
             )}
           />
