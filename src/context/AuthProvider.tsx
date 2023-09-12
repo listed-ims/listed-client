@@ -10,7 +10,7 @@ import React, {
 import { clearToken, storeToken } from '@listed-services';
 import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 import { getItemAsync } from 'expo-secure-store';
-import { AUTH_TOKEN_KEY } from '@listed-constants';
+import { AUTH_TOKEN_KEY, Routes } from '@listed-constants';
 import { useTokenValidationMutation } from '@listed-hooks';
 import { UserResponse } from '@listed-types';
 
@@ -69,9 +69,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       if (
         !isLoggedIn && !inAuthRoute
       ) {
-        router.replace('/');
+        router.replace(Routes.LOGIN);
       } else if (isLoggedIn && inAuthRoute) {
-        router.replace('/home');
+        router.replace(Routes.HOME);
       }
     }, [isLoggedIn, segments, isNavigationReady]);
   }
