@@ -4,7 +4,8 @@ import { NativeBaseProvider } from 'native-base'
 import { useFonts } from 'expo-font'
 import { stackHeaderStyles, theme } from '@listed-styles';
 import { AuthProvider } from '@listed-contexts';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 
 SplashScreen.preventAutoHideAsync();
 

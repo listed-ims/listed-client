@@ -1,14 +1,15 @@
-import { Button, DataSummaryIcon, StoreNameIcon } from '@listed-components'
+import { Button, DataSummaryIcon, StoreNameIcon } from '@listed-components/atoms'
 import { Column, Row, Text, View } from 'native-base'
 import React from 'react'
 
 
 interface SummaryCardProps {
   totalItemsSold: string,
-  totalRevenue: string
+  totalRevenue: string,
+  storeName?: string,
 }
 
-const SummaryCard = ({ totalItemsSold, totalRevenue }: SummaryCardProps) => {
+const SummaryCard = ({ totalItemsSold, totalRevenue, storeName }: SummaryCardProps) => {
 
   return (
     <Column alignItems="center" space="4"
@@ -20,7 +21,7 @@ const SummaryCard = ({ totalItemsSold, totalRevenue }: SummaryCardProps) => {
           <StoreNameIcon />
           <Text color="lightText" fontSize="xl"
             fontWeight="bold">
-            7/Evelen Store
+            {storeName}
           </Text>
         </Row>
         <Text color="lightText" fontSize="sm" fontWeight="regular">Today</Text>

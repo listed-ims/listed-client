@@ -1,7 +1,9 @@
 import React from 'react'
 import { Button, Row, ScrollView, Text, View } from 'native-base'
 import { Stack, router } from 'expo-router'
-import { MainButtons, ProductAlertCard, ScreenContainer, SummaryCard, TransactionButton } from '@listed-components'
+import { ScreenContainer } from '@listed-components/organisms'
+import { MainButtons, ProductAlertCard, SummaryCard, TransactionButton } from '@listed-components/molecules'
+import { Routes } from '@listed-constants'
 
 
 const Registration = () => {
@@ -11,7 +13,7 @@ const Registration = () => {
         <Stack.Screen options={{ headerShown: false }} />
         <Text fontSize="xs">Registration</Text>
         <Button
-          onPress={() => router.push("/")}>
+          onPress={() => router.push(Routes.LOGIN)}>
           Registration
         </Button>
         <View marginY={4} />

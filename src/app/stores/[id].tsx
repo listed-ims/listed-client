@@ -1,12 +1,4 @@
 import React from "react";
-import {
-  AlertOutlineIcon,
-  BackIcon,
-  Button,
-  ScreenContainer,
-  StoreDetailsIcon,
-  StoreDetailsInviteIcon,
-} from "@listed-components";
 import { Stack, router } from "expo-router";
 import {
   Badge,
@@ -18,7 +10,15 @@ import {
   Divider,
   ScrollView,
 } from "native-base";
-import {  useTheme } from "native-base"
+import {
+  AlertOutlineIcon,
+  BackIcon,
+  Button,
+  StoreDetailsIcon,
+  StoreDetailsInviteIcon
+} from "@listed-components/atoms";
+import { useTheme } from "native-base"
+import { ScreenContainer } from "@listed-components/organisms";
 
 const StoreDetails = () => {
   const theme = useTheme();
@@ -182,7 +182,7 @@ const StoreDetails = () => {
             p="4"
           >
             <HStack space="1">
-              <AlertOutlineIcon color={theme.colors.error[500]}/>
+              <AlertOutlineIcon color={theme.colors.error[500]} />
               <Text fontSize="xs" fontWeight="semibold" color="error.500">
                 CLOSE STORE
               </Text>

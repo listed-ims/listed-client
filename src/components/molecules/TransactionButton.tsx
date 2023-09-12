@@ -1,7 +1,7 @@
 import { IPressableProps, Pressable, Row, Text } from 'native-base'
 import React from 'react'
-import { IncomingIcon, OutgoingIcon } from '@listed-components'
 import { toTitleCase } from '@listed-utils'
+import { IncomingIcon, OutgoingIcon } from '@listed-components/atoms'
 
 
 interface TransactionButtonsProps extends IPressableProps {

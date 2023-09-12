@@ -1,6 +1,6 @@
-export interface User {
-  firstname: string;
-  lastname: string;
+export interface UserResponse {
+  id: number;
+  name: string;
   username: string;
-  password: string;
+  currentStoreId: number;
 }

@@ -1,8 +1,13 @@
 import React, { ReactNode, useCallback, useState } from 'react'
 import { Center, IPressableProps, Pressable, Text } from 'native-base'
 import { LayoutChangeEvent } from 'react-native';
-import { CollaboratorIcon, InventoryIcon, ProductIcon, TransactionIcon } from '@listed-components';
 import { toTitleCase } from '@listed-utils';
+import {
+  CollaboratorIcon,
+  InventoryIcon,
+  ProductIcon,
+  TransactionIcon
+} from '@listed-components/atoms';
 
 
 interface MainButtonsProps extends IPressableProps {
@@ -21,11 +26,9 @@ const MainButtons = ({ type, ...props }: MainButtonsProps) => {
 
   const onLayout = useCallback(
     (event: LayoutChangeEvent) => {
-      const { width, height } = event.nativeEvent.layout;
-      console.log(width, height, type)
+      const { width } = event.nativeEvent.layout;
       setDimension(width);
-    },
-    [],
+    }, [],
   )
 
   return (
@@ -35,8 +38,8 @@ const MainButtons = ({ type, ...props }: MainButtonsProps) => {
       _pressed={{
         backgroundColor: "offWhite.800"
       }}
-      >
-      <Center 
+    >
+      <Center
         width="full"
         height={dimension}
         onLayout={onLayout}>

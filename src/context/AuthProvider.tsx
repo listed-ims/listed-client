@@ -1,6 +1,8 @@
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react'
-import { clearToken, getToken, storeToken } from '@listed-services';
+import { clearToken, storeToken } from '@listed-services';
 import { useRootNavigation, useRouter, useSegments } from 'expo-router';
+import { getItemAsync } from 'expo-secure-store';
+import { AUTH_TOKEN_KEY } from '@listed-constants';
 
 interface AuthContextProps {
   isLoggedIn: boolean;
@@ -47,7 +49,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         return;
       }
 
-      const inAuthRoute = segments[0] === 'auth';
+      const inAuthRoute = segments[0] === '(auth)';
 
       if (
         !isLoggedIn && !inAuthRoute
@@ -61,13 +63,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     const checkToken = async () => {
-      const token = await getToken();
+      const token = await getItemAsync(AUTH_TOKEN_KEY);
       if (token) {
         setIsLoggedIn(true);
       }
     };
 
-    checkToken();
+    // checkToken(); // will update this once api for token expiration check is ready
   }, []);
 
   // handle token expiration and refresh
