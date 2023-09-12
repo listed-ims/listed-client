@@ -23,6 +23,15 @@ export const getUserService = async () => {
   }
 };
 
+export const validateTokenService = async () => {
+  try {
+    const response = await axiosInstance.post("users/validation/token");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // THESE ARE THE PREVIOUS SERVICES IMPLEMENTATIONS. WE'LL START TO TRANSITION TO THE NEW ONES LIKE ABOVE.
 
 // const loginService = (loginCredentials: LoginCredentials) => {

@@ -24,12 +24,10 @@ const MainButtons = ({ type, ...props }: MainButtonsProps) => {
     transactions: <TransactionIcon />,
   }
 
-  const onLayout = useCallback(
-    (event: LayoutChangeEvent) => {
-      const { width } = event.nativeEvent.layout;
-      setDimension(width);
-    }, [],
-  )
+  const onLayout = (event: LayoutChangeEvent) => {
+    const { width } = event.nativeEvent.layout;
+    setDimension(width);
+  }
 
   return (
     <Pressable {...props}

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Column, FlatList, HStack, Text } from "native-base";
 import { Stack, router } from "expo-router";
 import { ScreenContainer } from "@listed-components/organisms";
 import { AddIcon, Button } from "@listed-components/atoms";
 import { StoreListFilterGroup, StoreListItem } from "@listed-components/molecules";
 import { Routes } from "@listed-constants";
+import { useAuth } from "@listed-contexts";
 
 // to be deleted
 // mock-data
@@ -23,6 +24,12 @@ const mockData = [
 const Stores = () => {
   const [stores, setStores] = useState(mockData);
   const [filter, setFilter] = useState<"all" | "open" | "closed">("all");
+
+  const { userDetails } = useAuth();
+
+  useEffect(() => {
+    console.log({ ...userDetails })
+  }, [])
 
   return (
     <ScreenContainer>

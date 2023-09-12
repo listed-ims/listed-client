@@ -1,5 +1,5 @@
 import { Stack, router } from 'expo-router';
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   MainButtons,
   ProductAlertCard,
@@ -11,20 +11,31 @@ import { ScrollView } from 'react-native';
 import { ScreenContainer } from '@listed-components/organisms';
 import { Routes } from '@listed-constants';
 import { useGetStoreDetails, useGetUserDetails } from '@listed-hooks';
+import { useAuth } from '@listed-contexts';
 
 
 const Home = () => {
 
+  const { setUserDetails } = useAuth();
+
   const {
     data: userDetails,
     isError: userError,
-    isFetching: userFetching } = useGetUserDetails();
+    isFetching: userFetching,
+    isSuccess: userSuccess,
+  } = useGetUserDetails();
 
   const {
     data: storeDetails,
     isError: storeError,
     isFetching: storeFetching,
   } = useGetStoreDetails(userDetails?.currentStoreId);
+
+  useEffect(() => {
+    if (userSuccess) {
+      setUserDetails(userDetails)
+    }
+  }, [userSuccess])
 
 
   return (

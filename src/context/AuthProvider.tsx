@@ -1,19 +1,33 @@
-import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react'
+import React, {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import { clearToken, storeToken } from '@listed-services';
 import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 import { getItemAsync } from 'expo-secure-store';
 import { AUTH_TOKEN_KEY } from '@listed-constants';
+import { useTokenValidationMutation } from '@listed-hooks';
+import { UserResponse } from '@listed-types';
 
 interface AuthContextProps {
   isLoggedIn: boolean;
+  userDetails: UserResponse | null | undefined;
   login: (token: string) => void;
   logout: () => void;
+  setUserDetails: Dispatch<SetStateAction<UserResponse | null | undefined>>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   isLoggedIn: false,
+  userDetails: null,
   login: () => { },
   logout: () => { },
+  setUserDetails: () => { },
 });
 
 export function useAuth() {
@@ -25,6 +39,7 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [userDetails, setUserDetails] = useState<UserResponse | null | undefined>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isNavigationReady, setNavigationReady] = useState(false);
 
@@ -65,14 +80,21 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const checkToken = async () => {
       const token = await getItemAsync(AUTH_TOKEN_KEY);
       if (token) {
-        setIsLoggedIn(true);
+        validateToken();
       }
     };
-
-    // checkToken(); // will update this once api for token expiration check is ready
+    checkToken();
   }, []);
 
-  // handle token expiration and refresh
+  const { mutate: validateToken } = useTokenValidationMutation({
+    onSuccess: (data) => {
+      if (data.valid) {
+        setIsLoggedIn(true);
+      }
+    }
+  });
+
+  //TODO: handle token expiration and refresh
 
   const login = (token: string) => {
     storeToken(token);
@@ -84,10 +106,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsLoggedIn(false);
   }
 
+  const setUser = (user: UserResponse) => {
+    setUserDetails(user);
+  }
+
   useProtectedRoute(isLoggedIn);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, login, logout, setUserDetails, userDetails }}>
       {children}
     </AuthContext.Provider>
   )
