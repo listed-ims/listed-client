@@ -29,10 +29,6 @@ const Login = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const openModal = () => {
-    setShowModal(true);
-  };
-
   const closeModal = () => {
     setShowModal(false);
   };
@@ -83,8 +79,6 @@ const Login = () => {
         })
       }
       setShowModal(true)
-      console.log('Login error.')
-      console.error({ ...error });
     }
   });
 
