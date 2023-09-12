@@ -137,13 +137,11 @@ const Login = () => {
       <Box background="white" paddingY="4">
         <Button onPress={() => { handleLogin() }}> SIGN IN </Button>
       </Box>
-      <Modal isOpen={showModal}>
-        <InvalidLoginModal
-          modalContent={modalContent}
-          isOpen={showModal}
-          onClose={closeModal}
-        />
-      </Modal>
+      <InvalidLoginModal
+        modalContent={modalContent}
+        isOpen={showModal} 
+        onClose={closeModal}
+      />
     </ScreenContainer>
   )
 }
