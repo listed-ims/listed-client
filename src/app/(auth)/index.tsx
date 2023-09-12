@@ -12,7 +12,7 @@ import { useUserLoginMutation } from '@listed-hooks';
 import { Routes } from '@listed-constants';
 
 const Login = () => {
-  const[modalContent, setModalContent] = useState<ModalContent>({} as ModalContent)
+  const [modalContent, setModalContent] = useState<ModalContent>({} as ModalContent)
 
   const [errors, setErrors] = React.useState({
     username: "",
@@ -140,7 +140,7 @@ const Login = () => {
       <Modal isOpen={showModal}>
         <InvalidLoginModal
           modalContent={modalContent}
-          isOpen={showModal} 
+          isOpen={showModal}
           onClose={closeModal}
         />
       </Modal>

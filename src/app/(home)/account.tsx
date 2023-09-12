@@ -1,13 +1,17 @@
-import { View, Text } from 'react-native'
 import React from 'react'
-import { AccountIcon } from '@listed-components/atoms'
+import { ScreenContainer } from '@listed-components/organisms'
+import { FormControl, TextArea } from '@listed-components/molecules'
+import { Text } from 'native-base'
 
 const Account = () => {
   return (
-    <View>
-      <Text>Account</Text>
-      <AccountIcon selected />
-    </View>
+    <ScreenContainer>
+      <FormControl
+        helperText={<Text fontSize="xs" color="text.500" textAlign="right">0/50</Text>}
+        label="Comment">
+        <TextArea placeholder="Enter comment here" />
+      </FormControl>
+    </ScreenContainer>
   )
 }
 
