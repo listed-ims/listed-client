@@ -3,7 +3,10 @@ import { Box, Column, FlatList, HStack, Text } from "native-base";
 import { Stack, router } from "expo-router";
 import { ScreenContainer } from "@listed-components/organisms";
 import { AddIcon, Button } from "@listed-components/atoms";
-import { StoreListFilterGroup, StoreListItem } from "@listed-components/molecules";
+import {
+  StoreListFilterGroup,
+  StoreListItem,
+} from "@listed-components/molecules";
 import { Routes, StoreStatus } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetStoreList } from "@listed-hooks";
@@ -14,14 +17,22 @@ const Stores = () => {
   const { userDetails } = useAuth();
 
   useEffect(() => {
-    console.log({ ...userDetails })
-  }, [])
+    console.log({ ...userDetails });
+  }, []);
 
   const {
     data: storeList,
     isError: storeListError,
-    isFetching: storeListFetching } = useGetStoreList(
-      filter === "all" ? undefined : (filter === "open" ? StoreStatus.OPEN : StoreStatus.CLOSED), 1, 100);
+    isFetching: storeListFetching,
+  } = useGetStoreList(
+    filter === "all"
+      ? undefined
+      : filter === "open"
+      ? StoreStatus.OPEN
+      : StoreStatus.CLOSED,
+    1,
+    100
+  );
 
   return (
     <ScreenContainer>
@@ -36,7 +47,9 @@ const Stores = () => {
             px="4"
             startIcon={<AddIcon />}
             borderRadius="full"
-            onPress={() => { router.push(Routes.NEW_STORE) }}
+            onPress={() => {
+              router.push(Routes.NEW_STORE);
+            }}
           >
             Add Store
           </Button>
@@ -52,13 +65,15 @@ const Stores = () => {
               if (b.id === userDetails?.currentStoreId) return 1;
               return 0;
             })}
-            renderItem={({ item}) => (
+            renderItem={({ item }) => (
               <StoreListItem
                 name={item.name}
                 userRole={"Owner"}
                 status={item.status == "OPEN" ? "open" : "closed"}
                 current={userDetails?.currentStoreId === item.id}
-                onPress={() => { router.push(`${Routes.STORES}/${item.id}}`) }}
+                onPress={() => {
+                  router.push(`${Routes.STORES}/${item.id}}`);
+                }}
               />
             )}
           />
