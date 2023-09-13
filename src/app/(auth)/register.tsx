@@ -4,11 +4,15 @@ import { Stack, router } from 'expo-router'
 import { ScreenContainer } from '@listed-components/organisms'
 import { FormControl, TextField } from '@listed-components/molecules'
 import { Routes } from '@listed-constants'
-import { HidePasswordIcon, ListedIcon, ShowPasswordIcon } from '@listed-components/atoms'
+import { ListedIcon } from '@listed-components/atoms'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { useUserRegistrationMutation } from '@listed-hooks'
+import { RegistrationCredentials } from '@listed-types'
+import { useAuth } from '@listed-contexts'
 
 
 const Registration = () => {
+
   const [errors, setErrors] = React.useState({
     name: "",
     username: "",
@@ -30,7 +34,7 @@ const Registration = () => {
     } else if (formData.username === "") {
       handleErrors("Please enter username.", "username")
       return false;
-    }else if (formData.password === "") {
+    } else if (formData.password === "") {
       handleErrors("Please enter password.", "password")
       return false;
     }else if (formData.confirmPassword === "") {
@@ -52,8 +56,25 @@ const Registration = () => {
     setFormData({ ...formData, [data]: value });
   };
 
-  const [showPass, setShowPass] = React.useState(false);
-  const [showConfirmPass, setShowConfirmPass] = React.useState(false);
+  const handleRegister = () => {
+    if (validate()) {
+      registrationService({ name: formData.name, username: formData.username, password: formData.password } as RegistrationCredentials);
+    }
+  };
+
+  const { login } = useAuth();
+
+  const { mutate: registrationService, isError, isLoading, } = useUserRegistrationMutation({
+    onSuccess: (data) => {
+      const token = data.token;
+      login(token);
+      router.push(Routes.HOME);
+    },
+    onError: (error) => {
+      console.log("User not created.");
+      console.error({ ...error });
+    },
+  });
 
   return (
     <ScreenContainer>
@@ -107,13 +128,6 @@ const Registration = () => {
                 onFocus={() => handleErrors("", "password")}
                 onChangeText={(value) => handleOnchange(value, "password")}
                 placeholder="Password"
-                type={showPass ? "text" : "password"}
-                rightElement={<Pressable onPress={() => setShowPass(!showPass)}>
-                  <Icon as={showPass ? ShowPasswordIcon : HidePasswordIcon}
-                    size={5}
-                    mr="2"
-                  />
-                </Pressable>}
               />
             </FormControl>
             <FormControl
@@ -125,13 +139,6 @@ const Registration = () => {
                 onFocus={() => handleErrors("", "confirmPassword")}
                 onChangeText={(value) => handleOnchange(value, "confirmPassword")}
                 placeholder="Re-enter Password"
-                type={showConfirmPass ? "text" : "password"}
-                rightElement={<Pressable onPress={() => setShowConfirmPass(!showConfirmPass)}>
-                  <Icon as={showConfirmPass ? ShowPasswordIcon : HidePasswordIcon}
-                    size={5}
-                    mr="2"
-                  />
-                </Pressable>}
               />
             </FormControl>
           </Column>
@@ -147,6 +154,7 @@ const Registration = () => {
         </KeyboardAwareScrollView>
           <Box background="white" paddingTop="4" paddingBottom="6">
             <Button
+              onPress={() => { handleRegister() }}
             > SIGN UP </Button>
           </Box>
     </ScreenContainer>
