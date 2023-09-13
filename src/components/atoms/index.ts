@@ -21,5 +21,3 @@ export { default as AlertOutlineIcon } from "./AlertOutlineIcon";
 export { default as StoreDetailsIcon } from "./StoreDetailsIcon";
 export { default as StoreDetailsInviteIcon } from "./StoreDetailsInviteIcon";
 export { default as ListedIcon } from "./ListedIcon";
-export { default as ShowPasswordIcon } from "./ShowPasswordIcon";
-export { default as HidePasswordIcon } from "./HidePasswordIcon";
