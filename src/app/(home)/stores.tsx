@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Column, FlatList, HStack, Text } from "native-base";
 import { Stack, router } from "expo-router";
 import { ScreenContainer } from "@listed-components/organisms";

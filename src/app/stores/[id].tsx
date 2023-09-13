@@ -1,188 +1,148 @@
-import React from "react";
-import { Stack } from "expo-router";
+import React, { useState } from "react";
+import { Stack, useLocalSearchParams } from "expo-router";
+import { Badge, Column, Heading, VStack, Text, ScrollView } from "native-base";
 import {
-  Badge,
-  Column,
-  Heading,
-  VStack,
-  Text,
-  HStack,
-  Divider,
-  ScrollView,
-} from "native-base";
+  StoreSummaryCard,
+  MakeCurrentStoreCard,
+  CloseStoreCard,
+  ScreenContainer,
+  CurrentStoreModal,
+} from "@listed-components/organisms";
+import { useAuth } from "@listed-contexts";
 import {
-  AlertOutlineIcon,
-  Button,
-  StoreDetailsIcon,
-  StoreDetailsInviteIcon
-} from "@listed-components/atoms";
-import { useTheme } from "native-base"
-import { ScreenContainer } from "@listed-components/organisms";
+  useGetStoreDetails,
+  useCloseStoreMutation,
+  useUpdateUserMutation,
+} from "@listed-hooks";
+import CloseStoreModal from "@listed-components/organisms/CloseStoreModal";
+import {
+  GET_STORE,
+  GET_STORES,
+  GET_USER,
+  StoreStatus,
+} from "@listed-constants";
+import { useQueryClient } from "@tanstack/react-query";
+import { StoreDetailsIcon } from "@listed-components/atoms";
 import { stackHeaderStyles } from "@listed-styles";
+import { UserRequest, UserResponse } from "@listed-types";
 
 const StoreDetails = () => {
-  const theme = useTheme();
+  const queryClient = useQueryClient();
+  const [showCurrentStoreModal, setShowCurrentStoreModal] = useState(false);
+  const [showCloseStoreModal, setShowCloseStoreModal] = useState(false);
+  const { userDetails, setUserDetails } = useAuth();
+  const { id } = useLocalSearchParams();
+
+  const {
+    data: storeDetails,
+    isError: storeError,
+    isFetching: storeFetching,
+  } = useGetStoreDetails(parseInt(id as string));
+
+  const handleOnMakeCurrent = () => {
+    updateUser({
+      name: userDetails?.name,
+      username: userDetails?.username,
+      password: "string",
+      currentStoreId: storeDetails?.id,
+    } as UserRequest);
+  };
+
+  const handleOnCloseStore = () => {
+    closeStore({
+      id: storeDetails?.id,
+      storeRequest: {
+        name: storeDetails?.name,
+        status: StoreStatus.CLOSED,
+      },
+    });
+  };
+
+  const {
+    mutate: closeStore,
+    isError: closeStoreError,
+    isLoading: closeStoreLoading,
+  } = useCloseStoreMutation({
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [GET_STORES] });
+      queryClient.setQueryData([GET_STORE, data.id], data);
+      setShowCloseStoreModal(false);
+    },
+    onError: (error) => {
+      console.log("Close store error.");
+      console.error({ ...error });
+    },
+  });
+
+  const {
+    mutate: updateUser,
+    isError: updateUserError,
+    isLoading: updateUserLoading,
+  } = useUpdateUserMutation({
+    onSuccess: (data) => {
+      setUserDetails({
+        ...userDetails,
+        currentStoreId: data.currentStoreId,
+      } as UserResponse);
+      queryClient.setQueryData([GET_USER], {
+        ...userDetails,
+        currentStoreId: data.currentStoreId,
+      } as UserResponse);
+      queryClient.invalidateQueries({
+        queryKey: [GET_STORE, data.currentStoreId],
+      });
+      queryClient.invalidateQueries({ queryKey: [GET_STORES] });
+      setShowCurrentStoreModal(true);
+    },
+    onError: (error) => {
+      console.log("Make store current error.");
+      console.error({ ...error });
+    },
+  });
 
   return (
     <ScreenContainer withHeader>
-      <Stack.Screen
-        options={stackHeaderStyles("Store Details")}
-      />
+      <Stack.Screen options={stackHeaderStyles("Store Details")} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Column space="4" height="full" py="6">
           <VStack space="1" alignItems="center">
             <StoreDetailsIcon />
-            <Heading size="md">7/Evelen</Heading>
-            <Badge colorScheme="success" variant="solid">
-              CURRENT STORE
-            </Badge>
+            <Heading size="md">{storeDetails?.name}</Heading>
+            {storeDetails?.id === userDetails?.currentStoreId && (
+              <Badge colorScheme="success" variant="solid">
+                CURRENT STORE
+              </Badge>
+            )}
             <Text fontSize="xs" fontWeight="medium" color="darkText">
-              Jem, you are a collaborator!
+              {`${userDetails?.username}, you are the owner!`}
             </Text>
           </VStack>
-
-          <VStack
-            alignItems="center"
-            space="1"
-            p="4"
-            bgColor="primary.700"
-            borderRadius="8"
-            borderColor="primary.700"
-            borderWidth="1"
-          >
-            <HStack space="1">
-              <StoreDetailsInviteIcon />
-              <Text fontSize="sm" fontWeight="semibold" color="white">
-                You got an invite.
-              </Text>
-            </HStack>
-            <Text fontSize="xs" color="white">
-              Abigail invited you to join this store.
-            </Text>
-            <HStack space="4" pt="4">
-              <Button flex="1" variant="white">
-                ACCEPT
-              </Button>
-              <Button flex="1" variant="whiteOutline">
-                DECLINE
-              </Button>
-            </HStack>
-          </VStack>
-
-          <VStack
-            space="4"
-            borderWidth="1"
-            borderRadius="lg"
-            borderColor="muted.300"
-            p="4"
-          >
-            <VStack space="2">
-              <Text fontSize="xs" fontWeight="semibold" color="muted.500">
-                STORE DETAILS
-              </Text>
-              <VStack space="1">
-                <HStack>
-                  <Text flex="2" fontSize="sm" color="darkText">
-                    Store Owner:
-                  </Text>
-                  <Text
-                    flex="3"
-                    fontSize="sm"
-                    fontWeight="bold"
-                    color="darkText"
-                  >
-                    Abigail
-                  </Text>
-                </HStack>
-                <HStack>
-                  <Text flex="2" fontSize="sm" color="darkText">
-                    Store Status:
-                  </Text>
-                  <Text
-                    flex="3"
-                    fontSize="sm"
-                    fontWeight="bold"
-                    color="darkText"
-                  >
-                    Open
-                  </Text>
-                </HStack>
-              </VStack>
-            </VStack>
-            <Divider />
-            <VStack space="2">
-              <Text fontSize="xs" fontWeight="semibold" color="muted.500">
-                STORE PRODUCTS
-              </Text>
-              <VStack space="1">
-                <HStack>
-                  <Text flex="2" fontSize="sm" color="darkText">
-                    Total Products:
-                  </Text>
-                  <Text
-                    flex="3"
-                    fontSize="sm"
-                    fontWeight="bold"
-                    color="darkText"
-                  >
-                    10000
-                  </Text>
-                </HStack>
-                <HStack>
-                  <Text flex="2" fontSize="sm" color="darkText">
-                    Total Price Value:
-                  </Text>
-                  <Text
-                    flex="3"
-                    fontSize="sm"
-                    fontWeight="bold"
-                    color="darkText"
-                  >
-                    Php 240,080.00
-                  </Text>
-                </HStack>
-              </VStack>
-            </VStack>
-          </VStack>
-
-          <VStack
-            space="2"
-            borderWidth="1"
-            borderRadius="lg"
-            borderColor="primary.300"
-            p="4"
-          >
-            <Text fontSize="xs" fontWeight="semibold" color="muted.500">
-              MAKE CURRENT STORE
-            </Text>
-            <Text fontSize="sm" color="darkText">
-              Make this store your current store to manage.
-            </Text>
-            <Button>MAKE CURRENT STORE</Button>
-          </VStack>
-
-          <VStack
-            space="2"
-            borderWidth="1"
-            borderRadius="lg"
-            borderColor="error.300"
-            p="4"
-          >
-            <HStack space="1">
-              <AlertOutlineIcon color={theme.colors.error[500]} />
-              <Text fontSize="xs" fontWeight="semibold" color="error.500">
-                CLOSE STORE
-              </Text>
-            </HStack>
-            <Text fontSize="sm" color="darkText">
-              Closing a store will disable all features for inventory
-              management. This will make the store read-only. Closed stores
-              cannot be reopened.
-            </Text>
-            <Button variant="warnSubtle"> CLOSE STORE </Button>
-          </VStack>
+          <StoreSummaryCard
+            owner={userDetails?.username}
+            status={storeDetails?.status}
+            totalProducts={storeDetails?.totalProducts}
+            totalPriceValue={storeDetails?.totalPriceValue}
+            isInvite={false}
+          />
+          {storeDetails?.id !== userDetails?.currentStoreId &&
+            storeDetails?.status === StoreStatus.OPEN && (
+              <MakeCurrentStoreCard onMakeCurrent={handleOnMakeCurrent} />
+            )}
+          {storeDetails?.status === StoreStatus.OPEN && (
+            <CloseStoreCard onClose={() => setShowCloseStoreModal(true)} />
+          )}
         </Column>
       </ScrollView>
+      <CurrentStoreModal
+        name={storeDetails?.name}
+        onClose={() => setShowCurrentStoreModal(false)}
+        isOpen={showCurrentStoreModal}
+      />
+      <CloseStoreModal
+        onClose={() => setShowCloseStoreModal(false)}
+        isOpen={showCloseStoreModal}
+        onCloseStore={handleOnCloseStore}
+      />
     </ScreenContainer>
   );
 };
