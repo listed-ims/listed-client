@@ -134,7 +134,7 @@ const Login = () => {
           }}>Sign Up. </Link>
         </Row>
       </KeyboardAwareScrollView>
-      <Box background="white" paddingY="4">
+      <Box background="white" paddingTop="4" paddingBottom="6">
         <Button onPress={() => { handleLogin() }}> SIGN IN </Button>
       </Box>
       <InvalidLoginModal

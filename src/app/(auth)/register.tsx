@@ -1,41 +1,154 @@
-import React from 'react'
-import { Button, Row, ScrollView, Text, View } from 'native-base'
+import React, { useState } from 'react'
+import { Box, Button, Center, Column, Icon, Link, Pressable, Row, Text } from 'native-base'
 import { Stack, router } from 'expo-router'
 import { ScreenContainer } from '@listed-components/organisms'
-import { MainButtons, ProductAlertCard, SummaryCard, TransactionButton } from '@listed-components/molecules'
+import { FormControl, TextField } from '@listed-components/molecules'
 import { Routes } from '@listed-constants'
+import { HidePasswordIcon, ListedIcon, ShowPasswordIcon } from '@listed-components/atoms'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 const Registration = () => {
+  const [errors, setErrors] = React.useState({
+    name: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [formData, setFormData] = useState({
+    name: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const validate = () => {
+    if (formData.name === "") {
+      handleErrors("Please enter name.", "name");
+      return false;
+    } else if (formData.username === "") {
+      handleErrors("Please enter username.", "username")
+      return false;
+    }else if (formData.password === "") {
+      handleErrors("Please enter password.", "password")
+      return false;
+    }else if (formData.confirmPassword === "") {
+      handleErrors("Please enter password.", "confirmPassword")
+      return false;
+    } else if (formData.password !== formData.confirmPassword) {
+      handleErrors("Password did not match. Please try again.", "confirmPassword")
+      return false;
+     } else {
+      return true;
+    }
+  };
+
+  const handleErrors = (error: string, data: string) => {
+    setErrors({ ...errors, [data]: error });
+  };
+
+  const handleOnchange = (value: string, data: string) => {
+    setFormData({ ...formData, [data]: value });
+  };
+
+  const [showPass, setShowPass] = React.useState(false);
+  const [showConfirmPass, setShowConfirmPass] = React.useState(false);
+
   return (
     <ScreenContainer>
-      <ScrollView>
-        <Stack.Screen options={{ headerShown: false }} />
-        <Text fontSize="xs">Registration</Text>
-        <Button
-          onPress={() => router.push(Routes.LOGIN)}>
-          Registration
-        </Button>
-        <View marginY={4} />
-        <SummaryCard totalRevenue='1000' totalItemsSold='100' />
-        <View marginY={4} />
-        <Row width="full" space="4">
-          <TransactionButton flexGrow="1" type="incoming" />
-          <TransactionButton flexGrow="1" type="outgoing" />
+      <Stack.Screen options={{ headerShown: false }} />
+      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <Column flexGrow="1" justifyContent="center" marginBottom="12">
+        <Center paddingY="16">
+          <Row alignItems="center" space="2">
+            <ListedIcon/>
+            <Text 
+            bold
+            fontSize="lg"
+            >
+              Sign Up
+            </Text>
+            <Text 
+            fontSize="lg"
+            >
+              to listed
+            </Text>
+          </Row>
+        </Center>
+        <Column>
+            <FormControl
+              label="Name"
+              errorMessage={errors.name}
+              isInvalid={errors.name !== ""}
+            >
+              <TextField
+                onFocus={() => handleErrors("", "name")}
+                onChangeText={(value) => handleOnchange(value, "name")}
+                placeholder="Name" />
+            </FormControl>
+            <FormControl
+              label="Username"
+              errorMessage={errors.username}
+              isInvalid={errors.username !== ""}
+            >
+              <TextField
+                onFocus={() => handleErrors("", "username")}
+                onChangeText={(value) => handleOnchange(value, "username")}
+                placeholder="Username" />
+            </FormControl>
+            <FormControl
+              helperText="Password must be at least 8 characters."
+              label="Password"
+              errorMessage={errors.password}
+              isInvalid={errors.password !== ""}
+            >
+              <TextField
+                onFocus={() => handleErrors("", "password")}
+                onChangeText={(value) => handleOnchange(value, "password")}
+                placeholder="Password"
+                type={showPass ? "text" : "password"}
+                rightElement={<Pressable onPress={() => setShowPass(!showPass)}>
+                  <Icon as={showPass ? ShowPasswordIcon : HidePasswordIcon}
+                    size={5}
+                    mr="2"
+                  />
+                </Pressable>}
+              />
+            </FormControl>
+            <FormControl
+              label="Confirm Password"
+              errorMessage={errors.confirmPassword}
+              isInvalid={errors.confirmPassword !== ""}
+            >
+              <TextField
+                onFocus={() => handleErrors("", "confirmPassword")}
+                onChangeText={(value) => handleOnchange(value, "confirmPassword")}
+                placeholder="Re-enter Password"
+                type={showConfirmPass ? "text" : "password"}
+                rightElement={<Pressable onPress={() => setShowConfirmPass(!showConfirmPass)}>
+                  <Icon as={showConfirmPass ? ShowPasswordIcon : HidePasswordIcon}
+                    size={5}
+                    mr="2"
+                  />
+                </Pressable>}
+              />
+            </FormControl>
+          </Column>
+        </Column>
+        <Row justifyContent="center" alignItems="center" paddingY="4">
+            <Text>Already have an account? </Text>
+            <Link onPress={() => router.push(Routes.LOGIN)} _text={{
+              fontSize: "sm",
+              color: "primary.700",
+              fontWeight: "medium"
+            }}>Sign In </Link>
         </Row>
-        <View marginY={1} />
-        <Row width="full" space="2" >
-          <MainButtons flex="1" type="inventory" />
-          <MainButtons flex="1" type="products" />
-          <MainButtons flex="1" type="collaborators" />
-          <MainButtons flex="1" type="transactions" />
-        </Row>
-        <View marginY={1} />
-        <Row space="4">
-          <ProductAlertCard flex="1" type="stocks" value={24} />
-          <ProductAlertCard flex="1" type="expiration" value={8} />
-        </Row>
-      </ScrollView>
+        </KeyboardAwareScrollView>
+          <Box background="white" paddingTop="4" paddingBottom="6">
+            <Button
+            > SIGN UP </Button>
+          </Box>
     </ScreenContainer>
   )
 }
