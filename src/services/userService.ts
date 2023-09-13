@@ -3,11 +3,21 @@ import {
   UserResponse,
   AuthenticationResponse,
   LoginCredentials,
+  RegistrationCredentials
 } from "@listed-types";
 
 export const loginService = async (loginCredentials: LoginCredentials) => {
   try {
     const response = await authAxiosInstance.post("login", loginCredentials);
+    return response.data as AuthenticationResponse;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const registrationService = async (registrationCredentials: RegistrationCredentials) => {
+  try {
+    const response = await authAxiosInstance.post("register", registrationCredentials);
     return response.data as AuthenticationResponse;
   } catch (error) {
     throw error;
@@ -31,6 +41,15 @@ export const validateTokenService = async () => {
     throw error;
   }
 };
+
+export const validateUsernameService = async () => {
+  try {
+    const response = await axiosInstance.post("users/validation/username");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 // THESE ARE THE PREVIOUS SERVICES IMPLEMENTATIONS. WE'LL START TO TRANSITION TO THE NEW ONES LIKE ABOVE.
 

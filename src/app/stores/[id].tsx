@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack, router } from "expo-router";
+import { Stack } from "expo-router";
 import {
   Badge,
   Column,
@@ -12,13 +12,13 @@ import {
 } from "native-base";
 import {
   AlertOutlineIcon,
-  BackIcon,
   Button,
   StoreDetailsIcon,
   StoreDetailsInviteIcon
 } from "@listed-components/atoms";
 import { useTheme } from "native-base"
 import { ScreenContainer } from "@listed-components/organisms";
+import { stackHeaderStyles } from "@listed-styles";
 
 const StoreDetails = () => {
   const theme = useTheme();
@@ -26,20 +26,7 @@ const StoreDetails = () => {
   return (
     <ScreenContainer withHeader>
       <Stack.Screen
-        options={{
-          headerBackVisible: false,
-          headerShown: true,
-          title: "",
-          headerShadowVisible: true,
-          headerLeft: () => (
-            <HStack space="4" alignItems="center">
-              <BackIcon onPress={() => router.back()} />
-              <Text fontSize="sm" fontWeight="semibold">
-                Store Details
-              </Text>
-            </HStack>
-          ),
-        }}
+        options={stackHeaderStyles("Store Details")}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Column space="4" height="full" py="6">

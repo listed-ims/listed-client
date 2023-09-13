@@ -1,39 +1,18 @@
 import React from 'react'
 import { Stack, Tabs } from 'expo-router';
-import { Text } from 'native-base';
-import { toTitleCase } from '@listed-utils'
-import { tabHeaderStyles } from '@listed-styles';
 import { AccountIcon, HomeIcon, NotificationsIcon, StoresIcon } from '@listed-components/atoms';
+import { tabBarStyles } from '@listed-styles';
 
 
 const HomeTabsNav = () => {
-
-  const getTabBarLabel = (name: string, color: string) => {
-    const tabLabel = name === "index" ? "home" : name
-    return (
-      <Text fontSize="xs" fontWeight="medium"
-        color={color}>
-        {toTitleCase(tabLabel)}
-      </Text>
-    )
-  }
 
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <Tabs screenOptions={
-        ({ route }) => ({
-          ...tabHeaderStyles,
-          tabBarActiveTintColor: "primary.700",
-          tabBarInactiveTintColor: "black",
-          tabBarLabel: ({ color }) => { return getTabBarLabel(route.name, color) },
-          headerShown: false,
-          tabBarStyle: {
-            height: 56,
-            paddingBottom: 8,
-            paddingTop: 8,
-          }
-        })}>
+        ({ route }) => (
+          tabBarStyles(route)
+        )}>
         <Tabs.Screen name="home"
           options={{
             tabBarIcon: ({ focused }) => <HomeIcon selected={focused} />
