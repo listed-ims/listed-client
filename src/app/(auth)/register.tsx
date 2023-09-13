@@ -61,10 +61,19 @@ const Registration = () => {
       <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
       <Column flexGrow="1" justifyContent="center" marginBottom="12">
         <Center paddingY="16">
-          <Row>
+          <Row alignItems="center" space="2">
             <ListedIcon/>
-            <Text paddingY="2" paddingLeft="2" bold fontSize="lg">Sign Up </Text>
-            <Text paddingY="2" fontSize="lg">to listed</Text>
+            <Text 
+            bold
+            fontSize="lg"
+            >
+              Sign Up
+            </Text>
+            <Text 
+            fontSize="lg"
+            >
+              to listed
+            </Text>
           </Row>
         </Center>
         <Column>
@@ -89,6 +98,7 @@ const Registration = () => {
                 placeholder="Username" />
             </FormControl>
             <FormControl
+              helperText="Password must be at least 8 characters."
               label="Password"
               errorMessage={errors.password}
               isInvalid={errors.password !== ""}
@@ -105,7 +115,6 @@ const Registration = () => {
                   />
                 </Pressable>}
               />
-              <Text color="muted.500">Password must be at least 8 characters.</Text>
             </FormControl>
             <FormControl
               label="Confirm Password"
@@ -136,7 +145,7 @@ const Registration = () => {
             }}>Sign In </Link>
         </Row>
         </KeyboardAwareScrollView>
-          <Box background="white" paddingY="4">
+          <Box background="white" paddingTop="4" paddingBottom="6">
             <Button
             > SIGN UP </Button>
           </Box>
