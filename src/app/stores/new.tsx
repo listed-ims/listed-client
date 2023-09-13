@@ -9,6 +9,7 @@ import { StoreRequest, UserResponse } from "@listed-types";
 import { useCreateStoreMutation } from "@listed-hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@listed-contexts";
+import { stackHeaderStyles } from "@listed-styles";
 
 const NewStore = () => {
   const queryClient = useQueryClient();
@@ -77,13 +78,7 @@ const NewStore = () => {
   return (
     <ScreenContainer withHeader>
       <Stack.Screen
-        options={{
-          headerBackVisible: false,
-          headerShown: true,
-          title: "",
-          headerShadowVisible: false,
-          headerLeft: () => <BackIcon onPress={() => router.back()} />,
-        }}
+        options={stackHeaderStyles()}
       />
       <Column space="6" height="full" pb="6">
         <HStack py="4">

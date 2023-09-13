@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { SplashScreen, Stack } from 'expo-router'
 import { NativeBaseProvider } from 'native-base'
 import { useFonts } from 'expo-font'
-import { stackHeaderStyles, theme } from '@listed-styles';
+import { theme } from '@listed-styles';
 import { AuthProvider } from '@listed-contexts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -38,7 +38,7 @@ const RootLayout = () => {
     <NativeBaseProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Stack screenOptions={stackHeaderStyles} />
+          <Stack />
         </AuthProvider>
       </QueryClientProvider>
     </NativeBaseProvider>
