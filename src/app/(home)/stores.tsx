@@ -16,10 +16,6 @@ const Stores = () => {
 
   const { userDetails } = useAuth();
 
-  useEffect(() => {
-    console.log({ ...userDetails });
-  }, []);
-
   const {
     data: storeList,
     isError: storeListError,
