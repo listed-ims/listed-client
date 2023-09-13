@@ -23,3 +23,6 @@ export { default as StoreDetailsInviteIcon } from "./StoreDetailsInviteIcon";
 export { default as ListedIcon } from "./ListedIcon";
 export { default as ShowPasswordIcon } from "./ShowPasswordIcon";
 export { default as HidePasswordIcon } from "./HidePasswordIcon";
+export { default as ScanIcon } from "./ScanIcon";
+export { default as SearchIcon } from "./SearchIcon";
+export { default as CalendarIcon } from "./CalendarIcon";
