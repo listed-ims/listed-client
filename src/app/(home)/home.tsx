@@ -53,7 +53,11 @@ const Home = () => {
         </Column>
         <View marginY={4} />
         <Row width="full" space="4">
-          <TransactionButton flexGrow="1" type="incoming" />
+          <TransactionButton flexGrow="1" type="incoming" 
+          onPress={()=>{
+            router.push(Routes.NEW_INCOMING)
+          }}
+          />
           <TransactionButton flexGrow="1" type="outgoing" />
         </Row>
         <View marginY={3} />

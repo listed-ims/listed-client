@@ -20,4 +20,6 @@ export { default as ListedLogo } from "./ListedLogo";
 export { default as AlertOutlineIcon } from "./AlertOutlineIcon";
 export { default as StoreDetailsIcon } from "./StoreDetailsIcon";
 export { default as StoreDetailsInviteIcon } from "./StoreDetailsInviteIcon";
+export { default as ScanIcon } from "./ScanIcon";
+export { default as SearchIcon } from "./SearchIcon";
 export { default as ListedIcon } from "./ListedIcon";
