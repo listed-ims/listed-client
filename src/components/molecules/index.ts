@@ -9,3 +9,4 @@ export { default as ProductListItem } from "./ProductListItem";
 export { default as StoreListItem } from "./StoreListItem";
 export { default as StoreListFilterGroup } from "./StoreListFilterGroup";
 export { default as ProductAlertCard } from "./ProductAlertCard";
+export { default as TextArea } from "./TextArea";

@@ -5,8 +5,8 @@ import { AlertOutlineIcon } from '@listed-components/atoms';
 
 interface FormControlProps extends IFormControlProps {
   children: ReactNode,
-  label?: String,
-  helperText?: String,
+  label?: ReactNode | String,
+  helperText?: ReactNode | String,
   errorMessage?: String,
 }
 

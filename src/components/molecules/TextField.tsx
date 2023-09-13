@@ -11,11 +11,6 @@ interface TextFieldProps extends IInputProps {
 
 const TextField = ({ startDataLabel, endDataLabel, onChangeText, variant = "filled", value, defaultValue, ...props }: TextFieldProps) => {
   const { colors } = useTheme();
-  let backgroundColor: ColorValue = "offWhite.200";
-
-  if (variant === "underlined") {
-    backgroundColor = "white"
-  }
 
   const [hasInput, setHasInput] = useState(false);
 
@@ -33,12 +28,13 @@ const TextField = ({ startDataLabel, endDataLabel, onChangeText, variant = "fill
       value={value}
       defaultValue={defaultValue}
       variant={variant}
-      backgroundColor={backgroundColor}
+      backgroundColor="offWhite.200"
+      borderColor="offWhite.200"
       _input={{ selectionColor: colors.coolGray[400] }}
       _focus={{ borderColor: "muted.300" }}
       _invalid={{
-        background: "error.50",
-        _focus: { backgroundColor: "error.50" }
+        backgroundColor: "error.50",
+        _focus: { backgroundColor: "offWhite.200" }
       }}
       _disabled={{ backgroundColor: "muted.300" }}
       InputRightElement={
@@ -48,7 +44,7 @@ const TextField = ({ startDataLabel, endDataLabel, onChangeText, variant = "fill
               fontSize="md"
               fontWeight="regular"
               color="darkText"
-              marginRight={variant === "underlined"? "2": "4"}>
+              marginRight={variant === "underlined" ? "2" : "4"}>
               {endDataLabel}
             </Text>
           )
@@ -61,8 +57,8 @@ const TextField = ({ startDataLabel, endDataLabel, onChangeText, variant = "fill
               fontSize="md"
               fontWeight="regular"
               color="darkText"
-              marginLeft={variant === "underlined"? "0": "4"}
-              marginRight={variant === "underlined"? "2": "0"}>
+              marginLeft={variant === "underlined" ? "0" : "4"}
+              marginRight={variant === "underlined" ? "2" : "0"}>
               {startDataLabel}
             </Text>
           )
