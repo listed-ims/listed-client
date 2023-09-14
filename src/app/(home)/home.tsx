@@ -89,7 +89,7 @@ const Home = () => {
         </Column>
         <View marginY={3} />
       </ScrollView>:
-      <DashboardNoStore/>
+      <DashboardNoStore username={userDetails?.username} />
       }
     </ScreenContainer >
   )
