@@ -1,4 +1,4 @@
-import { StoreRequest, StoreResponse } from "@listed-types";
+import { StoreRequest, StoreResponse, CloseStoreRequest } from "@listed-types";
 import { axiosInstance } from "./axios";
 import { StoreStatus } from "@listed-constants";
 
@@ -33,6 +33,15 @@ export const getStoresService = async (
 export const createStoreService = async (storeRequest: StoreRequest) => {
   try {
     const response = await axiosInstance.post(`stores`, storeRequest);
+    return response.data as StoreResponse;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const closeStoreService = async (closeStoreRequest: CloseStoreRequest) => {
+  try {
+    const response = await axiosInstance.put(`stores/${closeStoreRequest.id}`, closeStoreRequest.storeRequest);
     return response.data as StoreResponse;
   } catch (error) {
     throw error;

@@ -9,6 +9,11 @@ export interface StoreResponse {
 }
 
 export interface StoreRequest {
-  name: string;
+  name?: string;
   status: StoreStatus;
+}
+
+export interface CloseStoreRequest {
+  id?: number;
+  storeRequest: StoreRequest;
 }
