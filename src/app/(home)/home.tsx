@@ -8,7 +8,7 @@ import {
 } from '@listed-components/molecules';
 import { Column, View, Row, Text } from 'native-base';
 import { ScrollView } from 'react-native';
-import { ScreenContainer } from '@listed-components/organisms';
+import { DashboardNoStore, ScreenContainer } from '@listed-components/organisms';
 import { Routes } from '@listed-constants';
 import { useGetStoreDetails, useGetUserDetails } from '@listed-hooks';
 import { useAuth } from '@listed-contexts';
@@ -41,6 +41,7 @@ const Home = () => {
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
+      {userDetails?.currentStoreId ?
       <ScrollView
         showsVerticalScrollIndicator={false}
       >
@@ -87,7 +88,9 @@ const Home = () => {
           </Row>
         </Column>
         <View marginY={3} />
-      </ScrollView>
+      </ScrollView>:
+      <DashboardNoStore username={userDetails?.username} />
+      }
     </ScreenContainer >
   )
 }
