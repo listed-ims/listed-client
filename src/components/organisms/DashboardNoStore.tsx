@@ -17,8 +17,8 @@ const DashboardNoStore= ({ username }: DashboardNoStoreProps) => {
       fontWeight="medium" 
       fontSize="md"
       >
-          <Text color="muted.400">Welcome </Text>
-          {username}
+      <Text color="muted.400">Welcome </Text>
+        {username}
       </Text>
       <Text
       fontSize="xl" 
