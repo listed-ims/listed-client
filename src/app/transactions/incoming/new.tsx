@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import {
-  BackIcon,
   Button,
   ScanIcon,
-  SearchIcon,
+  SearchIcon
 } from "@listed-components/atoms";
 import { FormControl, TextArea, TextField } from "@listed-components/molecules";
 import { ScreenContainer } from "@listed-components/organisms";
@@ -14,6 +13,8 @@ import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { Pressable } from "react-native";
+import { Routes } from "@listed-constants";
+import { stackHeaderStyles } from "@listed-styles";
 
 const NewIncoming = () => {
   const [expirationDate, setExpirationDate] = useState("");
@@ -47,25 +48,7 @@ const NewIncoming = () => {
 
   return (
     <ScreenContainer withHeader>
-      <Stack.Screen
-        options={{
-          headerBackVisible: false,
-          headerShown: true,
-          title: "",
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <HStack alignItems="center" marginRight={10}>
-              <BackIcon
-                onPress={() => router.back()}
-                style={{ marginRight: 16 }}
-              />
-              <Text fontSize="14px" fontWeight="semibold">
-                Incoming
-              </Text>
-            </HStack>
-          ),
-        }}
-      />
+      <Stack.Screen options={stackHeaderStyles("Incoming")} />
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
@@ -81,7 +64,11 @@ const NewIncoming = () => {
             <HStack space="2">
               <TextField
                 flex="1"
+                
                 placeholder="Search a product"
+                onPressIn={()=>{
+                  router.push(Routes.SELECT_PRODUCT)
+                }}
                 rightElement={
                   <View marginX="3">
                     <SearchIcon />
