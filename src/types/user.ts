@@ -20,3 +20,10 @@ export interface RegistrationCredentials {
   username: string;
   password: string;
 }
+
+export interface UserRequest {
+  name: string;
+  username: string;
+  password: string;
+  currentStoreId: number
+}

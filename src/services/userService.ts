@@ -3,7 +3,8 @@ import {
   UserResponse,
   AuthenticationResponse,
   LoginCredentials,
-  RegistrationCredentials
+  RegistrationCredentials,
+  UserRequest
 } from "@listed-types";
 
 export const loginService = async (loginCredentials: LoginCredentials) => {
@@ -46,6 +47,15 @@ export const validateUsernameService = async () => {
   try {
     const response = await axiosInstance.post("users/validation/username");
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const updateUserService = async (userRequest: UserRequest) => {
+  try {
+    const response = await axiosInstance.put("users", userRequest);
+    return response.data as UserResponse;
   } catch (error) {
     throw error;
   }
