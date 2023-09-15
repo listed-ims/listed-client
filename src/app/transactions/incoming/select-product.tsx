@@ -80,8 +80,6 @@ const SelectProduct = () => {
     },
   ];
 
-  const [filter, setFilter] = useState<"all" | "low stock" | "no stock">("all");
-
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles()} />
