@@ -1,32 +1,59 @@
-import { Column, IPressableProps, Icon, Text, Pressable, Row } from 'native-base'
-import { Ionicons } from '@expo/vector-icons'
-import React from 'react'
-
+import {
+  IPressableProps,
+  Text,
+  Pressable,
+  HStack,
+  VStack,
+  Badge,
+} from "native-base";
+import React from "react";
 
 interface ProductListItemProps extends IPressableProps {
-  name: string,
-  variant?: string,
-  quantity: number,
-  unit: string,
+  name: string;
+  variant?: string;
+  quantity: number;
+  threshold: number | null;
+  unit: string;
 }
 
-const ProductListItem = ({ variant, quantity, name, unit, ...props }: ProductListItemProps) => {
+const ProductListItem = ({
+  variant,
+  quantity,
+  name,
+  threshold,
+  unit,
+  ...props
+}: ProductListItemProps) => {
   return (
-    <Pressable {...props} _pressed={{ background: "muted.200" }} paddingY="1" >
-      <Row paddingX="1" paddingBottom="1"
-        alignItems="center"
-        justifyContent="space-between">
-        <Column>
-          <Text fontSize="lg" fontWeight="semibold" color="darkText">{name}</Text>
-          <Text fontSize="sm" fontWeight="semibold" color="muted.500">{variant}</Text>
-          <Text fontSize="sm" fontWeight="semibold" color="muted.500">{`${quantity} ${unit}`}</Text>
-        </Column>
-        <Icon color="muted.500" size="lg"
-          as={Ionicons}
-          name="chevron-forward-outline" />
-      </Row>
+    <Pressable {...props} _pressed={{ background: "muted.200" }} p="2">
+      <HStack alignItems="flex-end" justifyContent="space-between">
+        <VStack>
+          <Text fontSize="sm" fontWeight="medium">
+            {name}
+          </Text>
+          <Text fontSize="xs" fontWeight="medium" color="muted.600">
+            {variant}
+          </Text>
+        </VStack>
+        <VStack alignItems="flex-end">
+          {quantity == 0 ? (
+            <Badge colorScheme="error" variant="solid">
+              No Stock
+            </Badge>
+          ) : quantity <= (threshold as number) ? (
+            <Badge colorScheme="warning" variant="solid">
+              Low Stock
+            </Badge>
+          ) : (
+            <></>
+          )}
+          <Text fontSize="xs" fontWeight="medium" color="muted.600">
+            {quantity} {unit}
+          </Text>
+        </VStack>
+      </HStack>
     </Pressable>
-  )
-}
+  );
+};
 
-export default ProductListItem
+export default ProductListItem;
