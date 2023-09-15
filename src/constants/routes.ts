@@ -5,5 +5,6 @@ export enum Routes {
   STORES = "/stores",
   NEW_STORE = "/stores/new",
   PRODUCTS = "/products",
-  NEW_INCOMING =  "/transactions/incoming/new"
+  NEW_INCOMING =  "/transactions/incoming/new",
+  SELECT_PRODUCT = "/transactions/incoming/select-product"
 }
