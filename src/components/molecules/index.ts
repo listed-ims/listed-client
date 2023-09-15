@@ -11,3 +11,4 @@ export { default as StoreListFilterGroup } from "./StoreListFilterGroup";
 export { default as ProductAlertCard } from "./ProductAlertCard";
 export { default as TextArea } from "./TextArea";
 export { default as CreateStoreCard } from "./CreateStoreCard";
+export { default as ProductDetailsCard } from "./ProductDetailsCard";
