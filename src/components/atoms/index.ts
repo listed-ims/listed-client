@@ -26,3 +26,6 @@ export { default as ListedIcon } from "./ListedIcon";
 export { default as WarningIcon } from "./WarningIcon";
 export { default as AddStoreIcon } from "./AddStoreIcon";
 export { default as ArrowIcon } from "./ArrowIcon";
+export { default as HeaderScanIcon } from "./HeaderScanIcon";
+export { default as HeaderSearchIcon } from "./HeaderSearchIcon";
+export { default as StocksIcon } from "./StocksIcon";
