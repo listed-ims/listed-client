@@ -38,7 +38,7 @@ const RootLayout = () => {
     <NativeBaseProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Stack />
+          <Stack screenOptions={{ animation: "slide_from_right" }} />
         </AuthProvider>
       </QueryClientProvider>
     </NativeBaseProvider>

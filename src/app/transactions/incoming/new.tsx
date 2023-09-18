@@ -7,7 +7,7 @@ import {
 import { FormControl, TextArea, TextField } from "@listed-components/molecules";
 import { ScreenContainer } from "@listed-components/organisms";
 import { Stack, router } from "expo-router";
-import { Text, HStack, Column, View, Box } from "native-base";
+import { Text, HStack, Column, View, Box, useTheme } from "native-base";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import RNDateTimePicker, {
   DateTimePickerEvent,
@@ -15,35 +15,30 @@ import RNDateTimePicker, {
 import { Pressable } from "react-native";
 import { Routes } from "@listed-constants";
 import { stackHeaderStyles } from "@listed-styles";
+import { dateToMMDDYY } from "@listed-utils";
 
 const NewIncoming = () => {
+  const { colors } = useTheme();
   const [expirationDate, setExpirationDate] = useState("");
   const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-
-  const formatDate = (date: Date) => {
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    const year = date.getFullYear();
-    return `${month}/${day}/${year}`;
-  };
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const onChange = (
     event: DateTimePickerEvent,
-    selectedDate?: Date | undefined
+    date?: Date | undefined
   ) => {
-    const currentDate = selectedDate || date;
-    setShow(false);
-    setDate(currentDate);
+    const selectedDate = date;
+    setShowDatePicker(false);
+    setDate(selectedDate!);
 
-    if (currentDate instanceof Date) {
-      const formattedDate = formatDate(currentDate);
+    if (selectedDate instanceof Date) {
+      const formattedDate = dateToMMDDYY(selectedDate);
       setExpirationDate(formattedDate);
     }
   };
 
   const showDatepicker = () => {
-    setShow(true);
+    setShowDatePicker(true);
   };
 
   return (
@@ -62,19 +57,19 @@ const NewIncoming = () => {
 
           <FormControl label="Product">
             <HStack space="2">
-              <TextField
-                flex="1"
-                
-                placeholder="Search a product"
-                onPressIn={()=>{
-                  router.push(Routes.SELECT_PRODUCT)
-                }}
-                rightElement={
-                  <View marginX="3">
-                    <SearchIcon />
-                  </View>
-                }
-              />
+              <Pressable style={{flex:1}} onPress={() => {
+                router.push(Routes.SELECT_PRODUCT)
+              }}>
+                <TextField
+                  flex="1"
+                  placeholder="Search a product"
+                  rightElement={
+                    <View marginX="3">
+                      <SearchIcon />
+                    </View>
+                  }
+                />
+              </Pressable>
               <Button fontSize="sm" startIcon={<ScanIcon />}>
                 Scan
               </Button>
@@ -95,7 +90,6 @@ const NewIncoming = () => {
               </>
             }
           >
-            <HStack>
               <Pressable onPress={showDatepicker} style={{ flex: 1 }}>
                 <TextField
                   isReadOnly
@@ -104,12 +98,11 @@ const NewIncoming = () => {
                   value={expirationDate}
                 />
               </Pressable>
-            </HStack>
-            {show && (
+            {showDatePicker && (
               <RNDateTimePicker
+                accentColor={colors.primary[700]}
                 value={date}
                 mode="date"
-                display="default"
                 onChange={onChange}
               />
             )}

@@ -4,7 +4,7 @@ import {
   AuthenticationResponse,
   LoginCredentials,
   RegistrationCredentials,
-  UserRequest
+  UserRequest,
 } from "@listed-types";
 
 export const loginService = async (loginCredentials: LoginCredentials) => {
@@ -16,9 +16,14 @@ export const loginService = async (loginCredentials: LoginCredentials) => {
   }
 };
 
-export const registrationService = async (registrationCredentials: RegistrationCredentials) => {
+export const registrationService = async (
+  registrationCredentials: RegistrationCredentials
+) => {
   try {
-    const response = await authAxiosInstance.post("register", registrationCredentials);
+    const response = await authAxiosInstance.post(
+      "register",
+      registrationCredentials
+    );
     return response.data as AuthenticationResponse;
   } catch (error) {
     throw error;
@@ -50,7 +55,7 @@ export const validateUsernameService = async () => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const updateUserService = async (userRequest: UserRequest) => {
   try {
@@ -59,33 +64,4 @@ export const updateUserService = async (userRequest: UserRequest) => {
   } catch (error) {
     throw error;
   }
-}
-
-// THESE ARE THE PREVIOUS SERVICES IMPLEMENTATIONS. WE'LL START TO TRANSITION TO THE NEW ONES LIKE ABOVE.
-
-// const loginService = (loginCredentials: LoginCredentials) => {
-//   return axios.post(`${API_BASE_URL}login`, loginCredentials);
-// };
-
-// const registerService = (userDetails: User) => {
-//   return axios.post(`${API_BASE_URL}register`, userDetails);
-// };
-
-// const validateUsernameService = (username: string) => {
-//   return axios.post(`${API_BASE_URL}username-validation?username=${username}`);
-// };
-
-// const getUserService = (token: string) => {
-//   return axios.get(`${API_BASE_URL}`, {
-//     headers: {
-//       Authorization: token,
-//     },
-//   });
-// };
-
-// export {
-//   loginService,
-//   registerService,
-//   validateUsernameService,
-//   getUserService,
-// };
+};

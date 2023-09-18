@@ -32,10 +32,6 @@ export { default as PriceTagIcon } from "./PriceTagIcon";
 export { default as OutIcon } from "./OutIcon";
 export { default as CubeIcon } from "./CubeIcon";
 export { default as WarningPointIcon } from "./WarningPointIcon";
-
-
-
-
-
-
-
+export { default as HeaderScanIcon } from "./HeaderScanIcon";
+export { default as HeaderSearchIcon } from "./HeaderSearchIcon";
+export { default as StocksIcon } from "./StocksIcon";
