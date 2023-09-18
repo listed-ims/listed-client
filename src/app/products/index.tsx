@@ -198,7 +198,7 @@ const Products = () => {
                 quantity={item.quantity}
                 threshold={item.threshold}
                 unit={item.unit.toLowerCase()}
-                onPress={() => {}}
+                onPress={() => { }}
               />
             )}
           />
@@ -209,7 +209,7 @@ const Products = () => {
           px="4"
           startIcon={<AddIcon />}
           borderRadius="full"
-          onPress={() => {}}
+          onPress={() => { }}
         >
           Add Product
         </Button>
