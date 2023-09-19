@@ -214,7 +214,7 @@ const Products = () => {
           px="4"
           startIcon={<AddIcon />}
           borderRadius="full"
-          onPress={() => { }}
+          onPress={() => {router.push(Routes.NEW_PRODUCT)}}
         >
           Add Product
         </Button>
