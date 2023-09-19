@@ -57,10 +57,11 @@ const NewIncoming = () => {
 
           <FormControl label="Product">
             <HStack space="2">
-              <Pressable style={{flex:1}} onPress={() => {
+              <Pressable style={{ flex: 1 }} onPress={() => {
                 router.push(Routes.SELECT_PRODUCT)
               }}>
                 <TextField
+                  isReadOnly
                   flex="1"
                   placeholder="Search a product"
                   rightElement={
@@ -90,14 +91,14 @@ const NewIncoming = () => {
               </>
             }
           >
-              <Pressable onPress={showDatepicker} style={{ flex: 1 }}>
-                <TextField
-                  isReadOnly
-                  flex="1"
-                  placeholder="Enter date (mm/dd/yyyy)"
-                  value={expirationDate}
-                />
-              </Pressable>
+            <Pressable onPress={showDatepicker} style={{ flex: 1 }}>
+              <TextField
+                isReadOnly
+                flex="1"
+                placeholder="Enter date (mm/dd/yyyy)"
+                value={expirationDate}
+              />
+            </Pressable>
             {showDatePicker && (
               <RNDateTimePicker
                 accentColor={colors.primary[700]}
