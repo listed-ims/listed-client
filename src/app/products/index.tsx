@@ -212,7 +212,7 @@ const Products = () => {
           px="4"
           startIcon={<AddIcon />}
           borderRadius="full"
-          onPress={() => {}}
+          onPress={() => { }}
         >
           Add Product
         </Button>

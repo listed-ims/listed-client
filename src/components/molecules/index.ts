@@ -12,3 +12,4 @@ export { default as ProductAlertCard } from "./ProductAlertCard";
 export { default as TextArea } from "./TextArea";
 export { default as CreateStoreCard } from "./CreateStoreCard";
 export { default as ProdcutListFilter } from "./ProdcutListFilter";
+export { default as HeaderSearchField } from "./HeaderSearchField";
