@@ -35,3 +35,4 @@ export { default as WarningPointIcon } from "./WarningPointIcon";
 export { default as HeaderScanIcon } from "./HeaderScanIcon";
 export { default as HeaderSearchIcon } from "./HeaderSearchIcon";
 export { default as StocksIcon } from "./StocksIcon";
+export { default as SelectButton } from "./SelectButton";
