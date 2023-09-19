@@ -1,11 +1,10 @@
 import React from 'react'
 import { Box, Center, Column, Link, Row, Text } from 'native-base'
 import { Stack, router } from 'expo-router'
-import { ScreenContainer } from '@listed-components/organisms'
+import { KeyboardAwareScroll, ScreenContainer } from '@listed-components/organisms'
 import { FormControl, TextField } from '@listed-components/molecules'
 import { Routes } from '@listed-constants'
 import { Button, ListedIcon } from '@listed-components/atoms'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useFormValidation, useUserRegistrationMutation } from '@listed-hooks'
 import { RegistrationCredentials, ValidationRules } from '@listed-types'
 import { useAuth } from '@listed-contexts'
@@ -71,8 +70,14 @@ const Registration = () => {
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <Column flexGrow="1" justifyContent="center" marginBottom="12">
+      <KeyboardAwareScroll elementOnTopOfKeyboard={
+        <Box background="white" paddingTop="4" paddingBottom="6">
+          <Button
+            onPress={handleRegister}
+          > SIGN UP </Button>
+        </Box>
+      }>
+        <Column flexGrow="1">
           <Center paddingY="16">
             <Row alignItems="center" space="2">
               <ListedIcon />
@@ -141,13 +146,8 @@ const Registration = () => {
             fontWeight: "medium"
           }}>Sign In </Link>
         </Row>
-      </KeyboardAwareScrollView>
-      <Box background="white" paddingTop="4" paddingBottom="6">
-        <Button
-          onPress={handleRegister}
-        > SIGN UP </Button>
-      </Box>
-    </ScreenContainer>
+      </KeyboardAwareScroll>
+    </ScreenContainer >
   )
 }
 

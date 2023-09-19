@@ -1,27 +1,11 @@
 import { BackIcon } from "@listed-components/atoms";
-import { toTitleCase } from "@listed-utils";
-import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
-import { ParamListBase, RouteProp } from "@react-navigation/native";
-import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
-import { router } from "expo-router";
-import { HStack, useTheme } from "native-base";
+import { Stack, router } from "expo-router";
+import { HStack } from "native-base";
 import { Text } from "native-base";
-import { ReactNode } from "react";
+import { ComponentProps } from "react";
 
-const getTabBarLabel = (name: string, color: string) => {
-  const tabLabel = name === "index" ? "home" : name;
-  return (
-    <Text
-      fontSize="xs"
-      fontWeight="medium"
-      color={color}
-    >
-      {toTitleCase(tabLabel)}
-    </Text>
-  );
-};
 
-export const stackHeaderStyles = (headerTitle?: string): NativeStackNavigationOptions => {
+export const stackHeaderStyles = (headerTitle?: string): ComponentProps<typeof Stack.Screen>["options"] => {
   return {
     animation: "slide_from_right",
     headerBackVisible: false,
@@ -40,24 +24,5 @@ export const stackHeaderStyles = (headerTitle?: string): NativeStackNavigationOp
         }
       </HStack>
     ),
-  };
-};
-
-export const tabBarStyles = (
-  route: RouteProp<ParamListBase, string>
-): BottomTabNavigationOptions => {
-  const { colors } = useTheme();
-  return {
-    headerShown: false,
-    tabBarStyle: {
-      height: 56,
-      paddingBottom: 8,
-      paddingTop: 8,
-    },
-    tabBarActiveTintColor: colors.primary[700],
-    tabBarInactiveTintColor: colors.black,
-    tabBarLabel: ({ color }) => {
-      return getTabBarLabel(route.name, color);
-    }
   };
 };

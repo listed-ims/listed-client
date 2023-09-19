@@ -14,12 +14,12 @@ const HeaderSearchField = () => {
     <Row
       borderBottomColor="gray.300"
       borderBottomWidth="1"
-      paddingTop={insets.top + 8}
+      paddingTop={`${insets.top}px`}
       space="4"
       justifyContent="center"
       alignItems="center"
       paddingX="4"
-      height={headerHeight}
+      height={`${headerHeight}px`}
       paddingBottom="2"
     >
       <BackIcon onPress={() => router.back()} />

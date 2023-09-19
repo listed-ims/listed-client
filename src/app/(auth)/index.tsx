@@ -1,62 +1,49 @@
 import React, { useState } from 'react'
-import { Box, Center, Column, View, Icon, Link, Pressable, Text, Row, Modal } from 'native-base'
+import { Box, Center, Column, View, Icon, Link, Pressable, Text, Row } from 'native-base'
 import { Stack, router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useAuth } from '@listed-contexts';
-import { LoginCredentials, ModalContent } from '@listed-types';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ScreenContainer, InvalidLoginModal } from '@listed-components/organisms';
+import { LoginCredentials, ModalContent, ValidationRules } from '@listed-types';
+import { ScreenContainer, InvalidLoginModal, KeyboardAwareScroll } from '@listed-components/organisms';
 import { Button, ListedLogo } from '@listed-components/atoms';
 import { FormControl, TextField } from '@listed-components/molecules';
-import { useUserLoginMutation } from '@listed-hooks';
+import { useFormValidation, useUserLoginMutation } from '@listed-hooks';
 import { Routes } from '@listed-constants';
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 
 const Login = () => {
   const [modalContent, setModalContent] = useState<ModalContent>({} as ModalContent)
-
-  const [errors, setErrors] = React.useState({
-    username: "",
-    password: "",
-  });
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-
   const [show, setShow] = React.useState(false);
-
-  const { login } = useAuth();
-
   const [showModal, setShowModal] = useState(false);
+
+  const initialFormData = {
+    username: "",
+    password: "",
+  }
+
+  const validationRules: ValidationRules = {
+    username: { required: true },
+    password: { required: true },
+  }
+
+  const {
+    formData,
+    errors,
+    validate,
+    handleInputChange
+  } = useFormValidation(initialFormData, validationRules);
+  const { login } = useAuth();
 
   const closeModal = () => {
     setShowModal(false);
   };
 
-  const validate = () => {
-    if (formData.username === "") {
-      handleErrors("Please enter username.", "username");
-      return false;
-    } else if (formData.password === "") {
-      handleErrors("Please enter password.", "password")
-      return false;
-    }
-    else {
-      return true;
-    }
-  };
-
-  const handleErrors = (error: string, data: string) => {
-    setErrors({ ...errors, [data]: error });
-  };
-
-  const handleOnchange = (value: string, data: string) => {
-    setFormData({ ...formData, [data]: value });
-  };
-
   const handleLogin = () => {
     if (validate()) {
-      loginService({ username: formData.username, password: formData.password } as LoginCredentials);
+      loginService({
+        username: formData.username,
+        password: formData.password
+      } as LoginCredentials);
     }
   };
 
@@ -86,8 +73,15 @@ const Login = () => {
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <Column flexGrow="1" justifyContent="center" marginBottom="12">
+      <KeyboardAwareScroll elementOnTopOfKeyboard={
+        <Box background="white" paddingTop="4" paddingBottom="6">
+          <Button onPress={() => { handleLogin() }}> SIGN IN </Button>
+        </Box>
+      }>
+        <Column
+          flexGrow="1"
+          justifyContent="center"
+        >
           <Center marginBottom="12">
             <ListedLogo />
             <View marginY={3} />
@@ -99,20 +93,18 @@ const Login = () => {
           <Column>
             <FormControl
               errorMessage={errors.username}
-              isInvalid={errors.username !== ""}
+              isInvalid={!!errors.username}
             >
               <TextField
-                onFocus={() => handleErrors("", "username")}
-                onChangeText={(value) => handleOnchange(value, "username")}
+                onChangeText={(value) => handleInputChange(value, "username")}
                 placeholder="Username" />
             </FormControl>
             <FormControl
               errorMessage={errors.password}
-              isInvalid={errors.password !== ""}
+              isInvalid={!!errors.password}
             >
               <TextField
-                onFocus={() => handleErrors("", "password")}
-                onChangeText={(value) => handleOnchange(value, "password")}
+                onChangeText={(value) => handleInputChange(value, "password")}
                 placeholder="Password"
                 type={show ? "text" : "password"}
                 rightElement={<Pressable onPress={() => setShow(!show)}>
@@ -133,13 +125,10 @@ const Login = () => {
             fontWeight: "medium"
           }}>Sign Up. </Link>
         </Row>
-      </KeyboardAwareScrollView>
-      <Box background="white" paddingTop="4" paddingBottom="6">
-        <Button onPress={() => { handleLogin() }}> SIGN IN </Button>
-      </Box>
+      </KeyboardAwareScroll>
       <InvalidLoginModal
         modalContent={modalContent}
-        isOpen={showModal} 
+        isOpen={showModal}
         onClose={closeModal}
       />
     </ScreenContainer>

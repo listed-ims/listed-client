@@ -5,10 +5,9 @@ import {
   SearchIcon
 } from "@listed-components/atoms";
 import { FormControl, TextArea, TextField } from "@listed-components/molecules";
-import { ScreenContainer } from "@listed-components/organisms";
+import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
 import { Stack, router } from "expo-router";
 import { Text, HStack, Column, View, Box, useTheme } from "native-base";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -44,17 +43,17 @@ const NewIncoming = () => {
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Incoming")} />
-      <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}
-      >
+      <KeyboardAwareScroll elementOnTopOfKeyboard={
+        <Box background="white" paddingTop="4" paddingBottom="6">
+          <Button size="lg">SUBMIT TRANSACTION</Button>
+        </Box>
+      }>
         <Column>
           <HStack py="4">
-            <Text fontSize="18px" fontWeight="semibold">
+            <Text fontSize="lg" fontWeight="semibold">
               Enter Transaction Details
             </Text>
           </HStack>
-
           <FormControl label="Product">
             <HStack space="2">
               <Pressable style={{ flex: 1 }} onPress={() => {
@@ -134,10 +133,7 @@ const NewIncoming = () => {
             </FormControl>
           </HStack>
         </Column>
-      </KeyboardAwareScrollView>
-      <Box background="white" paddingTop="4" paddingBottom="6">
-        <Button size="lg">SUBMIT TRANSACTION</Button>
-      </Box>
+      </KeyboardAwareScroll>
     </ScreenContainer>
   );
 };
