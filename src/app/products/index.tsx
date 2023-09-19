@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { stackHeaderStyles } from "@listed-styles";
 import { ScreenContainer } from "@listed-components/organisms";
 import {
@@ -22,6 +22,7 @@ import {
   HeaderSearchIcon,
   StocksIcon,
 } from "@listed-components/atoms";
+import { Routes } from "@listed-constants";
 
 const mock_data = [
   {
@@ -198,7 +199,9 @@ const Products = () => {
                 quantity={item.quantity}
                 threshold={item.threshold}
                 unit={item.unit.toLowerCase()}
-                onPress={() => { }}
+                onPress={() => {
+                  router.push(`${Routes.PRODUCTS}/${item.id}}`)
+                }}
               />
             )}
           />
