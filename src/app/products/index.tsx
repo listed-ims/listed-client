@@ -169,27 +169,29 @@ const Products = () => {
           filter={filter}
           handleSetFilter={(filter) => setFilter(filter)}
         />
-        <HStack
-          bg="muted.100"
-          p="2"
-          borderRadius="lg"
-          alignSelf="flex-start"
-          space="5"
-        >
-          <VStack justifyContent="space-between" space="1">
-            <Text fontSize="2xs" fontWeight="medium" color="muted.600">
-              Stocks On Hand
-            </Text>
-            <Text fontSize="sm" fontWeight="medium">
-              1000
-            </Text>
-          </VStack>
-          <VStack justifyContent="flex-end">
-            <StocksIcon />
-          </VStack>
-        </HStack>
         <Box flex={1}>
           <FlatList
+            ListHeaderComponent={
+              <HStack
+                bg="muted.100"
+                p="2"
+                borderRadius="lg"
+                alignSelf="flex-start"
+                space="5"
+              >
+                <VStack justifyContent="space-between" space="1">
+                  <Text fontSize="2xs" fontWeight="medium" color="muted.600">
+                    Stocks On Hand
+                  </Text>
+                  <Text fontSize="sm" fontWeight="medium">
+                    1000
+                  </Text>
+                </VStack>
+                <VStack justifyContent="flex-end">
+                  <StocksIcon />
+                </VStack>
+              </HStack>
+            }
             ItemSeparatorComponent={() => <Divider />}
             data={products}
             renderItem={({ item }) => (

@@ -1,5 +1,5 @@
 import { ScreenContainer } from "@listed-components/organisms";
-import { Box, Divider, FlatList, HStack, Text } from "native-base";
+import { Box, Divider, FlatList, Text } from "native-base";
 import { Stack } from "expo-router";
 import { ProductListItem, HeaderSearchField } from "@listed-components/molecules";
 
@@ -129,13 +129,11 @@ const SelectProduct = () => {
       }} />
       <FlatList
         ListHeaderComponent={
-          <HStack py="4">
-            <Box background="white" paddingTop="4" paddingBottom="4">
-              <Text fontSize="18px" fontWeight="semibold">
-                Select Product
-              </Text>
-            </Box>
-          </HStack>
+          <Box background="white" paddingTop="4" paddingBottom="4">
+            <Text fontSize="lg" fontWeight="semibold">
+              Select Product
+            </Text>
+          </Box>
         }
         ItemSeparatorComponent={() => <Divider />}
         data={data}
