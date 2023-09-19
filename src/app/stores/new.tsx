@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Stack, router } from "expo-router";
-import { Column, Text, HStack } from "native-base";
-import { ScreenContainer } from "@listed-components/organisms";
+import { Column, Text, HStack, Box } from "native-base";
+import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
 import { BackIcon, Button, NewStoreIcon } from "@listed-components/atoms";
 import { FormControl, TextField } from "@listed-components/molecules";
 import { GET_STORES, GET_USER, Routes, StoreStatus } from "@listed-constants";
@@ -78,34 +78,42 @@ const NewStore = () => {
   return (
     <ScreenContainer withHeader>
       <Stack.Screen
-        options={stackHeaderStyles()}
+        options={{
+          ...stackHeaderStyles(),
+          headerShadowVisible: false
+        }}
       />
-      <Column space="6" height="full" pb="6">
-        <HStack py="4">
-          <Text fontSize="xl" fontWeight="semibold">
-            New Store
-          </Text>
-        </HStack>
-        <HStack justifyContent="center">
-          <NewStoreIcon />
-        </HStack>
-        <HStack flex="1">
-          <FormControl
-            label="Store name"
-            errorMessage={errors.name}
-            isInvalid={errors.name !== ""}
-          >
-            <TextField
-              placeholder="Enter store name"
-              onFocus={() => handleErrors("", "name")}
-              onChangeText={(value) => handleOnchange(value, "name")}
-            />
-          </FormControl>
-        </HStack>
-        <Button size="lg" onPress={handleCreateStore}>
-          CREATE STORE
-        </Button>
-      </Column>
+      <KeyboardAwareScroll elementOnTopOfKeyboard={
+        <Box paddingTop="4" paddingBottom="6">
+          <Button size="lg" onPress={handleCreateStore}>
+            CREATE STORE
+          </Button>
+        </Box>
+      }>
+        <Column space="6" height="full" pb="6">
+          <HStack py="4">
+            <Text fontSize="xl" fontWeight="semibold">
+              New Store
+            </Text>
+          </HStack>
+          <HStack justifyContent="center">
+            <NewStoreIcon />
+          </HStack>
+          <HStack flex="1">
+            <FormControl
+              label="Store name"
+              errorMessage={errors.name}
+              isInvalid={errors.name !== ""}
+            >
+              <TextField
+                placeholder="Enter store name"
+                onFocus={() => handleErrors("", "name")}
+                onChangeText={(value) => handleOnchange(value, "name")}
+              />
+            </FormControl>
+          </HStack>
+        </Column>
+      </KeyboardAwareScroll>
     </ScreenContainer>
   );
 };

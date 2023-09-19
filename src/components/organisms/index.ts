@@ -6,3 +6,4 @@ export { default as MakeCurrentStoreCard } from "./MakeCurrentStoreCard";
 export { default as CloseStoreCard } from "./CloseStoreCard";
 export { default as CurrentStoreModal } from "./CurrentStoreModal";
 export { default as DashboardNoStore } from "./DashboardNoStore";
+export { default as KeyboardAwareScroll } from "./KeyboardAwareScroll";
