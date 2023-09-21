@@ -9,11 +9,13 @@ const TextArea = (props: ITextAreaProps) => {
   const variantStyles: Record<Variants, {}> = {
     outline: {
       backgroundColor: "white",
-      borderColor: "muted.300"
+      borderColor: "muted.300",
+      fontSize: "xs"
     },
     filled: {
       backgroundColor: "offWhite.200",
-      borderColor: "white"
+      borderColor: "white",
+      fontSize: "md"
     }
   }
 
@@ -21,7 +23,7 @@ const TextArea = (props: ITextAreaProps) => {
     <NBTextArea
       {...props} {...variantStyles[props.variant as Variants || "filled"]}
       autoCompleteType={undefined}
-      fontSize="md"
+      
       _input={{ selectionColor: colors.coolGray[400] }}
       _focus={{ borderColor: "muted.300" }}
       _invalid={{
