@@ -1,16 +1,27 @@
 import React from 'react'
 import { ITextAreaProps, TextArea as NBTextArea, useTheme } from 'native-base'
 
+type Variants = "outline" | "filled";
+
 const TextArea = (props: ITextAreaProps) => {
   const { colors } = useTheme();
 
+  const variantStyles: Record<Variants, {}> = {
+    outline: {
+      backgroundColor: "white",
+      borderColor: "muted.300"
+    },
+    filled: {
+      backgroundColor: "offWhite.200",
+      borderColor: "white"
+    }
+  }
+
   return (
     <NBTextArea
-      {...props}
+      {...props} {...variantStyles[props.variant as Variants || "filled"]}
       autoCompleteType={undefined}
       fontSize="md"
-      backgroundColor={"offWhite.200"}
-      borderColor="white"
       _input={{ selectionColor: colors.coolGray[400] }}
       _focus={{ borderColor: "muted.300" }}
       _invalid={{
