@@ -24,7 +24,7 @@ import {
 } from "@listed-components/atoms";
 import { ProductFilter, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
-import { useGetProductList } from "src/hooks/queries/productQueries";
+import { useGetProductList } from "src/hooks/queries";
 
 const Products = () => {
   const [filter, setFilter] = useState<"all" | "low stock" | "no stock">("all");
