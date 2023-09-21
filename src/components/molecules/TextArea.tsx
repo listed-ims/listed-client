@@ -19,7 +19,7 @@ const TextArea = (props: ITextAreaProps) => {
 
   return (
     <NBTextArea
-      {...props} {...variantStyles[props.variant as Variants]}
+      {...props} {...variantStyles[props.variant as Variants || "filled"]}
       autoCompleteType={undefined}
       fontSize="md"
       _input={{ selectionColor: colors.coolGray[400] }}
