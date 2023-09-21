@@ -22,134 +22,32 @@ import {
   HeaderSearchIcon,
   StocksIcon,
 } from "@listed-components/atoms";
-import { Routes } from "@listed-constants";
-
-const mock_data = [
-  {
-    id: 1,
-    name: "Squeeze Bottle",
-    variant: "Restoring Serum Foundation SPF 15 023",
-    quantity: 89,
-    threshold: 72,
-    unit: "pcs",
-  },
-  {
-    id: 2,
-    name: "Lamb Rack - Ontario",
-    variant: "Apidra SoloStar",
-    quantity: 90,
-    threshold: 55,
-    unit: "pcs",
-  },
-  {
-    id: 3,
-    name: "Beer - Upper Canada Lager",
-    variant: "Seborrheic",
-    quantity: 70,
-    threshold: 92,
-    unit: "pcs",
-  },
-  {
-    id: 4,
-    name: "Chocolate - Chips Compound",
-    variant: "Sinus Nighttime",
-    quantity: 80,
-    threshold: 20,
-    unit: "pcs",
-  },
-  {
-    id: 5,
-    name: "Quail - Eggs, Fresh",
-    variant: "Pin X",
-    quantity: 3,
-    threshold: 0,
-    unit: "pcs",
-  },
-  {
-    id: 6,
-    name: "Juice - Prune",
-    variant: "Nicotine",
-    quantity: 64,
-    threshold: 88,
-    unit: "pcs",
-  },
-  {
-    id: 7,
-    name: "Appetizer - Escargot Puff",
-    variant: "Coffea cruda",
-    quantity: 98,
-    threshold: 91,
-    unit: "pcs",
-  },
-  {
-    id: 8,
-    name: "Broom - Angled",
-    variant: "Haloperidol Decanoate",
-    quantity: 0,
-    threshold: 4,
-    unit: "pcs",
-  },
-  {
-    id: 9,
-    name: "French Pastry - Mini Chocolate",
-    variant: "Potassium Chloride",
-    quantity: 47,
-    threshold: 0,
-    unit: "pcs",
-  },
-  {
-    id: 10,
-    name: "Sauce - White, Mix",
-    variant: "Lipitor",
-    quantity: 0,
-    threshold: 89,
-    unit: "pcs",
-  },
-  {
-    id: 11,
-    name: "Milk - 2%",
-    variant: "Anefrin Nasal",
-    quantity: 99,
-    threshold: 60,
-    unit: "pcs",
-  },
-  {
-    id: 12,
-    name: "Cape Capensis - Fillet",
-    variant: "Sertraline Hydrochloride Tablets",
-    quantity: 5,
-    threshold: null,
-    unit: "pcs",
-  },
-  {
-    id: 13,
-    name: "Corn Syrup",
-    variant: "TREXIMET",
-    quantity: 0,
-    threshold: 18,
-    unit: "pcs",
-  },
-  {
-    id: 14,
-    name: "Veal - Brisket, Provimi,bnls",
-    variant: "Spectrum SPF 20 LC01 PURE BEIGE",
-    quantity: 82,
-    threshold: null,
-    unit: "pcs",
-  },
-  {
-    id: 15,
-    name: "Napkin Colour",
-    variant: "womens laxative",
-    quantity: 35,
-    threshold: 27,
-    unit: "pcs",
-  },
-];
+import { ProductFilter, Routes } from "@listed-constants";
+import { useAuth } from "@listed-contexts";
+import { useGetProductList } from "src/hooks/queries/productQueries";
 
 const Products = () => {
-  const [products, setProducts] = useState(mock_data);
   const [filter, setFilter] = useState<"all" | "low stock" | "no stock">("all");
+
+  const { userDetails } = useAuth();
+
+  const {
+    data: productList,
+    isError: productListError,
+    isFetching: productListFetching,
+  } = useGetProductList(
+    userDetails?.currentStoreId as number,
+    undefined,
+    undefined,
+    filter === "all"
+      ? undefined
+      : filter === "low stock"
+      ? ProductFilter.LOW_STOCK
+      : ProductFilter.NO_STOCK,
+    undefined,
+    1,
+    100
+  );
 
   return (
     <ScreenContainer withHeader>
@@ -193,16 +91,12 @@ const Products = () => {
               </HStack>
             }
             ItemSeparatorComponent={() => <Divider />}
-            data={products}
+            data={productList}
             renderItem={({ item }) => (
               <ProductListItem
-                name={item.name}
-                variant={item.variant}
-                quantity={item.quantity}
-                threshold={item.threshold}
-                unit={item.unit.toLowerCase()}
+                product={item}
                 onPress={() => {
-                  router.push(`${Routes.PRODUCTS}/${item.id}}`)
+                  router.push(`${Routes.PRODUCTS}/${item.id}}`);
                 }}
               />
             )}
@@ -214,7 +108,9 @@ const Products = () => {
           px="4"
           startIcon={<AddIcon />}
           borderRadius="full"
-          onPress={() => {router.push(Routes.NEW_PRODUCT)}}
+          onPress={() => {
+            router.push(Routes.NEW_PRODUCT);
+          }}
         >
           Add Product
         </Button>

@@ -1,9 +1,14 @@
-export interface Product {
+import { ProductUnit } from "@listed-constants";
+
+export interface ProductResponse {
   id: number,
   name: string;
   barcode?: string;
   variant?: string;
   salePrice: number;
   threshold?: number;
-  unit: string;
+  unit: ProductUnit;
+  quantity: number
+  totalIn: number;
+  totalOut: number;
 };

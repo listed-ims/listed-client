@@ -1,3 +1,4 @@
+import { ProductResponse } from "@listed-types";
 import {
   IPressableProps,
   Text,
@@ -9,21 +10,12 @@ import {
 import React from "react";
 
 interface ProductListItemProps extends IPressableProps {
-  name: string;
-  variant?: string;
-  quantity: number;
-  threshold: number | null;
-  unit: string;
+  product: ProductResponse;
 }
 
-const ProductListItem = ({
-  variant,
-  quantity,
-  name,
-  threshold,
-  unit,
-  ...props
-}: ProductListItemProps) => {
+const ProductListItem = ({ product, ...props }: ProductListItemProps) => {
+  const { name, variant, quantity, threshold, unit } = product;
+
   return (
     <Pressable {...props} _pressed={{ background: "muted.200" }} p="2">
       <HStack alignItems="flex-end" justifyContent="space-between">
@@ -48,7 +40,7 @@ const ProductListItem = ({
             <></>
           )}
           <Text fontSize="xs" fontWeight="medium" color="muted.600">
-            {quantity} {unit}
+            {quantity} {unit.toLowerCase()}
           </Text>
         </VStack>
       </HStack>
