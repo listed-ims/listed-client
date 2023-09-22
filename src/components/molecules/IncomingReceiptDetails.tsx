@@ -6,9 +6,9 @@ import {
   Row,
   Text
 } from "native-base";
-import { FormControl, TextArea, TextField } from "@listed-components/molecules";
+import { FormControl, TextArea} from "@listed-components/molecules";
 
-interface IncomingReceiptCardProps {
+interface IncomingReceiptDetailsProps {
   referenceNumber?: number;
   name?: string;
   variant?: string;
@@ -21,7 +21,7 @@ interface IncomingReceiptCardProps {
   userRole?: string;
 }
 
-const IncomingReceiptCard = ({
+const IncomingReceiptDetails = ({
   referenceNumber,
   name,
   variant,
@@ -32,7 +32,7 @@ const IncomingReceiptCard = ({
   performedBy,
   comment,
   userRole
-}: IncomingReceiptCardProps) => {
+}: IncomingReceiptDetailsProps) => {
   return (
 
       <Column paddingX="4" paddingTop="4">
@@ -58,7 +58,7 @@ const IncomingReceiptCard = ({
 
       <Row paddingBottom="1">
           <Text flex="1" fontSize="xs">Purhase Price / Item:</Text>
-          <Text flex="1" fontSize="xs" fontWeight="bold">{purchasePrice}</Text>
+          <Text flex="1" fontSize="xs" fontWeight="bold">{toCurrency(purchasePrice as number)}</Text>
       </Row>
 
       <Row paddingBottom="1">
@@ -103,4 +103,4 @@ const IncomingReceiptCard = ({
   );
 };
 
-export default IncomingReceiptCard;
+export default IncomingReceiptDetails;

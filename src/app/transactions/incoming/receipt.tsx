@@ -3,7 +3,7 @@ import {
   IncomingReceiptIcon,
   ListedIcon,
 } from "@listed-components/atoms";
-import IncomingReceiptCard from "@listed-components/molecules/IncomingReceiptCard";
+import { IncomingReceiptDetails } from "@listed-components/molecules";
 import {
   KeyboardAwareScroll,
   ScreenContainer,
@@ -40,7 +40,7 @@ const IncomingReceipt = () => {
             </Text>
           </VStack>
         </Box>
-        <IncomingReceiptCard
+        <IncomingReceiptDetails
           referenceNumber={1001}
           name="Coca Cola"
           variant="100ml"
