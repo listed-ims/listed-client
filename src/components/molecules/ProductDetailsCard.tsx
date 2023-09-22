@@ -6,19 +6,19 @@ import { Column, Row, Text } from "native-base"
 import React from 'react'
 
 interface ProductDetailsCardProps {
-    barcode?: number;
-    saleprice?: number;
-    lowWarningpoint?: number;
-    stocksOnHand?: number;
+    barcode?: string;
+    salePrice?: number;
+    threshold?: number;
+    quantity?: number;
     totalIn?: number;
     totalOut?: number;
 }
 
 const ProductDetailsCard = ({
     barcode,
-    saleprice,
-    lowWarningpoint,
-    stocksOnHand,
+    salePrice,
+    threshold,
+    quantity,
     totalIn,
     totalOut,
 }: ProductDetailsCardProps) => {
@@ -36,7 +36,7 @@ const ProductDetailsCard = ({
                 <PriceTagIcon />
                 <Column>
                     <Text textAlign="center" fontSize="xs" color="text.500"> SALE PRICE PER ITEM</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{toCurrency(saleprice as number)} </Text>
+                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{toCurrency(salePrice as number)} </Text>
                 </Column>
             </Row>
 
@@ -44,7 +44,7 @@ const ProductDetailsCard = ({
                 <WarningPointIcon />
                 <Column>
                     <Text fontSize="xs" color="text.500">LOW WARNING POINT</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{lowWarningpoint} </Text>
+                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{threshold} </Text>
                 </Column>
             </Row>
 
@@ -52,7 +52,7 @@ const ProductDetailsCard = ({
                 <AlbumsIcon />
                 <Column>
                     <Text fontSize="xs" color="text.500">STOCK ON HAND</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{stocksOnHand} pcs. </Text>
+                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{quantity} pcs. </Text>
                 </Column>
             </Row>
 
