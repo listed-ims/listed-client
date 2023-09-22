@@ -45,7 +45,11 @@ const NewIncoming = () => {
       <Stack.Screen options={stackHeaderStyles("Incoming")} />
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
-          <Button size="lg">SUBMIT TRANSACTION</Button>
+          <Button size="lg"
+          onPress={() => {
+            router.push(Routes.INCOMING_RECEIPT);
+          }}
+          >SUBMIT TRANSACTION</Button>
         </Box>
       }>
         <Column>
