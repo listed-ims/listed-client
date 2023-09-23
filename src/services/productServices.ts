@@ -1,6 +1,6 @@
 import { ProductFilter } from "@listed-constants";
 import { axiosInstance } from "./axios";
-import { ProductResponse } from "@listed-types";
+import { ProductRequest, ProductResponse } from "@listed-types";
 
 export const getProductsService = async (
   storeId: number,
@@ -28,3 +28,29 @@ export const getProductsService = async (
     throw error;
   }
 };
+
+export const getProductService = async (productId: number) =>{
+  try {
+    const response = await axiosInstance.get(`products/${productId}`);
+    return response.data as ProductResponse;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const updateProductService = async (productRequest: ProductRequest) =>{
+  try {
+    const response = await axiosInstance.put(`products`,productRequest);
+    return response.data as ProductResponse;
+  } catch (error) {
+    throw error;
+  }
+}
+export const deleteProductService = async (productId: number) =>{
+  try {
+    const response = await axiosInstance.delete(`products/${productId}`);
+    return response.data as ProductResponse;
+  } catch (error) {
+    throw error;
+  }
+}

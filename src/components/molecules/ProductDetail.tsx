@@ -5,23 +5,23 @@ import { toCurrency } from "@listed-utils";
 import { Column, Row, Text } from "native-base"
 import React from 'react'
 
-interface ProductDetailsCardProps {
-    barcode?: number;
-    saleprice?: number;
-    lowWarningpoint?: number;
-    stocksOnHand?: number;
+interface ProductDetailsProps {
+    barcode?: string;
+    salePrice?: number;
+    threshold?: number;
+    quantity?: number;
     totalIn?: number;
     totalOut?: number;
 }
 
-const ProductDetailsCard = ({
+const ProductDetail = ({
     barcode,
-    saleprice,
-    lowWarningpoint,
-    stocksOnHand,
+    salePrice,
+    threshold,
+    quantity,
     totalIn,
     totalOut,
-}: ProductDetailsCardProps) => {
+}: ProductDetailsProps) => {
 
     return (
         <Column paddingX="4">
@@ -36,7 +36,7 @@ const ProductDetailsCard = ({
                 <PriceTagIcon />
                 <Column>
                     <Text textAlign="center" fontSize="xs" color="text.500"> SALE PRICE PER ITEM</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{toCurrency(saleprice as number)} </Text>
+                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{toCurrency(salePrice as number)} </Text>
                 </Column>
             </Row>
 
@@ -44,7 +44,7 @@ const ProductDetailsCard = ({
                 <WarningPointIcon />
                 <Column>
                     <Text fontSize="xs" color="text.500">LOW WARNING POINT</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{lowWarningpoint} </Text>
+                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{threshold} pcs.</Text>
                 </Column>
             </Row>
 
@@ -52,7 +52,7 @@ const ProductDetailsCard = ({
                 <AlbumsIcon />
                 <Column>
                     <Text fontSize="xs" color="text.500">STOCK ON HAND</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{stocksOnHand} pcs. </Text>
+                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{quantity} pcs. </Text>
                 </Column>
             </Row>
 
@@ -60,7 +60,7 @@ const ProductDetailsCard = ({
                 <EnterIcon />
                 <Column>
                     <Text fontSize="xs" color="text.500">TOTAL IN</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{totalIn} </Text>
+                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{totalIn} pcs.</Text>
                 </Column>
             </Row>
 
@@ -68,7 +68,7 @@ const ProductDetailsCard = ({
                 <OutIcon />
                 <Column>
                     <Text fontSize="xs" color="text.500">TOTAL OUT</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{totalOut} </Text>
+                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{totalOut} pcs.</Text>
                 </Column>
             </Row>
         </Column>
@@ -76,4 +76,4 @@ const ProductDetailsCard = ({
     )
 }
 
-export default ProductDetailsCard
+export default ProductDetail

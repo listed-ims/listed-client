@@ -1,5 +1,5 @@
-import { GET_PRODUCTS, ProductFilter } from "@listed-constants";
-import { getProductsService } from "@listed-services";
+import { GET_PRODUCT, GET_PRODUCTS, ProductFilter } from "@listed-constants";
+import { getProductService, getProductsService } from "@listed-services";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetProductList = (
@@ -28,3 +28,7 @@ export const useGetProductList = (
       )
   );
 };
+
+export const useGetProductDetails = ( productId:number) => {
+    return useQuery([GET_PRODUCT,productId], () => getProductService(productId));
+ };

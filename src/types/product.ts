@@ -12,3 +12,12 @@ export interface ProductResponse {
   totalIn: number;
   totalOut: number;
 };
+
+export interface ProductRequest{
+  name: string;
+  barcode?: string;
+  variant?: string;
+  salePrice: number;
+  threshold?: number;
+  unit: ProductUnit;
+}
