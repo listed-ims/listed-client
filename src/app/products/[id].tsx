@@ -4,11 +4,12 @@ import { Column, Heading, Text } from 'native-base'
 import { Button, CubeIcon } from '@listed-components/atoms'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { GET_PRODUCTS, Routes } from '@listed-constants'
-import ProductDetailsCard from '@listed-components/molecules/ProductDetailsCard'
 import { stackHeaderStyles } from '@listed-styles'
 import { ScrollView } from 'react-native'
 import {  useDeleteProductMutation, useGetProductDetails } from '@listed-hooks'
 import { useQueryClient } from '@tanstack/react-query'
+import ProductDetail from '@listed-components/molecules/ProductDetail'
+
 
 
 const ProductDetails = ({}) => {
@@ -54,7 +55,7 @@ const ProductDetails = ({}) => {
             <Text color="darkText" fontSize="xs" fontWeight="md" >{productDetails?.variant} </Text>
 
           </Column>
-          <ProductDetailsCard
+          <ProductDetail
             barcode={productDetails?.barcode}
             salePrice={productDetails?.salePrice}
             threshold={productDetails?.threshold}
@@ -63,7 +64,7 @@ const ProductDetails = ({}) => {
             totalOut={productDetails?.totalOut}
           />
 
-          <Column marginTop="8" space="4" >
+          <Column marginTop="8" marginBottom="6" space="4" >
             <Button
               onPress={() => {
                 router.push(Routes.EDIT_PRODUCT)
