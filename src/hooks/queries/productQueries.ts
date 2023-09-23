@@ -1,5 +1,14 @@
-import { GET_PRODUCT, GET_PRODUCTS, ProductFilter } from "@listed-constants";
-import { getProductService, getProductsService } from "@listed-services";
+import {
+  GET_PRODUCT,
+  GET_PRODUCTS,
+  ProductFilter,
+  VALIDATE_BARCODE,
+} from "@listed-constants";
+import {
+  getProductService,
+  getProductsService,
+  validateBarcodeService,
+} from "@listed-services";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetProductList = (
@@ -29,6 +38,16 @@ export const useGetProductList = (
   );
 };
 
-export const useGetProductDetails = ( productId:number) => {
-    return useQuery([GET_PRODUCT,productId], () => getProductService(productId));
- };
+export const useValidateBarcode = (storeId: number, barcode: string) => {
+  return useQuery(
+    [VALIDATE_BARCODE, { storeId, barcode }],
+    () => validateBarcodeService(storeId, barcode),
+    {
+      enabled: !!barcode,
+    }
+  );
+};
+
+export const useGetProductDetails = (productId: number) => {
+  return useQuery([GET_PRODUCT, productId], () => getProductService(productId));
+};

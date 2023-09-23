@@ -1,6 +1,10 @@
 import { ProductFilter } from "@listed-constants";
 import { axiosInstance } from "./axios";
-import { ProductRequest, ProductResponse } from "@listed-types";
+import {
+  ProductRequest,
+  AddProductRequest,
+  ProductResponse,
+} from "@listed-types";
 
 export const getProductsService = async (
   storeId: number,
@@ -9,7 +13,7 @@ export const getProductsService = async (
   filter?: ProductFilter,
   sort?: string,
   pageNumber?: number,
-  pageSize?: number,
+  pageSize?: number
 ) => {
   try {
     const response = await axiosInstance.get("products", {
@@ -21,7 +25,7 @@ export const getProductsService = async (
         sort: sort,
         pageNumber: pageNumber,
         pageSize,
-      }
+      },
     });
     return response.data as ProductResponse[];
   } catch (error) {
@@ -29,28 +33,63 @@ export const getProductsService = async (
   }
 };
 
-export const getProductService = async (productId: number) =>{
+export const validateBarcodeService = async (
+  storeId: number,
+  barcode: string
+) => {
+  try {
+    console.log("Validating");
+    const response = await axiosInstance.get("products/validation/barcode", {
+      params: {
+        storeId: storeId,
+        barcode: barcode,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addProductService = async (productRequest: AddProductRequest) => {
+  try {
+    const response = await axiosInstance.post(
+      "products",
+      productRequest.productRequest,
+      {
+        params: {
+          storeId: productRequest.storeId,
+        },
+      }
+    );
+    return response.data as ProductResponse;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductService = async (productId: number) => {
   try {
     const response = await axiosInstance.get(`products/${productId}`);
     return response.data as ProductResponse;
   } catch (error) {
     throw error;
   }
-}
+};
 
-export const updateProductService = async (productRequest: ProductRequest) =>{
+export const updateProductService = async (productRequest: ProductRequest) => {
   try {
-    const response = await axiosInstance.put(`products`,productRequest);
+    const response = await axiosInstance.put(`products`, productRequest);
     return response.data as ProductResponse;
   } catch (error) {
     throw error;
   }
-}
-export const deleteProductService = async (productId: number) =>{
+};
+export const deleteProductService = async (productId: number) => {
   try {
     const response = await axiosInstance.delete(`products/${productId}`);
     return response.data as ProductResponse;
   } catch (error) {
     throw error;
   }
-}
+};
