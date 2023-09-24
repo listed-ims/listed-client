@@ -1,10 +1,26 @@
-import { loginService, registrationService, updateUserService, validateTokenService, validateUsernameService } from "@listed-services";
-import { LoginCredentials, RegistrationCredentials, UserRequest } from "@listed-types";
+import {
+  loginService,
+  registrationService,
+  updateUserService,
+  validateTokenService,
+  validateUsernameService,
+} from "@listed-services";
+import {
+  AuthenticationResponse,
+  LoginCredentials,
+  RegistrationCredentials,
+  UserRequest,
+  UserResponse,
+} from "@listed-types";
 import { MutationOptions, useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export const useUserLoginMutation = (
-  mutationOptions: MutationOptions<any, AxiosError, LoginCredentials>
+  mutationOptions: MutationOptions<
+    AuthenticationResponse,
+    AxiosError,
+    LoginCredentials
+  >
 ) => {
   return useMutation(loginService, mutationOptions);
 };
@@ -16,7 +32,11 @@ export const useTokenValidationMutation = (
 };
 
 export const useUserRegistrationMutation = (
-  mutationOptions: MutationOptions<any, AxiosError, RegistrationCredentials>
+  mutationOptions: MutationOptions<
+    AuthenticationResponse,
+    AxiosError,
+    RegistrationCredentials
+  >
 ) => {
   return useMutation(registrationService, mutationOptions);
 };
@@ -28,7 +48,7 @@ export const useUsernameValidationMutation = (
 };
 
 export const useUpdateUserMutation = (
-  mutationOptions: MutationOptions<any, AxiosError, UserRequest>
+  mutationOptions: MutationOptions<UserResponse, AxiosError, UserRequest>
 ) => {
   return useMutation(updateUserService, mutationOptions);
 };
