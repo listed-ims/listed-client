@@ -1,44 +1,115 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  HStack,
+  Column,
+  View,
+  Box,
+  useTheme,
+  Pressable,
+  Row
+} from "native-base";
 import {
   Button,
+  CloseIcon,
+  IconButton,
   ScanIcon,
   SearchIcon
 } from "@listed-components/atoms";
 import { FormControl, TextArea, TextField } from "@listed-components/molecules";
 import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
-import { Stack, router } from "expo-router";
-import { Text, HStack, Column, View, Box, useTheme } from "native-base";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { Pressable } from "react-native";
-import { Routes } from "@listed-constants";
+import { GET_INCOMING, Routes } from "@listed-constants";
 import { stackHeaderStyles } from "@listed-styles";
 import { dateToMMDDYY } from "@listed-utils";
+import { IncomingRequest, ValidationRules } from "@listed-types";
+import { useCreateIncomingMutation, useFormValidation } from "@listed-hooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 const NewIncoming = () => {
   const { colors } = useTheme();
-  const [expirationDate, setExpirationDate] = useState("");
-  const [date, setDate] = useState(new Date());
+  const [expirationDisplay, setExpirationDisplay] = useState("");
+  const [expirationDate, setExpirationDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const { productId, product } = useLocalSearchParams();
+  const queryClient = useQueryClient();
 
-  const onChange = (
+  const initialFormData = {
+    product: "",
+    "expiration date": "",
+    quantity: "",
+    "purchase price": "",
+    comment: "",
+  }
+
+  const validationRules: ValidationRules = {
+    product: { required: true },
+    "expiration date": {
+      custom(value) {
+        if (value === "") {
+          return true;
+        }
+        const date = new Date(value);
+        const today = new Date();
+        return date.getDate() > today.getDate() || date.getMonth() > today.getMonth();
+      },
+      customErrorMessage: "Expiration date must be in the future."
+    },
+    quantity: { required: true },
+    "purchase price": { required: true },
+    comment: { required: false, }
+  }
+
+  const { formData, errors, validate, handleInputChange } = useFormValidation(
+    initialFormData,
+    validationRules
+  );
+
+  useEffect(() => {
+    if (productId) {
+      handleInputChange(productId, "product");
+    }
+  }, [productId]);
+
+  const onDateChange = (
     event: DateTimePickerEvent,
     date?: Date | undefined
   ) => {
     const selectedDate = date;
     setShowDatePicker(false);
-    setDate(selectedDate!);
-
+    setExpirationDate(selectedDate!);
+    handleInputChange(selectedDate, "expiration date");
     if (selectedDate instanceof Date) {
-      const formattedDate = dateToMMDDYY(selectedDate);
-      setExpirationDate(formattedDate);
+      setExpirationDisplay(dateToMMDDYY(selectedDate));
     }
   };
 
-  const showDatepicker = () => {
-    setShowDatePicker(true);
-  };
+  const handleCreateIncoming = () => {
+    if (validate()) {
+      createIncoming([
+        {
+          expirationDate: expirationDisplay ? new Date(formData["expiration date"]) : null,
+          initialQuantity: formData.quantity,
+          purchasePrice: formData["purchase price"],
+          comment: formData.comment,
+        } as IncomingRequest,
+        parseInt(formData.product)
+      ]);
+    }
+  }
+
+  const {
+    mutate: createIncoming,
+    isError: createIncomingError,
+    isLoading: createIncomingLoading } = useCreateIncomingMutation({
+      onSuccess(data) {
+        queryClient.setQueryData([GET_INCOMING, data.id], data);
+        router.push(`${Routes.INCOMING_RECEIPT}?transactionId=${data.id}`);
+      }
+    });
 
   return (
     <ScreenContainer withHeader>
@@ -46,9 +117,9 @@ const NewIncoming = () => {
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
           <Button size="lg"
-          onPress={() => {
-            router.push(Routes.INCOMING_RECEIPT);
-          }}
+            onPress={() => {
+              handleCreateIncoming();
+            }}
           >SUBMIT TRANSACTION</Button>
         </Box>
       }>
@@ -58,15 +129,21 @@ const NewIncoming = () => {
               Enter Transaction Details
             </Text>
           </HStack>
-          <FormControl label="Product">
+          <FormControl
+            label="Product"
+            errorMessage={errors.product}
+            isInvalid={!!errors.product}
+          >
             <HStack space="2">
-              <Pressable style={{ flex: 1 }} onPress={() => {
-                router.push(Routes.SELECT_PRODUCT)
-              }}>
+              <Pressable style={{ flex: 1 }}
+                onPress={() => {
+                  router.push(Routes.SELECT_PRODUCT)
+                }}>
                 <TextField
                   isReadOnly
                   flex="1"
-                  placeholder="Search a product"
+                  placeholder="Select a product"
+                  value={product?.toString()}
                   rightElement={
                     <View marginX="3">
                       <SearchIcon />
@@ -79,9 +156,9 @@ const NewIncoming = () => {
               </Button>
             </HStack>
           </FormControl>
-
           <FormControl
-            fontSize="12px"
+            errorMessage={errors["expiration date"]}
+            isInvalid={!!errors["expiration date"]}
             label={
               <>
                 <Text fontWeight="medium" fontSize="sm">
@@ -94,33 +171,55 @@ const NewIncoming = () => {
               </>
             }
           >
-            <Pressable onPress={showDatepicker} style={{ flex: 1 }}>
+            <Pressable onPress={() => setShowDatePicker(true)}
+              style={{ flex: 1 }}>
               <TextField
                 isReadOnly
                 flex="1"
-                placeholder="Enter date (mm/dd/yyyy)"
-                value={expirationDate}
+                placeholder="Select expiration date"
+                value={expirationDisplay}
+                rightElement={expirationDisplay !== "" ?
+                  <IconButton variant="subtle" marginRight="2"
+                    icon={<CloseIcon />}
+                    onPress={() => setExpirationDisplay("")}
+                  /> : undefined}
               />
             </Pressable>
             {showDatePicker && (
               <RNDateTimePicker
                 accentColor={colors.primary[700]}
-                value={date}
+                minimumDate={new Date()}
+                value={expirationDate}
                 mode="date"
-                onChange={onChange}
+                onChange={onDateChange}
               />
             )}
           </FormControl>
-          <FormControl label="Quantity">
-            <TextField placeholder="Enter product quantity" />
+          <FormControl
+            label="Quantity"
+            errorMessage={errors.quantity}
+            isInvalid={!!errors.quantity}>
+            <TextField
+              onChangeText={(value) => handleInputChange(value, "quantity")}
+              placeholder="Enter product quantity" />
           </FormControl>
 
-          <FormControl label="Purchase Price / Item">
-            <TextField placeholder="Enter purchase price per item" />
+          <FormControl
+            label="Purchase Price / Item"
+            errorMessage={errors["purchase price"]}
+            isInvalid={!!errors["purchase price"]}>
+            <TextField
+              onChangeText={(value) => handleInputChange(value, "purchase price")}
+              placeholder="Enter purchase price per item" />
           </FormControl>
-
           <HStack>
             <FormControl
+              helperText={
+                <Row flex="1" justifyContent="flex-end">
+                  <Text fontSize="xs" fontWeight="normal" color="text.500">
+                    {formData.comment.length}/100
+                  </Text>
+                </Row>}
               label={
                 <>
                   <Text fontWeight="medium" fontSize="sm">
@@ -131,14 +230,16 @@ const NewIncoming = () => {
                     (optional)
                   </Text>
                 </>
-              }
-            >
-              <TextArea placeholder="Enter comment here" />
+              }>
+              <TextArea
+                maxLength={100}
+                onChangeText={(value) => handleInputChange(value, "comment")}
+                placeholder="Enter comment here" />
             </FormControl>
           </HStack>
         </Column>
       </KeyboardAwareScroll>
-    </ScreenContainer>
+    </ScreenContainer >
   );
 };
 
