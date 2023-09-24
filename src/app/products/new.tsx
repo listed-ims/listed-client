@@ -27,14 +27,14 @@ const NewProduct = () => {
     name: "",
     barcode: "",
     variant: "",
-    salePrice: "",
+    "sale price": "",
     threshold: "",
     unit: ProductUnit.PCS,
   };
 
   const validationRules: ValidationRules = {
     name: { required: true },
-    salePrice: {
+    "sale price": {
       required: true,
       custom: (value: string) => {
         return parseFloat(value) >= 0.0;
@@ -55,14 +55,14 @@ const NewProduct = () => {
   );
 
   const handleAddProduct = () => {
-    if (validate() && barcodeValidation?.valid === true) {
+    if (validate() && barcodeValidation?.valid !== false) {
       addProduct({
         storeId: userDetails?.currentStoreId,
         productRequest: {
           name: formData.name,
           barcode: formData.barcode,
           variant: formData.variant,
-          salePrice: formData.salePrice,
+          salePrice: formData["sale price"],
           threshold: formData.threshold,
           unit: formData.unit,
         },
@@ -195,12 +195,12 @@ const NewProduct = () => {
             </FormControl>
             <FormControl
               label="Sale Price"
-              errorMessage={errors.salePrice}
-              isInvalid={!!errors.salePrice}
+              errorMessage={errors["sale price"]}
+              isInvalid={!!errors["sale price"]}
             >
               <TextField
                 keyboardType="numeric"
-                onChangeText={(value) => handleInputChange(value, "salePrice")}
+                onChangeText={(value) => handleInputChange(value, "sale price")}
                 placeholder="Enter sale price"
               />
             </FormControl>
