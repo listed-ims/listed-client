@@ -36,6 +36,8 @@ const NewIncoming = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const { productId, product } = useLocalSearchParams();
   const queryClient = useQueryClient();
+  const tomorrow = new Date();
+  tomorrow.setDate(new Date().getDate() + 1);
 
   const initialFormData = {
     product: "",
@@ -47,18 +49,14 @@ const NewIncoming = () => {
 
   const validationRules: ValidationRules = {
     product: { required: true },
-    "expiration date": {
+    "expiration date": { required: false },
+    quantity: {
+      required: true,
       custom(value) {
-        if (value === "") {
-          return true;
-        }
-        const date = new Date(value);
-        const today = new Date();
-        return date.getDate() > today.getDate() || date.getMonth() > today.getMonth();
+        return (value && parseInt(value) > 0)
       },
-      customErrorMessage: "Expiration date must be in the future."
+      customErrorMessage: "Quantity must be greater than 0."
     },
-    quantity: { required: true },
     "purchase price": { required: true },
     comment: { required: false, }
   }
@@ -80,6 +78,7 @@ const NewIncoming = () => {
   ) => {
     const selectedDate = date;
     setShowDatePicker(false);
+    if (event.type === "dismissed") return;
     setExpirationDate(selectedDate!);
     handleInputChange(selectedDate, "expiration date");
     if (selectedDate instanceof Date) {
@@ -186,7 +185,7 @@ const NewIncoming = () => {
             {showDatePicker && (
               <RNDateTimePicker
                 accentColor={colors.primary[700]}
-                minimumDate={new Date()}
+                minimumDate={tomorrow}
                 value={expirationDate}
                 mode="date"
                 onChange={onDateChange}
