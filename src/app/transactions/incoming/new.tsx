@@ -117,9 +117,7 @@ const NewIncoming = () => {
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
           <Button size="lg"
-            onPress={() => {
-              handleCreateIncoming();
-            }}
+            onPress={handleCreateIncoming}
           >SUBMIT TRANSACTION</Button>
         </Box>
       }>
@@ -201,6 +199,7 @@ const NewIncoming = () => {
             isInvalid={!!errors.quantity}>
             <TextField
               onChangeText={(value) => handleInputChange(value, "quantity")}
+              keyboardType="numeric"
               placeholder="Enter product quantity" />
           </FormControl>
 
@@ -210,6 +209,7 @@ const NewIncoming = () => {
             isInvalid={!!errors["purchase price"]}>
             <TextField
               onChangeText={(value) => handleInputChange(value, "purchase price")}
+              keyboardType="numeric"
               placeholder="Enter purchase price per item" />
           </FormControl>
           <HStack>
