@@ -1,6 +1,5 @@
 import { IInputProps, Input, useTheme, Text } from 'native-base'
 import React, { useState } from 'react'
-import { ColorValue } from 'react-native';
 
 
 interface TextFieldProps extends IInputProps {
@@ -16,9 +15,7 @@ const TextField = ({ startDataLabel, endDataLabel, onChangeText, variant = "fill
 
   const handleInputChange = (value: string) => {
     setHasInput(value.length > 0);
-    if (onChangeText) {
-      onChangeText(value);
-    }
+    onChangeText!(value)
   };
 
   return (
@@ -26,7 +23,6 @@ const TextField = ({ startDataLabel, endDataLabel, onChangeText, variant = "fill
       onChangeText={handleInputChange}
       size="lg"
       value={value}
-      defaultValue={defaultValue}
       variant={variant}
       backgroundColor="offWhite.200"
       borderColor="offWhite.200"
@@ -37,6 +33,7 @@ const TextField = ({ startDataLabel, endDataLabel, onChangeText, variant = "fill
         _focus: { backgroundColor: "offWhite.200" }
       }}
       _disabled={{ backgroundColor: "muted.300" }}
+      //TODO: will update implementation if input data labels are no longer needed.
       InputRightElement={
         endDataLabel !== undefined ?
           (

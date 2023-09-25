@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ScreenContainer } from "@listed-components/organisms";
 import { Box, Divider, FlatList, Text } from "native-base";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { ProductListItem, HeaderSearchField } from "@listed-components/molecules";
 import { useGetProductList } from "src/hooks/queries";
 import { ProductFilter, Routes } from "@listed-constants";
@@ -23,8 +23,8 @@ const SelectProduct = () => {
     filter === "all"
       ? undefined
       : filter === "low stock"
-      ? ProductFilter.LOW_STOCK
-      : ProductFilter.NO_STOCK,
+        ? ProductFilter.LOW_STOCK
+        : ProductFilter.NO_STOCK,
     undefined,
     1,
     100
@@ -47,8 +47,18 @@ const SelectProduct = () => {
         }
         ItemSeparatorComponent={() => <Divider />}
         data={productList}
-        renderItem={({ item }) => <ProductListItem product={item} />}
-
+        renderItem={({ item }) => (
+          <ProductListItem product={item}
+            onPress={() => {
+              router.push({
+                pathname: Routes.NEW_INCOMING,
+                params: {
+                  productId: item.id,
+                  product: `${item.name}${item.variant ? ` - ${item.variant}` : ""}`
+                }
+              })
+            }} />
+        )}
       />
     </ScreenContainer>
   );
