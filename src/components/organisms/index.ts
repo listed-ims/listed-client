@@ -8,3 +8,4 @@ export { default as CurrentStoreModal } from "./CurrentStoreModal";
 export { default as DashboardNoStore } from "./DashboardNoStore";
 export { default as KeyboardAwareScroll } from "./KeyboardAwareScroll";
 export { default as DeleteProductModal } from "./DeleteProductModal";
+export { default as Quantity } from "./Quantity";

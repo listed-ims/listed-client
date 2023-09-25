@@ -14,3 +14,4 @@ export { default as CreateStoreCard } from "./CreateStoreCard";
 export { default as ProdcutListFilter } from "./ProdcutListFilter";
 export { default as HeaderSearchField } from "./HeaderSearchField";
 export { default as IncomingReceiptDetails } from "./IncomingReceiptDetails";
+export { default as OutProductItem } from "./OutProductItem";
