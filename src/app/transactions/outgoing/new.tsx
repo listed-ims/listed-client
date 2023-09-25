@@ -4,8 +4,8 @@ import {
   OutProductScanIcon,
   SelectButton
 } from "@listed-components/atoms";
-import { FormControl, OutProductItem, TextArea } from "@listed-components/molecules";
-import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
+import { FormControl, TextArea } from "@listed-components/molecules";
+import { KeyboardAwareScroll, ScreenContainer, OutProductItem } from "@listed-components/organisms";
 import { Stack } from "expo-router";
 import { Text, HStack, Column, Box, ScrollView, VStack, Row } from "native-base";
 import { stackHeaderStyles } from "@listed-styles";

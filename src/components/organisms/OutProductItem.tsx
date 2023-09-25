@@ -7,7 +7,7 @@ import {
 } from "native-base";
 import { toCurrency } from "@listed-utils";
 import { DeleteIcon, IconButton } from "@listed-components/atoms";
-import { Quantity } from "@listed-components/organisms";
+import { Quantity } from "@listed-components/molecules";
 
 interface OutProductItemProps {
   name?: string;
