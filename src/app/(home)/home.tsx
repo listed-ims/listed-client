@@ -59,7 +59,11 @@ const Home = () => {
                 router.push(Routes.NEW_INCOMING)
               }}
             />
-            <TransactionButton flexGrow="1" type="outgoing" />
+            <TransactionButton flexGrow="1" type="outgoing"
+              onPress={() => {
+                router.push(Routes.NEW_OUTGOING)
+              }}
+            />
           </Row>
           <View marginY={3} />
           <Column space="2">
