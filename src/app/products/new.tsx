@@ -4,19 +4,107 @@ import {
   KeyboardAwareScroll,
   ScreenContainer,
 } from "@listed-components/organisms";
+import { GET_PRODUCTS, ProductUnit, Routes } from "@listed-constants";
+import { useAuth } from "@listed-contexts";
+import {
+  useAddProductMutation,
+  useDebounce,
+  useFormValidation,
+  useValidateBarcode,
+} from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
-import { Stack } from "expo-router";
+import { AddProductRequest, ValidationRules } from "@listed-types";
+import { useQueryClient } from "@tanstack/react-query";
+import { Stack, router } from "expo-router";
 import { VStack, Text, HStack, Box, Column } from "native-base";
 import React from "react";
 
 const NewProduct = () => {
+  const queryClient = useQueryClient();
+  const { userDetails } = useAuth();
+
+  const initialFormData = {
+    name: "",
+    barcode: "",
+    variant: "",
+    "sale price": "",
+    threshold: "",
+    unit: ProductUnit.PCS,
+  };
+
+  const validationRules: ValidationRules = {
+    name: { required: true },
+    "sale price": {
+      required: true,
+      custom: (value: string) => {
+        return parseFloat(value) >= 0.0;
+      },
+      customErrorMessage: "Sale price should be a minimum of 0.00",
+    },
+    threshold: {
+      custom: (value: string) => {
+        return value.length === 0 || parseFloat(value) >= 0.0;
+      },
+      customErrorMessage: "Low warning point should be a minimum of 0",
+    },
+  };
+
+  const { formData, errors, validate, handleInputChange } = useFormValidation(
+    initialFormData,
+    validationRules
+  );
+
+  const handleAddProduct = () => {
+    if (validate() && barcodeValidation?.valid !== false) {
+      addProduct({
+        storeId: userDetails?.currentStoreId,
+        productRequest: {
+          name: formData.name,
+          barcode: formData.barcode,
+          variant: formData.variant,
+          salePrice: formData["sale price"],
+          threshold: formData.threshold,
+          unit: formData.unit,
+        },
+      } as AddProductRequest);
+    }
+  };
+
+  const debouncedBarcode = useDebounce(formData.barcode, 300);
+
+  const {
+    data: barcodeValidation,
+    isError: barcodeValidationError,
+    isFetching: barcodeValidationFetching,
+  } = useValidateBarcode(
+    userDetails?.currentStoreId as number,
+    debouncedBarcode
+  );
+
+  const {
+    mutate: addProduct,
+    isError: addProductError,
+    isLoading: addProductLoading,
+  } = useAddProductMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS] });
+      router.push(Routes.PRODUCTS);
+    },
+    onError: (error) => {
+      console.log("Product not added.");
+      console.error({ ...error });
+    },
+  });
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("New Product")} />
       <KeyboardAwareScroll
         elementOnTopOfKeyboard={
           <Box pt="4" pb="6" background="white">
-            <Button size="lg">ADD PRODUCT</Button>
+            <Button size="lg" onPress={handleAddProduct}>
+              ADD PRODUCT
+            </Button>
           </Box>
         }
       >
@@ -27,8 +115,15 @@ const NewProduct = () => {
             </Text>
           </VStack>
           <VStack>
-            <FormControl label="Product">
-              <TextField placeholder="Enter product name" />
+            <FormControl
+              label="Product"
+              errorMessage={errors.name}
+              isInvalid={!!errors.name}
+            >
+              <TextField
+                onChangeText={(value) => handleInputChange(value, "name")}
+                placeholder="Enter product name"
+              />
             </FormControl>
             <FormControl
               label={
@@ -42,9 +137,21 @@ const NewProduct = () => {
                   </Text>
                 </>
               }
+              errorMessage={
+                barcodeValidation?.valid === false
+                  ? "Barcode must be unique."
+                  : ""
+              }
+              isInvalid={barcodeValidation?.valid === false}
             >
               <HStack space="2">
-                <TextField flex="1" placeholder="Scan barcode" />
+                <TextField
+                  flex="1"
+                  onChangeText={(value) => {
+                    handleInputChange(value, "barcode");
+                  }}
+                  placeholder="Scan barcode"
+                />
                 <Button startIcon={<ScanIcon />}>Scan</Button>
               </HStack>
             </FormControl>
@@ -60,17 +167,42 @@ const NewProduct = () => {
                   </Text>
                 </>
               }
+              errorMessage={errors.variant}
+              isInvalid={!!errors.variant}
             >
-              <TextField placeholder="Enter variant" />
+              <TextField
+                onChangeText={(value) => handleInputChange(value, "variant")}
+                placeholder="Enter variant"
+              />
             </FormControl>
-            <FormControl label="Product Unit">
+            <FormControl
+              label="Product Unit"
+              errorMessage={errors.unit}
+              isInvalid={!!errors.unit}
+            >
               <HStack space="2">
-                <SelectButton label="pieces" selected={true} />
-                <SelectButton label="kilograms" selected={false} />
+                <SelectButton
+                  label="pieces"
+                  selected={formData.unit === ProductUnit.PCS}
+                  onPress={() => handleInputChange(ProductUnit.PCS, "unit")}
+                />
+                <SelectButton
+                  label="kilograms"
+                  selected={formData.unit === ProductUnit.KG}
+                  onPress={() => handleInputChange(ProductUnit.KG, "unit")}
+                />
               </HStack>
             </FormControl>
-            <FormControl label="Sale Price">
-              <TextField placeholder="Enter sale price" />
+            <FormControl
+              label="Sale Price"
+              errorMessage={errors["sale price"]}
+              isInvalid={!!errors["sale price"]}
+            >
+              <TextField
+                keyboardType="numeric"
+                onChangeText={(value) => handleInputChange(value, "sale price")}
+                placeholder="Enter sale price"
+              />
             </FormControl>
             <FormControl
               label={
@@ -84,8 +216,14 @@ const NewProduct = () => {
                   </Text>
                 </>
               }
+              errorMessage={errors.threshold}
+              isInvalid={!!errors.threshold}
             >
-              <TextField placeholder="Enter low warning point" />
+              <TextField
+                keyboardType="numeric"
+                onChangeText={(value) => handleInputChange(value, "threshold")}
+                placeholder="Enter low warning point"
+              />
             </FormControl>
           </VStack>
         </Column>
