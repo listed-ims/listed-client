@@ -14,6 +14,7 @@ import {
   Box,
   FlatList,
   Divider,
+  useTheme,
 } from "native-base";
 import {
   AddIcon,
@@ -48,6 +49,8 @@ const Products = () => {
     1,
     100
   );
+
+  const {colors} = useTheme();
 
   return (
     <ScreenContainer withHeader>
@@ -106,7 +109,7 @@ const Products = () => {
           alignSelf="flex-end"
           size="sm"
           px="4"
-          startIcon={<AddIcon />}
+          startIcon={<AddIcon color={colors.white} />}
           borderRadius="full"
           onPress={() => {
             router.push(Routes.NEW_PRODUCT);

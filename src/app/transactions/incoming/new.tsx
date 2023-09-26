@@ -148,7 +148,7 @@ const NewIncoming = () => {
                   }
                 />
               </Pressable>
-              <Button fontSize="sm" startIcon={<ScanIcon />}>
+              <Button fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>
                 Scan
               </Button>
             </HStack>
