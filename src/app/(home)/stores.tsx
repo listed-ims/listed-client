@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Column, FlatList, HStack, Text } from "native-base";
+import { Box, Column, FlatList, HStack, Text, useTheme } from "native-base";
 import { Stack, router } from "expo-router";
 import { ScreenContainer } from "@listed-components/organisms";
 import { AddIcon, Button } from "@listed-components/atoms";
@@ -30,6 +30,8 @@ const Stores = () => {
     100
   );
 
+  const {colors} = useTheme();
+
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
@@ -41,7 +43,7 @@ const Stores = () => {
           <Button
             size="sm"
             px="4"
-            startIcon={<AddIcon />}
+            startIcon={<AddIcon color={colors.white} />}
             borderRadius="full"
             onPress={() => {
               router.push(Routes.NEW_STORE);

@@ -1,13 +1,13 @@
 import {
-  AddOutProductIcon,
+  AddIcon,
   Button,
-  OutProductScanIcon,
+  ScanIcon,
   SelectButton
 } from "@listed-components/atoms";
 import { FormControl, TextArea } from "@listed-components/molecules";
 import { KeyboardAwareScroll, ScreenContainer, OutProductItem } from "@listed-components/organisms";
 import { Stack } from "expo-router";
-import { Text, HStack, Column, Box, ScrollView, VStack, Row } from "native-base";
+import { Text, HStack, Column, Box, ScrollView, VStack, Row, useTheme } from "native-base";
 import { stackHeaderStyles } from "@listed-styles";
 
 const NewOutgoing = () => {
@@ -51,6 +51,8 @@ const NewOutgoing = () => {
         },
       ];
 
+  const {colors} = useTheme();
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Outgoing")} />
@@ -62,7 +64,7 @@ const NewOutgoing = () => {
             size="sm"
             variant="outline"
             borderRadius="full"
-            startIcon={<OutProductScanIcon/>}
+            startIcon={<ScanIcon color={colors.primary[700]}/>}
             >
               Scan
             </Button>
@@ -71,7 +73,7 @@ const NewOutgoing = () => {
             size="sm"
             variant="outline"
             borderRadius="full"
-            startIcon={<AddOutProductIcon/>}
+            startIcon={<AddIcon color={colors.primary[700]}/>}
             >
               Add Product
             </Button>

@@ -1,6 +1,6 @@
 import { FormControl, TextField } from '@listed-components/molecules'
 import ScreenContainer from '@listed-components/organisms/ScreenContainer'
-import { Box, Column, Row, Text } from 'native-base'
+import { Box, Column, Row, Text, useTheme } from 'native-base'
 import React from 'react'
 import { Stack } from 'expo-router'
 import { Button, ScanIcon } from "@listed-components/atoms";
@@ -8,6 +8,8 @@ import { stackHeaderStyles } from '@listed-styles'
 import { KeyboardAwareScroll } from '@listed-components/organisms'
 
 const EditProduct = () => {
+	const {colors} = useTheme();
+
 	return (
 		<ScreenContainer withHeader>
 			<Stack.Screen options={stackHeaderStyles("Edit Product")} />
@@ -36,7 +38,7 @@ const EditProduct = () => {
 					>
 						<Row space="2">
 							<TextField flex="1" placeholder='Scan barcode' value={"132987905"} />
-							<Button fontSize="sm" startIcon={<ScanIcon />}>Scan</Button>
+							<Button fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>Scan</Button>
 						</Row>
 					</FormControl>
 					<FormControl label={
