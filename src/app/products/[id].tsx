@@ -3,7 +3,7 @@ import { DeleteProductModal, ScreenContainer } from '@listed-components/organism
 import { Column, Heading, Text } from 'native-base'
 import { Button, CubeIcon } from '@listed-components/atoms'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
-import { GET_PRODUCTS, Routes } from '@listed-constants'
+import { GET_PRODUCTS, ProductUnit, Routes } from '@listed-constants'
 import { stackHeaderStyles } from '@listed-styles'
 import { ScrollView } from 'react-native'
 import {  useDeleteProductMutation, useGetProductDetails } from '@listed-hooks'
@@ -44,6 +44,7 @@ const ProductDetails = ({}) => {
     deleteProduct(productDetails?.id!)
   };
 
+  
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Product Details")} />
@@ -53,21 +54,22 @@ const ProductDetails = ({}) => {
             <CubeIcon />
             <Heading size="md">{productDetails?.name} </Heading>
             <Text color="darkText" fontSize="xs" fontWeight="md" >{productDetails?.variant} </Text>
-
           </Column>
+  
           <ProductDetail
-            barcode={productDetails?.barcode}
+            barcode={productDetails?.barcode ? productDetails.barcode : "N/A"}
             salePrice={productDetails?.salePrice}
-            threshold={productDetails?.threshold}
+            threshold={productDetails?.threshold }
+            unit= {productDetails?.unit}
             quantity={productDetails?.quantity}
             totalIn={productDetails?.totalIn}
             totalOut={productDetails?.totalOut}
           />
-
+          
           <Column marginTop="8" marginBottom="6" space="4" >
             <Button
               onPress={() => {
-                router.push(Routes.EDIT_PRODUCT)
+                router.push(`${Routes.EDIT_PRODUCT}?productId=${productDetails?.id}`)
               }}>
               EDIT
             </Button>
