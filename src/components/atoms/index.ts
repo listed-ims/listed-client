@@ -41,6 +41,4 @@ export { default as CloseIcon } from "./CloseIcon";
 export { default as IconButton } from "./IconButton";
 export { default as DeleteIcon } from "./DeleteIcon";
 export { default as RemoveIcon } from "./RemoveIcon";
-export { default as OutProductScanIcon } from "./OutProductScanIcon"
-export { default as AddOutProductIcon } from "./AddOutProductIcon"
-export { default as PlusIcon } from "./PlusIcon"
+export { default as PlusIcon } from "./PlusIcon";
