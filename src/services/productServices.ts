@@ -3,7 +3,7 @@ import { axiosInstance } from "./axios";
 import {
   ProductRequest,
   AddProductRequest,
-  ProductResponse,
+  ProductResponse, UpdateRequest,
 } from "@listed-types";
 
 export const getProductsService = async (
@@ -77,15 +77,25 @@ export const getProductService = async (productId: number) => {
   }
 };
 
-export const updateProductService = async (productRequest: ProductRequest) => {
+// export const updateProductService = async (productRequest: ProductRequest) =>{
+//   try {
+//     const response = await axiosInstance.put(`products`,productRequest);
+//     return response.data as ProductResponse;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+export const updateProductService = async (productRequest: UpdateRequest) => {
   try {
-    const response = await axiosInstance.put(`products`, productRequest);
+    const response = await axiosInstance.put(`products/${productRequest.productId}`,productRequest.productRequest)
     return response.data as ProductResponse;
-  } catch (error) {
+  }catch(error){
     throw error;
   }
 };
-export const deleteProductService = async (productId: number) => {
+
+
+export const deleteProductService = async (productId: number) =>{
   try {
     const response = await axiosInstance.delete(`products/${productId}`);
     return response.data as ProductResponse;

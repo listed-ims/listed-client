@@ -48,6 +48,11 @@ export const useValidateBarcode = (storeId: number, barcode: string) => {
   );
 };
 
+const fiveMinutes = 1000 * 60 * 5;
+
 export const useGetProductDetails = (productId: number) => {
-  return useQuery([GET_PRODUCT, productId], () => getProductService(productId));
+  return useQuery([GET_PRODUCT, productId], () => getProductService(productId),
+  {
+    staleTime: fiveMinutes,
+  });
 };

@@ -39,3 +39,4 @@ export { default as SelectButton } from "./SelectButton";
 export { default as IncomingReceiptIcon } from "./IncomingReceiptIcon";
 export { default as CloseIcon } from "./CloseIcon";
 export { default as IconButton } from "./IconButton";
+export { default as CheckIcon } from "./CheckIcon";
