@@ -3,13 +3,12 @@ import { DeleteProductModal, ScreenContainer } from '@listed-components/organism
 import { Column, Heading, Text } from 'native-base'
 import { Button, CubeIcon } from '@listed-components/atoms'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
-import { GET_PRODUCTS, ProductUnit, Routes } from '@listed-constants'
+import { GET_PRODUCTS, Routes } from '@listed-constants'
 import { stackHeaderStyles } from '@listed-styles'
 import { ScrollView } from 'react-native'
 import {  useDeleteProductMutation, useGetProductDetails } from '@listed-hooks'
 import { useQueryClient } from '@tanstack/react-query'
-import ProductDetail from '@listed-components/molecules/ProductDetail'
-
+import { ProductDetail } from '@listed-components/molecules'
 
 
 const ProductDetails = ({}) => {

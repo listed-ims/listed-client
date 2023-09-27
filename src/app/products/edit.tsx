@@ -1,7 +1,7 @@
-import { FormControl, TextField } from '@listed-components/molecules'
+import { FormControl, TextField, Toast } from '@listed-components/molecules'
 import ScreenContainer from '@listed-components/organisms/ScreenContainer'
 import { Box, Column, Row, Text, useToast} from 'native-base'
-import React, { useState } from 'react'
+import React, {} from 'react'
 import { Stack, router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { Button, ScanIcon } from "@listed-components/atoms";
 import { stackHeaderStyles } from '@listed-styles'
@@ -10,7 +10,6 @@ import { useFormValidation, useGetProductDetails, useUpdateProductMutation, } fr
 import { useQueryClient } from '@tanstack/react-query'
 import { ValidationRules, UpdateRequest, } from '@listed-types'
 import { GET_PRODUCT, GET_PRODUCTS, Routes } from '@listed-constants'
-import Toast from '@listed-components/molecules/Toast'
 
 const EditProduct = () => {
   const { productId } = useLocalSearchParams();

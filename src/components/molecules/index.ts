@@ -15,3 +15,5 @@ export { default as ProdcutListFilter } from "./ProdcutListFilter";
 export { default as HeaderSearchField } from "./HeaderSearchField";
 export { default as IncomingReceiptDetails } from "./IncomingReceiptDetails";
 export { default as Toast } from "./Toast";
+export { default as ProductDetail} from "./ProductDetail";
+

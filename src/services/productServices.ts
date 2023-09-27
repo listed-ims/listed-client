@@ -1,7 +1,6 @@
 import { ProductFilter } from "@listed-constants";
 import { axiosInstance } from "./axios";
 import {
-  ProductRequest,
   AddProductRequest,
   ProductResponse, UpdateRequest,
 } from "@listed-types";

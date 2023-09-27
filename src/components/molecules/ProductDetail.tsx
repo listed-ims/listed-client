@@ -4,7 +4,6 @@ import WarningPointIcon from "@listed-components/atoms/WarningPointIcon";
 import { toCurrency } from "@listed-utils";
 import { Column, Row, Text } from "native-base"
 import React from 'react'
-import ProductDetails from "src/screens/product_management/ProductDetails";
 
 interface ProductDetailsProps {
     barcode?: string;

@@ -3,7 +3,7 @@ import {
   updateProductService,
   addProductService,
 } from "@listed-services";
-import { ProductRequest, AddProductRequest, UpdateRequest, ProductResponse } from "@listed-types";
+import { AddProductRequest, UpdateRequest, ProductResponse } from "@listed-types";
 import { MutationOptions, useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
