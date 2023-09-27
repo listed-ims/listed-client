@@ -6,9 +6,10 @@ import {
 } from "@listed-components/atoms";
 import { FormControl, TextArea } from "@listed-components/molecules";
 import { KeyboardAwareScroll, ScreenContainer, OutProductItem } from "@listed-components/organisms";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { Text, HStack, Column, Box, ScrollView, VStack, Row, useTheme } from "native-base";
 import { stackHeaderStyles } from "@listed-styles";
+import { Routes } from "@listed-constants";
 
 const NewOutgoing = () => {
 
@@ -74,6 +75,9 @@ const NewOutgoing = () => {
             variant="outline"
             borderRadius="full"
             startIcon={<AddIcon color={colors.primary[700]}/>}
+            onPress={() => {
+              router.push(Routes.SELECT_OUTGOING)
+            }}
             >
               Add Product
             </Button>
