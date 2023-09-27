@@ -16,7 +16,6 @@ const EditProduct = () => {
   const { productId } = useLocalSearchParams();
   const queryClient = useQueryClient();
   const navigation = useNavigation();
-  const [isToastVisible, setToastVisible] = useState(false);
   const toast = useToast();
 
 
@@ -40,7 +39,7 @@ const EditProduct = () => {
 
   const validationRules: ValidationRules = {
     product: { required: true },
-    ["sale price"]: {
+    "sale price": {
       required: true,
       custom: (value: string) => {
         return parseFloat(value) >= 0.0;
@@ -66,14 +65,15 @@ const EditProduct = () => {
     isLoading: updateProductLoading,
   } = useUpdateProductMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData([GET_PRODUCT, data.productId], data);
+      queryClient.setQueryData([GET_PRODUCT, data.id], data);
       queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS]});
-      setToastVisible(true);
-      setTimeout(() => {
-      setToastVisible(false);
-    }, 1000)
       router.push(Routes.PRODUCTS);
-    ;
+      toast.show({ 
+        render:() =>{
+          return <Toast message='Product details updated.'/>
+        }
+      })
+      
     },
     onError: (error) => {
       console.log("Error in Updating product.");
@@ -92,11 +92,6 @@ const EditProduct = () => {
         unit: productDetails?.unit
       },
     } as UpdateRequest);
-    toast.show({ 
-      render:() =>{
-        return <Toast message='Product details updated.'/>
-      }
-    })
   };
 
   return (
@@ -153,7 +148,6 @@ const EditProduct = () => {
         </Column>
       </KeyboardAwareScrollView>
       <Box background=" white" paddingTop="4" paddingBottom="6">
-      {/* {isToastVisible && <CustomToast message="Product details updated." />} */}
         <Row space="4" >
           <Button flex="1" onPress={handleSave} >Save</Button>
           <Button flex="1" variant="outline" onPress={handleCancel}>Cancel</Button>

@@ -77,14 +77,6 @@ export const getProductService = async (productId: number) => {
   }
 };
 
-// export const updateProductService = async (productRequest: ProductRequest) =>{
-//   try {
-//     const response = await axiosInstance.put(`products`,productRequest);
-//     return response.data as ProductResponse;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
 export const updateProductService = async (productRequest: UpdateRequest) => {
   try {
     const response = await axiosInstance.put(`products/${productRequest.productId}`,productRequest.productRequest)

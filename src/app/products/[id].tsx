@@ -57,9 +57,9 @@ const ProductDetails = ({}) => {
           </Column>
   
           <ProductDetail
-            barcode={productDetails?.barcode ? productDetails.barcode : "N/A"}
+            barcode={productDetails?.barcode}
             salePrice={productDetails?.salePrice}
-            threshold={productDetails?.threshold }
+            threshold={productDetails?.threshold}
             unit= {productDetails?.unit}
             quantity={productDetails?.quantity}
             totalIn={productDetails?.totalIn}
