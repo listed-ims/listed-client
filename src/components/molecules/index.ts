@@ -17,3 +17,4 @@ export { default as IncomingReceiptDetails } from "./IncomingReceiptDetails";
 export { default as Toast } from "./Toast";
 export { default as ProductDetail} from "./ProductDetail";
 
+export { default as Quantity } from "./Quantity";

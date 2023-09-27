@@ -16,7 +16,7 @@ import { stackHeaderStyles } from "@listed-styles";
 import { AddProductRequest, ValidationRules } from "@listed-types";
 import { useQueryClient } from "@tanstack/react-query";
 import { Stack, router } from "expo-router";
-import { VStack, Text, HStack, Box, Column } from "native-base";
+import { VStack, Text, HStack, Box, Column, useTheme } from "native-base";
 import React from "react";
 
 const NewProduct = () => {
@@ -96,6 +96,8 @@ const NewProduct = () => {
     },
   });
 
+  const {colors} = useTheme();
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("New Product")} />
@@ -152,7 +154,7 @@ const NewProduct = () => {
                   }}
                   placeholder="Scan barcode"
                 />
-                <Button startIcon={<ScanIcon />}>Scan</Button>
+                <Button startIcon={<ScanIcon color={colors.white} />}>Scan</Button>
               </HStack>
             </FormControl>
             <FormControl

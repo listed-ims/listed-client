@@ -1,6 +1,6 @@
 import { FormControl, TextField, Toast } from '@listed-components/molecules'
 import ScreenContainer from '@listed-components/organisms/ScreenContainer'
-import { Box, Column, Row, Text, useToast} from 'native-base'
+import { Box, Column, Row, Text, useTheme, useToast} from 'native-base'
 import React, {} from 'react'
 import { Stack, router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { Button, ScanIcon } from "@listed-components/atoms";
@@ -93,6 +93,8 @@ const EditProduct = () => {
     } as UpdateRequest);
   };
 
+	const {colors} = useTheme();
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Edit Product")} />
@@ -114,7 +116,7 @@ const EditProduct = () => {
           >
             <Row space="2">
               <TextField flex="1" placeholder='Scan barcode' value={formData.barcode} onChangeText={(value) => handleInputChange(value, "barcode")} />
-              <Button fontSize="sm" startIcon={<ScanIcon />}>Scan</Button>
+              <Button fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>Scan</Button>
             </Row>
           </FormControl>
           <FormControl label={

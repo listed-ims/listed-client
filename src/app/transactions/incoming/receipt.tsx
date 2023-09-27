@@ -4,26 +4,37 @@ import {
   ListedIcon,
 } from "@listed-components/atoms";
 import { IncomingReceiptDetails } from "@listed-components/molecules";
-import {
-  KeyboardAwareScroll,
-  ScreenContainer,
-} from "@listed-components/organisms";
-import { Stack, router } from "expo-router";
+import { ScreenContainer } from "@listed-components/organisms";
+import { useGetIncomingDetails } from "@listed-hooks";
+import { dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
   Box,
   Divider,
   HStack,
   Heading,
+  ScrollView,
   Spacer,
   Text,
   VStack,
 } from "native-base";
 
 const IncomingReceipt = () => {
+  const { transactionId } = useLocalSearchParams();
+  const {
+    data: transactionDetails,
+    isError: transactionError,
+    isFetching: transactionFetching,
+  } = useGetIncomingDetails(parseInt(transactionId as string));
+
+  const transactionDate = new Date(
+    transactionDetails?.transactionDate.toString()!
+  );
+
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      <KeyboardAwareScroll>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Box paddingTop="8" paddingBottom="6">
           <Text fontSize="sm" fontWeight="medium" textAlign="center">
             Transaction Receipt
@@ -36,22 +47,15 @@ const IncomingReceipt = () => {
               Incoming
             </Heading>
             <Text fontSize="xs" fontWeight="medium" paddingTop="1">
-              Jan 1, 2023 - 8:00AM
+              {dateToMonthDDYYYY(transactionDate) +
+                " - " +
+                dateToReadableTime(transactionDate)}
             </Text>
           </VStack>
         </Box>
-        <IncomingReceiptDetails
-          referenceNumber={1001}
-          name="Coca Cola"
-          variant="100ml"
-          expirationDate="Jan 1, 2024"
-          purchasePrice={20.0}
-          totalQuantity={80}
-          totalPurchasePrice={160.0}
-          performedBy="Jeon Somi"
-          comment="I Love Somi"
-          userRole="owner"
-        />
+
+        <IncomingReceiptDetails incomingDetails={transactionDetails!} />
+
         <HStack paddingTop="4" alignItems="center">
           <Spacer>
             <Divider />
@@ -75,7 +79,7 @@ const IncomingReceipt = () => {
             Close
           </Button>
         </Box>
-      </KeyboardAwareScroll>
+      </ScrollView>
     </ScreenContainer>
   );
 };

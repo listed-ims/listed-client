@@ -40,3 +40,6 @@ export { default as IncomingReceiptIcon } from "./IncomingReceiptIcon";
 export { default as CloseIcon } from "./CloseIcon";
 export { default as IconButton } from "./IconButton";
 export { default as CheckIcon } from "./CheckIcon";
+export { default as DeleteIcon } from "./DeleteIcon";
+export { default as RemoveIcon } from "./RemoveIcon";
+export { default as PlusIcon } from "./PlusIcon";
