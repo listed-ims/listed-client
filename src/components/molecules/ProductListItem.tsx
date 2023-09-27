@@ -6,19 +6,33 @@ import {
   HStack,
   VStack,
   Badge,
+  Checkbox,
 } from "native-base";
 import React from "react";
 
 interface ProductListItemProps extends IPressableProps {
   product: ProductResponse;
+  showCheckbox?: boolean;
+  isChecked?: boolean;
 }
 
-const ProductListItem = ({ product, ...props }: ProductListItemProps) => {
+const ProductListItem = ({ product, showCheckbox, isChecked, ...props }: ProductListItemProps) => {
   const { name, variant, quantity, threshold, unit } = product;
 
   return (
     <Pressable {...props} _pressed={{ background: "muted.200" }} p="2">
-      <HStack alignItems="flex-end" justifyContent="space-between">
+      <HStack space="2" alignItems="center">
+        {showCheckbox &&
+          <Checkbox
+            aria-label="selected product"
+            colorScheme="success"
+            size="sm"
+            borderRadius="full"
+            value=""
+            isChecked={isChecked}
+          />
+        }
+      <HStack flex="1" alignItems="flex-end" justifyContent="space-between">
         <VStack>
           <Text fontSize="sm" fontWeight="medium">
             {name}
@@ -43,6 +57,7 @@ const ProductListItem = ({ product, ...props }: ProductListItemProps) => {
             {quantity} {unit.toLowerCase()}
           </Text>
         </VStack>
+      </HStack>
       </HStack>
     </Pressable>
   );
