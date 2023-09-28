@@ -1,0 +1,40 @@
+import { UserResponse } from "./user";
+
+export enum UserPermission {
+  OWNER,
+  ADD_COLLABORATOR,
+  UPDATE_COLLABORATOR,
+  DELETE_COLLABORATOR,
+  VIEW_COLLABORATORS,
+  VIEW_COLLABORATOR_DETAILS,
+
+  ADD_PRODUCT,
+  UPDATE_PRODUCT,
+  VIEW_PRODUCT_DETAILS,
+  DELETE_PRODUCT,
+
+  ADD_INCOMING,
+  GET_INCOMING_DETAILS,
+
+  ADD_OUTGOING_SOLD,
+  ADD_OUTGOING_DEFECTS,
+  ADD_OUTGOING_EXPIRED,
+  ADD_OUTGOING_LOST,
+  ADD_OUTGOING_CONSUMED,
+  GET_OUTGOING_DETAILS,
+
+  GET_TRANSACTIONS_LIST,
+}
+
+export enum MembershipStatus {
+  ACTIVE = "ACTIVE",
+  DECLINED = "DECLINED",
+  PENDING = "PENDING",
+  INACTIVE = "INACTIVE",
+}
+
+export interface MembershipResponse {
+  user: UserResponse;
+  permissions: Set<UserPermission>;
+  membershipStatus: MembershipStatus;
+}

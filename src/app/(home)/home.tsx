@@ -77,7 +77,10 @@ const Home = () => {
                   router.push(Routes.PRODUCTS);
                 }}
               />
-              <MainButtons flex="1" type="collaborators" />
+              <MainButtons flex="1" type="collaborators"
+                onPress={() => {
+                  router.push(Routes.COLLABORATORS)
+                }} />
               <MainButtons flex="1" type="transactions" />
             </Row>
           </Column>
