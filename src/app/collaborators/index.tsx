@@ -1,9 +1,10 @@
 import { AddIcon, Button } from "@listed-components/atoms"
 import { CollaboratorListItem, CollaboratorsFilter } from "@listed-components/molecules"
 import { ScreenContainer } from "@listed-components/organisms"
+import { Routes } from "@listed-constants"
 import { stackHeaderStyles } from "@listed-styles"
 import { MembershipStatus } from "@listed-types"
-import { Stack } from "expo-router"
+import { Stack, router } from "expo-router"
 import { Column, FlatList, useTheme } from "native-base"
 import { useState } from "react"
 
@@ -104,6 +105,9 @@ const Collaborators = () => {
           px="4"
           startIcon={<AddIcon color={colors.white} />}
           borderRadius="full"
+          onPress={() => {
+            router.push(Routes.NEW_COLLABORATOR)
+          }}
         >
           Add Collaborator
         </Button>

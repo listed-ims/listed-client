@@ -13,4 +13,5 @@ export enum Routes {
   NEW_OUTGOING = "/transactions/outgoing/new",
   SELECT_OUTGOING = "/transactions/outgoing/select-product",
   COLLABORATORS = "/collaborators",
+  NEW_COLLABORATOR = "/collaborators/new",
 }

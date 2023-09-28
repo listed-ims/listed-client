@@ -43,3 +43,5 @@ export { default as CheckIcon } from "./CheckIcon";
 export { default as DeleteIcon } from "./DeleteIcon";
 export { default as RemoveIcon } from "./RemoveIcon";
 export { default as PlusIcon } from "./PlusIcon";
+export { default as Checkmark } from "./Checkmark";
+export { default as Checkbox } from "./Checkbox";
