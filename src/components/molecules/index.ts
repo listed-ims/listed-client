@@ -18,3 +18,5 @@ export { default as Toast } from "./Toast";
 export { default as ProductDetail} from "./ProductDetail";
 
 export { default as Quantity } from "./Quantity";
+export { default as CollaboratorListItem } from "./CollaboratorListItem";
+export { default as CollaboratorsFilter } from "./CollaboratorsFilter";
