@@ -50,7 +50,7 @@ const Products = () => {
     100
   );
 
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   return (
     <ScreenContainer withHeader>
@@ -72,13 +72,14 @@ const Products = () => {
         />
         <Box flex={1}>
           <FlatList
-            ListHeaderComponent={
+            ListHeaderComponent={() => (
               <HStack
                 bg="muted.100"
                 p="2"
                 borderRadius="lg"
                 alignSelf="flex-start"
                 space="5"
+                mb="4"
               >
                 <VStack justifyContent="space-between" space="1">
                   <Text fontSize="2xs" fontWeight="medium" color="muted.600">
@@ -92,7 +93,7 @@ const Products = () => {
                   <StocksIcon />
                 </VStack>
               </HStack>
-            }
+            )}
             ItemSeparatorComponent={() => <Divider />}
             data={productList}
             renderItem={({ item }) => (
