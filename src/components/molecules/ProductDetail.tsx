@@ -9,6 +9,7 @@ interface ProductDetailsProps {
     barcode?: string;
     salePrice?: number;
     threshold?: number;
+    unit?: string;
     quantity?: number;
     totalIn?: number;
     totalOut?: number;
@@ -18,6 +19,7 @@ const ProductDetail = ({
     barcode,
     salePrice,
     threshold,
+    unit,
     quantity,
     totalIn,
     totalOut,
@@ -29,14 +31,15 @@ const ProductDetail = ({
                 <BarcodeIcon />
                 <Column space="1">
                     <Text fontSize="xs" color="text.500">BARCODE</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{barcode}</Text>
+                    <Text fontSize="sm" fontWeight={barcode ? "medium" : "thin"} fontStyle="normal" color="black" >{barcode || "N/A"}</Text>
                 </Column>
             </Row>
+
             <Row paddingX="4" paddingY="2" space="4" borderBottomWidth="0.5" borderBottomColor="#D4D4D4" alignItems="center" >
                 <PriceTagIcon />
                 <Column>
-                    <Text textAlign="center" fontSize="xs" color="text.500"> SALE PRICE PER ITEM</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{toCurrency(salePrice as number)} </Text>
+                    <Text textAlign="center" fontSize="xs" color="text.500">SALE PRICE PER ITEM</Text>
+                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{toCurrency(salePrice as number)}</Text>
                 </Column>
             </Row>
 
@@ -44,9 +47,10 @@ const ProductDetail = ({
                 <WarningPointIcon />
                 <Column>
                     <Text fontSize="xs" color="text.500">LOW WARNING POINT</Text>
-                    <Text fontSize="sm" fontWeight="medium" fontStyle="normal" color="black">{threshold} pcs.</Text>
+                    <Text fontSize="sm"  fontWeight={threshold ?  "medium" : "thin"}  fontStyle="normal" color="black">{threshold ? `${threshold} ${unit?.toLowerCase()}` : "N/A"} </Text>
                 </Column>
             </Row>
+            
 
             <Row paddingX="4" paddingY="2" space="4" borderBottomWidth="0.5" borderBottomColor="#D4D4D4" alignItems="center" >
                 <AlbumsIcon />

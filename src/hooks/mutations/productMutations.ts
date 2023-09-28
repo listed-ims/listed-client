@@ -3,12 +3,13 @@ import {
   updateProductService,
   addProductService,
 } from "@listed-services";
-import { ProductRequest, AddProductRequest } from "@listed-types";
+import { AddProductRequest, UpdateRequest, ProductResponse } from "@listed-types";
 import { MutationOptions, useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
-export const useUpdateProductDetailsMutation = (
-  mutationOptions: MutationOptions<any, AxiosError, ProductRequest>
+
+export const useUpdateProductMutation = (
+  mutationOptions: MutationOptions<ProductResponse, AxiosError, UpdateRequest>
 ) => {
   return useMutation(updateProductService, mutationOptions);
 };

@@ -26,3 +26,8 @@ export interface AddProductRequest {
   storeId: number;
   productRequest: ProductRequest;
 }
+
+export interface UpdateRequest {
+  productId: number;
+  productRequest: ProductRequest;
+}

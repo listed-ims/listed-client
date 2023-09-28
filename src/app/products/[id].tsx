@@ -8,8 +8,7 @@ import { stackHeaderStyles } from '@listed-styles'
 import { ScrollView } from 'react-native'
 import {  useDeleteProductMutation, useGetProductDetails } from '@listed-hooks'
 import { useQueryClient } from '@tanstack/react-query'
-import ProductDetail from '@listed-components/molecules/ProductDetail'
-
+import { ProductDetail } from '@listed-components/molecules'
 
 
 const ProductDetails = ({}) => {
@@ -44,6 +43,7 @@ const ProductDetails = ({}) => {
     deleteProduct(productDetails?.id!)
   };
 
+  
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Product Details")} />
@@ -53,21 +53,22 @@ const ProductDetails = ({}) => {
             <CubeIcon />
             <Heading size="md">{productDetails?.name} </Heading>
             <Text color="darkText" fontSize="xs" fontWeight="md" >{productDetails?.variant} </Text>
-
           </Column>
+  
           <ProductDetail
             barcode={productDetails?.barcode}
             salePrice={productDetails?.salePrice}
             threshold={productDetails?.threshold}
+            unit= {productDetails?.unit}
             quantity={productDetails?.quantity}
             totalIn={productDetails?.totalIn}
             totalOut={productDetails?.totalOut}
           />
-
+          
           <Column marginTop="8" marginBottom="6" space="4" >
             <Button
               onPress={() => {
-                router.push(Routes.EDIT_PRODUCT)
+                router.push(`${Routes.EDIT_PRODUCT}?productId=${productDetails?.id}`)
               }}>
               EDIT
             </Button>
