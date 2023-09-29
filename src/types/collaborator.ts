@@ -35,7 +35,7 @@ export enum MembershipStatus {
 
 export interface MembershipResponse {
   user: UserResponse;
-  permissions: Set<UserPermission>;
+  permissions: UserPermission[];
   membershipStatus: MembershipStatus;
 }
 

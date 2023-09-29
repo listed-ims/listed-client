@@ -6,33 +6,36 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { ClearFilterIcon, FilterButton } from "@listed-components/atoms";
+import { MembershipStatus } from "@listed-types";
 
 interface StoreListFilterGroup {
-  filter: "all" | "active" | "inactive" | "pending";
-  handleSetFilter: (filter: "all" | "active" | "inactive" | "pending") => void;
+  filters: MembershipStatus[];
+  handleSetFilter: (filter: "ALL" | Omit<MembershipStatus, "DECLINED">) => void;
 }
 
 const StoreListFilterGroup = ({
-  filter,
+  filters,
   handleSetFilter,
 }: StoreListFilterGroup) => {
+  const [filter, setFilter] = useState<"ALL" | Omit<MembershipStatus, "DECLINED">>("ALL")
   const [prevFilter, setPrevFilter] = useState<typeof filter>()
 
   const handleFilterChange = (nextFilter: typeof filter) => {
     setPrevFilter(filter);
+    setFilter(nextFilter);
     handleSetFilter(nextFilter);
   }
 
   const clearFilterAnimatedStyle = useAnimatedStyle(() => {
     return {
       opacity:
-        filter !== "all"
+        filter !== "ALL"
           ? withDelay(250, withTiming(1, { duration: 100 }))
           : withTiming(0, { duration: 100 }),
       transform: [
         {
           translateX:
-            filter === "all" ? withDelay(200, withTiming(-40)) : withTiming(0),
+            filter === "ALL" ? withDelay(200, withTiming(-40)) : withTiming(0),
         },
       ],
     };
@@ -41,46 +44,46 @@ const StoreListFilterGroup = ({
   const activeFilterAnimatedStyle = useAnimatedStyle(() => {
     return {
       opacity:
-        filter !== "inactive" && filter !== "pending"
+        filter !== "INACTIVE" && filter !== "PENDING"
           ? withDelay(300, withTiming(1, { duration: 100 }))
           : withTiming(0, { duration: 100 }),
       transform: [
         {
           translateX:
-            filter === "all"
+            filter === "ALL"
               ? withTiming(-40)
-              : filter === "active"
+              : filter === "ACTIVE"
                 ? withTiming(0)
                 : withTiming(-72),
         },
       ],
-      zIndex: filter === "inactive" || filter === "pending" ? -1 : 0,
+      zIndex: filter === "INACTIVE" || filter === "PENDING" ? -1 : 0,
     };
   }, [filter]);
 
 
   const inactiveFilterAnimatedStyle = useAnimatedStyle(() => {
-    const opacity = prevFilter === "pending" ?
+    const opacity = prevFilter === "PENDING" ?
       withDelay(300, withTiming(1, { duration: 100 })) :
-      prevFilter === "active" ?
+      prevFilter === "ACTIVE" ?
         withTiming(1, { duration: 100 }) : undefined;
 
     return {
       opacity:
-        filter !== "active" && filter !== "pending" ?
+        filter !== "ACTIVE" && filter !== "PENDING" ?
           opacity :
           withTiming(0, { duration: 100 }),
       transform: [
         {
           translateX:
-            filter === "all"
+            filter === "ALL"
               ? withTiming(-40)
-              : filter === "active" || filter === "pending"
+              : filter === "ACTIVE" || filter === "PENDING"
                 ? withTiming(0)
                 : withTiming(-82),
         },
       ],
-      zIndex: filter === "active" || filter === "pending" ? -1 : 0,
+      zIndex: filter === "ACTIVE" || filter === "PENDING" ? -1 : 0,
     };
   }, [filter]);
 
@@ -88,15 +91,15 @@ const StoreListFilterGroup = ({
   const pendingFilterAnimatedStyle = useAnimatedStyle(() => {
     return {
       opacity:
-        filter !== "active" && filter !== "inactive"
+        filter !== "ACTIVE" && filter !== "INACTIVE"
           ? withTiming(1, { duration: 100 })
           : withTiming(0, { duration: 100 }),
       transform: [
         {
           translateX:
-            filter === "all"
+            filter === "ALL"
               ? withTiming(-40)
-              : filter === "active" || filter === "inactive"
+              : filter === "ACTIVE" || filter === "INACTIVE"
                 ? withTiming(0)
                 : withTiming(-172),
         },
@@ -104,50 +107,37 @@ const StoreListFilterGroup = ({
     };
   }, [filter]);
 
+  const filterAnimation: Record<string, any> = {
+    ACTIVE: activeFilterAnimatedStyle,
+    INACTIVE: inactiveFilterAnimatedStyle,
+    PENDING: pendingFilterAnimatedStyle,
+  };
+
   return (
     <HStack space="2">
       <Animated.View style={[clearFilterAnimatedStyle]}>
         <ClearFilterIcon
           onPress={() => {
-            handleFilterChange("all");
+            handleFilterChange("ALL");
           }}
-          disabled={filter === "all"}
+          disabled={filter === "ALL"}
         />
       </Animated.View>
-      <Animated.View style={[activeFilterAnimatedStyle]}>
-        <FilterButton
-          label="active"
-          state={filter === "active" ? "active" : "inactive"}
-          onPress={() => {
-            filter === "all" ? handleFilterChange("active") : handleFilterChange("all");
-          }}
-          disabled={filter === "inactive" || filter === "pending"}
-        />
-      </Animated.View>
-      <Animated.View style={[inactiveFilterAnimatedStyle]}>
-        <FilterButton
-          label="inactive"
-          state={filter === "inactive" ? "active" : "inactive"}
-          onPress={() => {
-            filter === "all"
-              ? handleFilterChange("inactive")
-              : handleFilterChange("all");
-          }}
-          disabled={filter === "active" || filter === "pending"}
-        />
-      </Animated.View>
-      <Animated.View style={[pendingFilterAnimatedStyle]}>
-        <FilterButton
-          label="pending"
-          state={filter === "pending" ? "active" : "inactive"}
-          onPress={() => {
-            filter === "all"
-              ? handleFilterChange("pending")
-              : handleFilterChange("all");
-          }}
-          disabled={filter === "active" || filter === "inactive"}
-        />
-      </Animated.View>
+      {
+        filters.map((filterItem, index) => {
+          return <Animated.View key={index}
+            style={[filterAnimation[filterItem]]}>
+            <FilterButton
+              label={filterItem}
+              state={filter === filterItem ? "active" : "inactive"}
+              onPress={() => {
+                filter === "ALL" ? handleFilterChange(filterItem) : handleFilterChange("ALL");
+              }}
+              disabled={filter !== filterItem && filter !== "ALL"}
+            />
+          </Animated.View>
+        })
+      }
     </HStack>
   );
 };

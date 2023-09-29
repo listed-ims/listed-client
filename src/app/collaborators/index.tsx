@@ -2,80 +2,42 @@ import { AddIcon, Button } from "@listed-components/atoms"
 import { CollaboratorListItem, CollaboratorsFilter } from "@listed-components/molecules"
 import { ScreenContainer } from "@listed-components/organisms"
 import { Routes } from "@listed-constants"
+import { useAuth } from "@listed-contexts"
+import { useGetCollaborators } from "@listed-hooks"
 import { stackHeaderStyles } from "@listed-styles"
-import { MembershipStatus } from "@listed-types"
+import { MembershipStatus, UserPermission } from "@listed-types"
+import { setCollaboratorsCurrentUserFirst } from "@listed-utils"
 import { Stack, router } from "expo-router"
 import { Column, FlatList, useTheme } from "native-base"
-import { useState } from "react"
+import React, { useState } from "react"
 
 
 const Collaborators = () => {
   const { colors } = useTheme();
-  const [filter, setFilter] = useState<"all" | "active" | "inactive" | "pending">("all");
+  const [currentFilter, setCurrentFilter] = useState<"ALL" | Omit<MembershipStatus, "DECLINED">>("ALL");
+  const { userDetails } = useAuth();
 
-  const mockData = [
-    {
-      name: "Johnny Johnny",
-      userRole: "owner",
-      membershipStatus: MembershipStatus.ACTIVE,
-      isYou: true
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.PENDING,
-      isYou: false
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.ACTIVE,
-      isYou: false
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.ACTIVE,
-      isYou: false
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.ACTIVE,
-      isYou: false
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.PENDING,
-      isYou: false
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.INACTIVE,
-      isYou: false
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.ACTIVE,
-      isYou: false
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.ACTIVE,
-      isYou: false
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.ACTIVE,
-      isYou: false
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.PENDING,
-      isYou: false
-    },
-    {
-      name: "Johnny Johnny",
-      membershipStatus: MembershipStatus.INACTIVE,
-      isYou: false
-    },
-  ]
+
+  /*
+  TODO: render all filter chips if user is owner, otherwise render only active and pending
+  */
+  const filters = ["ACTIVE", "INACTIVE", "PENDING"] as MembershipStatus[];
+
+  const {
+    data: collaboratorsList,
+    isError: collaboratorsListError,
+    isFetching: collaboratorsListFetching,
+    isSuccess: collaboratorsListSuccess,
+  } = useGetCollaborators(
+    userDetails?.currentStoreId as number,
+    currentFilter === "ALL" ?
+      undefined :
+      currentFilter === "ACTIVE" ?
+        MembershipStatus.ACTIVE :
+        currentFilter === "INACTIVE" ?
+          MembershipStatus.INACTIVE :
+          MembershipStatus.PENDING,
+  )
 
 
   return (
@@ -86,16 +48,17 @@ const Collaborators = () => {
         paddingBottom="6"
       >
         <CollaboratorsFilter
-          filter={filter}
-          handleSetFilter={(filter) => { setFilter(filter) }} />
+          filters={filters}
+          handleSetFilter={(filter) => { setCurrentFilter(filter) }} />
         <FlatList
-          data={mockData}
-          renderItem={({ item }) => (
+          data={setCollaboratorsCurrentUserFirst(collaboratorsList, userDetails?.id!)}
+          renderItem={({ item, index }) => (
             <CollaboratorListItem
-              name={item.name}
+              key={index}
+              name={item.user.name}
               membershipStatus={item.membershipStatus}
-              isYou={item.isYou}
-              userRole={item.userRole || undefined}
+              isYou={item.user.id === userDetails?.id}
+              userRole={item.permissions.includes(UserPermission.OWNER) ? "owner" : "collaborator"}
             />
           )}
         />
