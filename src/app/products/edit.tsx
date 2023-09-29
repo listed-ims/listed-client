@@ -6,15 +6,17 @@ import { Stack, router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { Button, ScanIcon } from "@listed-components/atoms";
 import { stackHeaderStyles } from '@listed-styles'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { useFormValidation, useGetProductDetails, useUpdateProductMutation, } from '@listed-hooks'
+import { useDebounce, useFormValidation, useGetProductDetails, useUpdateProductMutation, useValidateBarcode, } from '@listed-hooks'
 import { useQueryClient } from '@tanstack/react-query'
 import { ValidationRules, UpdateRequest, } from '@listed-types'
 import { GET_PRODUCT, GET_PRODUCTS, Routes } from '@listed-constants'
+import { useAuth } from '@listed-contexts'
 
 const EditProduct = () => {
   const { productId } = useLocalSearchParams();
   const queryClient = useQueryClient();
   const navigation = useNavigation();
+  const { userDetails } = useAuth();
   const toast = useToast();
 
 
@@ -33,11 +35,11 @@ const EditProduct = () => {
     barcode: productDetails?.barcode,
     variant: productDetails?.variant,
     "sale price": String(productDetails?.salePrice),
-    threshold: String(productDetails?.threshold),
+    threshold: productDetails?.threshold ? String(productDetails.threshold): "",
   };
 
   const validationRules: ValidationRules = {
-    product: { required: true },
+    name: { required: true },
     "sale price": {
       required: true,
       custom: (value: string) => {
@@ -79,9 +81,21 @@ const EditProduct = () => {
       console.error({...error});
     },
   });
+
+  const debouncedBarcode = useDebounce(formData.barcode, 300);
+
+  const {
+    data: barcodeValidation,
+    isError: barcodeValidationError,
+    isFetching: barcodeValidationFetching,
+  } = useValidateBarcode(
+    userDetails?.currentStoreId as number,
+    debouncedBarcode
+  );
   
   const handleSave = () => {
-    updateProduct({productId: productDetails?.id,
+    if (validate() && barcodeValidation?.valid !== false) {
+    updateProduct({productId: productDetails?.id, 
       productRequest: {
         name: formData.name,
         barcode: formData.barcode,
@@ -91,6 +105,7 @@ const EditProduct = () => {
         unit: productDetails?.unit
       },
     } as UpdateRequest);
+  }
   };
 
 	const {colors} = useTheme();
@@ -103,7 +118,7 @@ const EditProduct = () => {
           <Row paddingY="6">
             <Text fontSize="18px" fontWeight="600">Edit Product Details</Text>
           </Row>
-          <FormControl label="Product" errorMessage={errors.name}>
+          <FormControl label="Product" errorMessage={errors.name} isInvalid={!!errors.name}>
             <TextField flex="1" placeholder="Enter product name" value ={formData.name} onChangeText={(value) => handleInputChange(value, "name")} />
 
           </FormControl>
@@ -129,7 +144,7 @@ const EditProduct = () => {
             <TextField placeholder='Enter variant' value ={formData.variant} onChangeText={(value) => handleInputChange(value, "variant")} />
           </FormControl>
 
-          <FormControl label="Sale Price per Item" errorMessage={errors.salePrice} isInvalid={!!errors.salePrice}>
+          <FormControl label="Sale Price per Item" errorMessage={errors["sale price"]} isInvalid={!!errors["sale price"]}>
 
             <TextField flex="1" placeholder='Enter sale price' value ={formData["sale price"]}
               onChangeText={(value) => handleInputChange(value, "sale price")} startDataLabel={'Php'} />
@@ -150,8 +165,8 @@ const EditProduct = () => {
       </KeyboardAwareScrollView>
       <Box background=" white" paddingTop="4" paddingBottom="6">
         <Row space="4" >
-          <Button flex="1" onPress={handleSave} >Save</Button>
-          <Button flex="1" variant="outline" onPress={handleCancel}>Cancel</Button>
+          <Button flex="1" onPress={handleSave}>SAVE</Button>
+          <Button flex="1" variant="outline" onPress={handleCancel}>CANCEL</Button>
         </Row>
       </Box>
      

@@ -8,10 +8,10 @@ interface ToastProps {
 const Toast = ({ message }:ToastProps) => {
 
   return (
-      <Box padding= "2" marginBottom= "4">
-        <Row padding= "2" space = "2" backgroundColor= "success.600" borderRadius= "4"  justifyContent= "center">
+      <Box marginBottom= "4">
+        <Row padding= "2" space = "2" backgroundColor= "success.600" borderRadius= "4"  alignItems= "center">
           <CheckIcon/>
-          <Text color= "white"> {message}</Text>
+          <Text color= "white" >{message}</Text>
         </Row>
       </Box>
   );
