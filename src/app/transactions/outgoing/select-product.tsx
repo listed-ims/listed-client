@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ScreenContainer } from "@listed-components/organisms";
 import { Box, Divider, FlatList, Text } from "native-base";
-import { Stack, router } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { HeaderSearchField, ProductListItem } from "@listed-components/molecules";
 import { ProductFilter, Routes } from "@listed-constants";
 import { useGetProductList } from "@listed-hooks";
@@ -9,7 +9,8 @@ import { useAuth } from "@listed-contexts";
 import { Button } from "@listed-components/atoms";
 
 const SelectProduct = () => {
-  const [filter, setFilter] = useState<"all" | "low stock" | "no stock">("all");
+
+  const {ids} = useLocalSearchParams();
 
   const { userDetails } = useAuth();
 
@@ -21,11 +22,7 @@ const SelectProduct = () => {
     userDetails?.currentStoreId as number,
     undefined,
     undefined,
-    filter === "all"
-      ? undefined
-      : filter === "low stock"
-      ? ProductFilter.LOW_STOCK
-      : ProductFilter.NO_STOCK,
+    ProductFilter.WITH_STOCK,
     undefined,
     1,
     100
@@ -55,6 +52,12 @@ const SelectProduct = () => {
 
   const handleConfirm = () => {
     console.log("Selected Products:", selectedProducts);
+    router.push({
+      pathname: Routes.NEW_OUTGOING,
+      params: {
+        ids: !!ids ? `${ids},${selectedProducts.toString()}`: selectedProducts.toString(),
+      }
+    })
   };
 
   return (
@@ -73,7 +76,7 @@ const SelectProduct = () => {
           </Box>
         }
         ItemSeparatorComponent={() => <Divider />}
-        data={productList}
+        data={productList?.filter((product) => !ids?.toString().split(",").includes(product.id.toString()))}
         renderItem={({ item }) => (
           <ProductListItem
             product={item}
@@ -84,14 +87,20 @@ const SelectProduct = () => {
               if (showCheckboxes) {
                 handleCheckboxChange(item.id);
               } else {
-                router.push(Routes.NEW_OUTGOING);
+                router.push({
+                  pathname: Routes.NEW_OUTGOING,
+                  params: {
+                    ids: !!ids ? `${ids},${item.id.toString()}`: item.id.toString(),
+                  }
+                })
               }
             }}
           />   
         )}
+        marginBottom={4}
       />
       {showCheckboxes && (
-        <Box background="white" pt="4" pb="6">
+        <Box background="white" pb="6">
           <Button onPress={handleConfirm}> SELECT PRODUCTS</Button>
         </Box>
       )}
