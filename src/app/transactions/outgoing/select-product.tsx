@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { ScreenContainer } from "@listed-components/organisms";
 import { Box, Divider, FlatList, Text } from "native-base";
 import { Stack, router, useLocalSearchParams } from "expo-router";
-import { HeaderSearchField, ProductListItem } from "@listed-components/molecules";
+import {
+  HeaderSearchField,
+  ProductListItem,
+} from "@listed-components/molecules";
 import { ProductFilter, Routes } from "@listed-constants";
 import { useGetProductList } from "@listed-hooks";
 import { useAuth } from "@listed-contexts";
 import { Button } from "@listed-components/atoms";
 
 const SelectProduct = () => {
-
-  const {ids} = useLocalSearchParams();
+  const { ids } = useLocalSearchParams();
 
   const { userDetails } = useAuth();
 
@@ -51,22 +53,25 @@ const SelectProduct = () => {
   };
 
   const handleConfirm = () => {
-    console.log("Selected Products:", selectedProducts);
     router.push({
       pathname: Routes.NEW_OUTGOING,
       params: {
-        ids: !!ids ? `${ids},${selectedProducts.toString()}`: selectedProducts.toString(),
-      }
-    })
+        ids: !!ids
+          ? `${ids},${selectedProducts.toString()}`
+          : selectedProducts.toString(),
+      },
+    });
   };
 
   return (
     <ScreenContainer withHeader>
-      <Stack.Screen options={{
-        header: () => {
-          return (<HeaderSearchField />)
-        }
-      }} />
+      <Stack.Screen
+        options={{
+          header: () => {
+            return <HeaderSearchField />;
+          },
+        }}
+      />
       <FlatList
         ListHeaderComponent={
           <Box background="white" py="4">
@@ -76,7 +81,10 @@ const SelectProduct = () => {
           </Box>
         }
         ItemSeparatorComponent={() => <Divider />}
-        data={productList?.filter((product) => !ids?.toString().split(",").includes(product.id.toString()))}
+        data={productList?.filter(
+          (product) =>
+            !ids?.toString().split(",").includes(product.id.toString())
+        )}
         renderItem={({ item }) => (
           <ProductListItem
             product={item}
@@ -90,12 +98,14 @@ const SelectProduct = () => {
                 router.push({
                   pathname: Routes.NEW_OUTGOING,
                   params: {
-                    ids: !!ids ? `${ids},${item.id.toString()}`: item.id.toString(),
-                  }
-                })
+                    ids: !!ids
+                      ? `${ids},${item.id.toString()}`
+                      : item.id.toString(),
+                  },
+                });
               }
             }}
-          />   
+          />
         )}
         marginBottom={4}
       />
