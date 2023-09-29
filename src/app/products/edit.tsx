@@ -35,7 +35,7 @@ const EditProduct = () => {
     barcode: productDetails?.barcode,
     variant: productDetails?.variant,
     "sale price": String(productDetails?.salePrice),
-    threshold: productDetails?.threshold ? String(productDetails.threshold): "",
+    threshold: productDetails?.threshold,
   };
 
   const validationRules: ValidationRules = {
@@ -68,7 +68,7 @@ const EditProduct = () => {
     onSuccess: (data) => {
       queryClient.setQueryData([GET_PRODUCT, data.id], data);
       queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS]});
-      router.push(Routes.PRODUCTS);
+      router.push(`${Routes.PRODUCTS}/${productDetails?.id}`);
       toast.show({ 
         render:() =>{
           return <Toast message='Product details updated.'/>
@@ -94,18 +94,19 @@ const EditProduct = () => {
   );
   
   const handleSave = () => {
-    if (validate() && barcodeValidation?.valid !== false) {
-    updateProduct({productId: productDetails?.id, 
-      productRequest: {
-        name: formData.name,
-        barcode: formData.barcode,
-        variant: formData.variant,
-        salePrice: formData["sale price"],
-        threshold: formData.threshold,
-        unit: productDetails?.unit
-      },
-    } as UpdateRequest);
-  }
+    
+    if (validate() && (formData.barcode === initialFormData.barcode || barcodeValidation?.valid !== false)) {
+      updateProduct({productId: productDetails?.id, 
+        productRequest: {
+          name: formData.name,
+          barcode: formData.barcode,
+          variant: formData.variant,
+          salePrice: formData["sale price"],
+          threshold: formData.threshold,
+          unit: productDetails?.unit
+        },
+      } as UpdateRequest);
+    }
   };
 
 	const {colors} = useTheme();
@@ -128,6 +129,10 @@ const EditProduct = () => {
               <Text fontWeight="medium" fontSize="sm" color="text.500">{" "}(optional)</Text>
             </>
           }
+          errorMessage={initialFormData.barcode !== formData.barcode && barcodeValidation?.valid === false
+            ? "Barcode must be unique."
+            : ""}
+          isInvalid={initialFormData.barcode !== formData.barcode && barcodeValidation?.valid === false}
           >
             <Row space="2">
               <TextField flex="1" placeholder='Scan barcode' value={formData.barcode} onChangeText={(value) => handleInputChange(value, "barcode")} />
@@ -159,7 +164,7 @@ const EditProduct = () => {
             errorMessage={errors.threshold}
             isInvalid={!!errors.threshold}
           >
-            <TextField placeholder="Enter low warning point" value= {formData.threshold} onChangeText={(value) => handleInputChange(value, "threshold")} endDataLabel={productDetails?.unit} />
+            <TextField placeholder="Enter low warning point" value= {formData.threshold ? String(formData.threshold) : ""} onChangeText={(value) => handleInputChange(value, "threshold")} endDataLabel={productDetails?.unit} />
           </FormControl>
         </Column>
       </KeyboardAwareScrollView>
