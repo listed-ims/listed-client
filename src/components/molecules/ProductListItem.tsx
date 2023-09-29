@@ -1,3 +1,4 @@
+import { CheckedIcon, UncheckedIcon } from "@listed-components/atoms";
 import { ProductResponse } from "@listed-types";
 import {
   IPressableProps,
@@ -6,7 +7,6 @@ import {
   HStack,
   VStack,
   Badge,
-  Checkbox,
 } from "native-base";
 import React from "react";
 
@@ -23,14 +23,7 @@ const ProductListItem = ({ product, showCheckbox, isChecked, ...props }: Product
     <Pressable {...props} _pressed={{ background: "muted.200" }} p="2">
       <HStack space="2" alignItems="center">
         {showCheckbox &&
-          <Checkbox
-            aria-label="selected product"
-            colorScheme="success"
-            size="sm"
-            borderRadius="full"
-            value=""
-            isChecked={isChecked}
-          />
+          (isChecked? <CheckedIcon/> : <UncheckedIcon/>)
         }
       <HStack flex="1" alignItems="flex-end" justifyContent="space-between">
         <VStack>
