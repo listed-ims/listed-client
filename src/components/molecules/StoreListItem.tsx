@@ -53,10 +53,10 @@ const StoreListItem = ({
             </Badge>
           )}
           <Text fontSize="sm" fontWeight="semibold" color="darkText">
-            {toTitleCase(name)}
+            {name}
           </Text>
           <Text fontSize="xs" color="muted.500">
-            {toTitleCase(userRole)}
+            {userRole}
           </Text>
         </Column>
         <Column flex="1" alignItems="flex-end">
