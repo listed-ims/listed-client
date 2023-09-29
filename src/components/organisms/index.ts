@@ -9,3 +9,4 @@ export { default as DashboardNoStore } from "./DashboardNoStore";
 export { default as KeyboardAwareScroll } from "./KeyboardAwareScroll";
 export { default as DeleteProductModal } from "./DeleteProductModal";
 export { default as OutProductItem } from "./OutProductItem";
+export { default as Permissions } from "./Permissions";
