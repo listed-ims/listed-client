@@ -41,7 +41,7 @@ export const getUserService = async () => {
 
 export const validateTokenService = async () => {
   try {
-    const response = await axiosInstance.post("users/validation/token");
+    const response = await axiosInstance.get("users/validation/token");
     return response.data;
   } catch (error) {
     throw error;
