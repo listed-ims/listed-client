@@ -1,6 +1,10 @@
-import { GET_COLLABORATORS } from "@listed-constants";
+import { GET_COLLABORATORS, GET_PERMISSIONS } from "@listed-constants";
 import { getCollaboratorsService } from "@listed-services";
-import { MembershipResponse, MembershipStatus } from "@listed-types";
+import {
+  MembershipResponse,
+  MembershipStatus,
+  UserPermission,
+} from "@listed-types";
 import { useQuery } from "@tanstack/react-query";
 
 const fiveMinutes = 1000 * 60 * 5;
@@ -19,4 +23,24 @@ export const useGetCollaborators = (
     }
   );
   return query;
+};
+
+export const useGetUserPermissions = (storeId: number, userId: number) => {
+  return useQuery<UserPermission[]>(
+    [GET_PERMISSIONS, { storeId, userId }],
+    () =>
+      getCollaboratorsService(
+        storeId,
+        undefined,
+        undefined,
+        undefined,
+        userId
+      ).then((response) => {
+        return response[0].permissions;
+      }),
+    {
+      staleTime: Infinity,
+      enabled: !!storeId && !!userId,
+    }
+  );
 };

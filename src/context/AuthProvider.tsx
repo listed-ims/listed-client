@@ -12,22 +12,26 @@ import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 import { getItemAsync } from 'expo-secure-store';
 import { AUTH_TOKEN_KEY, Routes } from '@listed-constants';
 import { useTokenValidationMutation } from '@listed-hooks';
-import { UserResponse } from '@listed-types';
+import { UserPermission, UserResponse } from '@listed-types';
 
 interface AuthContextProps {
   isLoggedIn: boolean;
   userDetails: UserResponse | null | undefined;
+  userPermissions: UserPermission[];
   login: (token: string) => void;
   logout: () => void;
   setUserDetails: Dispatch<SetStateAction<UserResponse | null | undefined>>;
+  setUserPermissions: Dispatch<SetStateAction<UserPermission[]>>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   isLoggedIn: false,
   userDetails: null,
+  userPermissions: [],
   login: () => { },
   logout: () => { },
   setUserDetails: () => { },
+  setUserPermissions: () => { },
 });
 
 export function useAuth() {
@@ -40,6 +44,7 @@ interface AuthProviderProps {
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [userDetails, setUserDetails] = useState<UserResponse | null | undefined>();
+  const [userPermissions, setUserPermissions] = useState<UserPermission[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isNavigationReady, setNavigationReady] = useState(false);
 
@@ -113,7 +118,15 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   useProtectedRoute(isLoggedIn);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout, setUserDetails, userDetails }}>
+    <AuthContext.Provider value={{
+      isLoggedIn,
+      login,
+      logout,
+      setUserDetails,
+      userDetails,
+      userPermissions,
+      setUserPermissions
+    }}>
       {children}
     </AuthContext.Provider>
   )

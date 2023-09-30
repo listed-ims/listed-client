@@ -10,13 +10,13 @@ import { Column, View, Row, Text } from 'native-base';
 import { ScrollView } from 'react-native';
 import { DashboardNoStore, ScreenContainer } from '@listed-components/organisms';
 import { Routes } from '@listed-constants';
-import { useGetStoreDetails, useGetUserDetails } from '@listed-hooks';
+import { useGetStoreDetails, useGetUserDetails, useGetUserPermissions } from '@listed-hooks';
 import { useAuth } from '@listed-contexts';
 
 
 const Home = () => {
 
-  const { setUserDetails } = useAuth();
+  const { setUserDetails, setUserPermissions } = useAuth();
 
   const {
     data: userDetails,
@@ -31,11 +31,21 @@ const Home = () => {
     isFetching: storeFetching,
   } = useGetStoreDetails(userDetails?.currentStoreId);
 
+  const {
+    data: userPermissions,
+    isError: userPermissionsError,
+    isFetching: userPermissionsFetching,
+    isSuccess: userPermissionsSuccess,
+  } = useGetUserPermissions(userDetails?.currentStoreId!, userDetails?.id!);
+
   useEffect(() => {
     if (userSuccess) {
       setUserDetails(userDetails)
     }
-  }, [userSuccess])
+    if (userPermissionsSuccess) {
+      setUserPermissions([...userPermissions])
+    }
+  }, [userDetails, userPermissions])
 
 
   return (
