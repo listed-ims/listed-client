@@ -10,6 +10,7 @@ interface CheckboxProps extends InterfaceBoxProps {
   onChange?: (state: boolean, value: string) => void;
   value?: string;
   isSelected?: boolean;
+  isDisabled?: false | boolean;
 }
 
 const Checkbox = ({
@@ -18,26 +19,34 @@ const Checkbox = ({
   onChange,
   value,
   isSelected,
+  isDisabled,
   ...props
 }: CheckboxProps) => {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(isSelected || false);
 
   useEffect(() => {
-    setChecked(isSelected!)
-  }, [isSelected])
+    setChecked(isSelected || false);
+  }, [isSelected]);
 
   useEffect(() => {
-    if (onChange) {
-      onChange(checked, value!);
+    onChange && onChange(checked, value || "");
+  }, [checked]);
+
+  const handleOnChange = () => {
+    if (!isDisabled) {
+      const newState = !checked;
+      setChecked(newState);
     }
-  }, [checked])
+  }
 
   return (
     <Pressable
       justifyContent="flex-start"
       alignItems="center"
       flexDirection="row"
-      onPress={() => setChecked(!checked)}
+      onPress={handleOnChange}
+      opacity={isDisabled ? 0.6 : 1}
+      _pressed={{ opacity: 0.5 }}
     >
       <Flex
         {...props}
@@ -50,8 +59,8 @@ const Checkbox = ({
         borderColor={checked || isIndeterminate ? "primary.700" : "gray.500"}
         backgroundColor={checked || isIndeterminate ? "primary.700" : "transparent"}
       >
-        {checked || isSelected ? <Checkmark /> : undefined}
-        {isIndeterminate && !checked ? <RemoveIcon /> : undefined}
+        {checked ? <Checkmark /> : undefined}
+        {isIndeterminate && (!checked) ? <RemoveIcon /> : undefined}
       </Flex>
       <Box marginLeft="2">{children}</Box>
     </Pressable>

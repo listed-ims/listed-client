@@ -40,12 +40,6 @@ export interface MembershipResponse {
 }
 
 export const UserPermissionMap = {
-  OWNER: {
-    permission: UserPermission.OWNER,
-    description: "Owner of the inventory",
-    category: "Owner",
-  },
-
   ADD_COLLABORATOR: {
     permission: UserPermission.ADD_COLLABORATOR,
     description: "Add collaborator.",
@@ -63,7 +57,7 @@ export const UserPermissionMap = {
   },
   VIEW_COLLABORATORS: {
     permission: UserPermission.VIEW_COLLABORATORS,
-    description: "View collaborators.",
+    description: "View collaborators list.",
     category: "Collaborators",
   },
   VIEW_COLLABORATOR_DETAILS: {
