@@ -48,9 +48,13 @@ export const validateTokenService = async () => {
   }
 };
 
-export const validateUsernameService = async () => {
+export const validateUsernameService = async (username: string) => {
   try {
-    const response = await axiosInstance.post("users/validation/username");
+    const response = await authAxiosInstance.get("users/validation/username", {
+      params: {
+        username: username,
+      },
+    });
     return response.data;
   } catch (error) {
     throw error;

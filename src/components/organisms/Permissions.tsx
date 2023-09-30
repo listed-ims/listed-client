@@ -2,12 +2,13 @@ import { UserPermission, UserPermissionMap } from "@listed-types"
 import { Column, Text } from "native-base"
 import { Dispatch, SetStateAction, useState } from "react"
 import { Checkbox } from "@listed-components/atoms"
+import { InterfaceBoxProps } from "native-base/lib/typescript/components/primitives/Box";
 
-interface PermissionsProps {
+interface PermissionsProps extends InterfaceBoxProps {
   handleSelectPermission: (selectedPermissions: Set<UserPermission>) => void;
 }
 
-const Permissions = ({ handleSelectPermission }: PermissionsProps) => {
+const Permissions = ({ handleSelectPermission, ...props }: PermissionsProps) => {
   const [selectedPermissions, setSelectedPermissions] = useState<Set<UserPermission>>(new Set())
   const [collaboratorsSelected, setCollaboratorsSelected] = useState<Set<UserPermission>>(new Set());
   const [productsSelected, setProductsSelected] = useState<Set<UserPermission>>(new Set());
@@ -127,7 +128,7 @@ const Permissions = ({ handleSelectPermission }: PermissionsProps) => {
   };
 
   return (
-    <Column space="1">
+    <Column space="1" {...props}>
       <Checkbox value="Collaborators" my="1" marginTop="2"
         isSelected={collaboratorsSelected.size === collaborators.length}
         isDisabled={collaboratorsSelected.size > 0}

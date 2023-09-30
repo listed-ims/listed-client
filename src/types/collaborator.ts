@@ -39,6 +39,12 @@ export interface MembershipResponse {
   membershipStatus: MembershipStatus;
 }
 
+export interface MembershipRequest {
+  storeId: number;
+  username: string;
+  userPermissions: UserPermission[];
+}
+
 export const UserPermissionMap = {
   ADD_COLLABORATOR: {
     permission: UserPermission.ADD_COLLABORATOR,
