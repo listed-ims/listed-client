@@ -32,9 +32,7 @@ const CurrentStoreModal: React.FC<CurrentStoreModalProps> = ({
           </VStack>
         </Modal.Header>
         <Modal.Body>
-          <Text textAlign="center">
-            {`You have successfully changed your current store to ${name}.`}
-          </Text>
+          <Text textAlign="center">You have successfully changed your current store to <Text fontWeight="bold">{name}.</Text></Text>
         </Modal.Body>
         <Modal.Footer>
           <Row width="full" justifyContent="center">
