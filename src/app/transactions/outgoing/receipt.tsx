@@ -76,7 +76,7 @@ const OutgoingReceipt = () => {
         </Box>
         <Box background="white" mt="6" mb="6">
           <Button size="lg" onPress={() => router.back()}>
-            Close
+            CLOSE
           </Button>
         </Box>
       </ScrollView>
