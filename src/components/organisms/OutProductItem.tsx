@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Column,
   Divider,
@@ -11,17 +10,24 @@ import { Quantity } from "@listed-components/molecules";
 
 interface OutProductItemProps {
   name?: string;
-  variant?: number;
-  price?: number;
-  totalPrice?: number;
+  variant?: string;
+  price: number;
+  quantity: number;
+  onDecrement: () => void;
+  onIncrement: () => void;
+  onDelete: () => void;
 }
 
 const OutProductItem = ({
   name,
   variant,
   price,
-  totalPrice
+  quantity,
+  onDecrement,
+  onIncrement,
+  onDelete
 }: OutProductItemProps) => {
+
   return (
     <Column
     px="4"
@@ -43,7 +49,7 @@ const OutProductItem = ({
             {name}
           </Text>
           <Text fontSize="xs" fontWeight="medium" color="muted.500">
-            {variant} ml
+            {variant}
           </Text>
         </Column>
         <Column
@@ -54,6 +60,7 @@ const OutProductItem = ({
           variant="subtle"
           size="xs"
           icon={<DeleteIcon/>}
+          onPress={onDelete}
           />
           <Row space="1" >
             <Text fontSize="xs" fontWeight="medium">
@@ -72,10 +79,12 @@ const OutProductItem = ({
       justifyContent="space-between"
       >
         <Text fontSize="sm" fontWeight="medium">
-            Total: {toCurrency(totalPrice as number).replace("Php", "₱")}
+            Total: {toCurrency(quantity*price).replace("Php", "₱")}
         </Text>
         <Quantity
-            quantity={1}
+          quantity={quantity}
+          onDecrement={onDecrement}
+          onIncrement={onIncrement}
         />
       </Row>
     </Column>
