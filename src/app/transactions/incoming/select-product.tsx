@@ -42,9 +42,9 @@ const SelectProduct = () => {
           },
         }}
       />
-      <FlatList
+      <FlatList marginBottom="6"
         ListHeaderComponent={
-          <Box background="white" paddingTop="4">
+          <Box background="white" py="4">
             <Text fontSize="lg" fontWeight="semibold">
               Select Product
             </Text>

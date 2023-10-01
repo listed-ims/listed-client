@@ -31,5 +31,9 @@ export const useFormValidation = (
     }
   };
 
-  return { formData, errors, validate, handleInputChange };
+  const resetForm = () => {
+    setFormData(initialFormData);
+  };
+
+  return { formData, errors, validate, handleInputChange, resetForm };
 };

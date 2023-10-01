@@ -7,20 +7,17 @@ import {
   Box,
   useTheme,
   Pressable,
-  Row,
+  Row
 } from "native-base";
 import {
   Button,
   CloseIcon,
   IconButton,
   ScanIcon,
-  SearchIcon,
+  SearchIcon
 } from "@listed-components/atoms";
 import { FormControl, TextArea, TextField } from "@listed-components/molecules";
-import {
-  KeyboardAwareScroll,
-  ScreenContainer,
-} from "@listed-components/organisms";
+import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import RNDateTimePicker, {
   DateTimePickerEvent,
@@ -40,7 +37,6 @@ const NewIncoming = () => {
   const { productId, product } = useLocalSearchParams();
   const queryClient = useQueryClient();
   const tomorrow = new Date();
-  const [resetKey, setResetKey] = useState(0);
   tomorrow.setDate(new Date().getDate() + 1);
 
   const initialFormData = {
@@ -49,7 +45,7 @@ const NewIncoming = () => {
     quantity: "",
     "purchase price": "",
     comment: "",
-  };
+  }
 
   const validationRules: ValidationRules = {
     product: { required: true },
@@ -57,26 +53,18 @@ const NewIncoming = () => {
     quantity: {
       required: true,
       custom(value) {
-        return value && parseInt(value) > 0;
+        return (value && parseInt(value) > 0)
       },
-      customErrorMessage: "Quantity must be greater than 0.",
+      customErrorMessage: "Quantity must be greater than 0."
     },
     "purchase price": { required: true },
-    comment: { required: false },
-  };
+    comment: { required: false, }
+  }
 
-  const { formData, errors, validate, handleInputChange } = useFormValidation(
+  const { formData, errors, validate, handleInputChange, resetForm } = useFormValidation(
     initialFormData,
     validationRules
   );
-
-  const resetFormData = () => {
-    formData.product = "";
-    setExpirationDisplay("");
-    formData.quantity = "";
-    formData["purchase price"] = "";
-    formData.comment = "";
-  };
 
   useEffect(() => {
     if (productId) {
@@ -102,43 +90,38 @@ const NewIncoming = () => {
     if (validate()) {
       createIncoming([
         {
-          expirationDate: expirationDisplay
-            ? new Date(formData["expiration date"])
-            : null,
+          expirationDate: expirationDisplay ? new Date(formData["expiration date"]) : null,
           initialQuantity: formData.quantity,
           purchasePrice: formData["purchase price"],
           comment: formData.comment,
         } as IncomingRequest,
-        parseInt(formData.product),
+        parseInt(formData.product)
       ]);
     }
-  };
+  }
 
   const {
     mutate: createIncoming,
     isError: createIncomingError,
-    isLoading: createIncomingLoading,
-  } = useCreateIncomingMutation({
-    onSuccess(data) {
-      queryClient.setQueryData([GET_INCOMING, data.id], data);
-      router.push(`${Routes.INCOMING_RECEIPT}?transactionId=${data.id}`);
-      resetFormData();
-      setResetKey((previousKey) => previousKey + 1);
-    },
-  });
+    isLoading: createIncomingLoading } = useCreateIncomingMutation({
+      onSuccess(data) {
+        resetForm();
+        setExpirationDisplay("");
+        queryClient.setQueryData([GET_INCOMING, data.id], data);
+        router.push(`${Routes.INCOMING_RECEIPT}?transactionId=${data.id}`);
+      }
+    });
 
   return (
-    <ScreenContainer withHeader key={resetKey}>
+    <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Incoming")} />
-      <KeyboardAwareScroll
-        elementOnTopOfKeyboard={
-          <Box background="white" paddingTop="4" paddingBottom="6">
-            <Button size="lg" onPress={handleCreateIncoming}>
-              SUBMIT TRANSACTION
-            </Button>
-          </Box>
-        }
-      >
+      <KeyboardAwareScroll elementOnTopOfKeyboard={
+        <Box background="white" paddingTop="4" paddingBottom="6">
+          <Button size="lg"
+            onPress={handleCreateIncoming}
+          >SUBMIT TRANSACTION</Button>
+        </Box>
+      }>
         <Column>
           <HStack py="4">
             <Text fontSize="lg" fontWeight="semibold">
@@ -151,12 +134,10 @@ const NewIncoming = () => {
             isInvalid={!!errors.product}
           >
             <HStack space="2">
-              <Pressable
-                style={{ flex: 1 }}
+              <Pressable style={{ flex: 1 }}
                 onPress={() => {
-                  router.push(Routes.SELECT_PRODUCT);
-                }}
-              >
+                  router.push(Routes.SELECT_PRODUCT)
+                }}>
                 <TextField
                   isReadOnly
                   flex="1"
@@ -169,10 +150,7 @@ const NewIncoming = () => {
                   }
                 />
               </Pressable>
-              <Button
-                fontSize="sm"
-                startIcon={<ScanIcon color={colors.white} />}
-              >
+              <Button fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>
                 Scan
               </Button>
             </HStack>
@@ -192,25 +170,21 @@ const NewIncoming = () => {
               </>
             }
           >
-            <Pressable
-              onPress={() => setShowDatePicker(true)}
-              style={{ flex: 1 }}
-            >
+            <Pressable onPress={() => {
+              setExpirationDate(tomorrow)
+              setShowDatePicker(true)
+            }}
+              style={{ flex: 1 }}>
               <TextField
                 isReadOnly
                 flex="1"
                 placeholder="Select expiration date"
                 value={expirationDisplay}
-                rightElement={
-                  expirationDisplay !== "" ? (
-                    <IconButton
-                      variant="subtle"
-                      marginRight="2"
-                      icon={<CloseIcon />}
-                      onPress={() => setExpirationDisplay("")}
-                    />
-                  ) : undefined
-                }
+                rightElement={expirationDisplay !== "" ?
+                  <IconButton variant="subtle" marginRight="2"
+                    icon={<CloseIcon />}
+                    onPress={() => setExpirationDisplay("")}
+                  /> : undefined}
               />
             </Pressable>
             {showDatePicker && (
@@ -226,27 +200,23 @@ const NewIncoming = () => {
           <FormControl
             label="Quantity"
             errorMessage={errors.quantity}
-            isInvalid={!!errors.quantity}
-          >
+            isInvalid={!!errors.quantity}>
             <TextField
               onChangeText={(value) => handleInputChange(value, "quantity")}
+              value={formData.quantity}
               keyboardType="numeric"
-              placeholder="Enter product quantity"
-            />
+              placeholder="Enter product quantity" />
           </FormControl>
 
           <FormControl
             label="Purchase Price / Item"
             errorMessage={errors["purchase price"]}
-            isInvalid={!!errors["purchase price"]}
-          >
+            isInvalid={!!errors["purchase price"]}>
             <TextField
-              onChangeText={(value) =>
-                handleInputChange(value, "purchase price")
-              }
+              onChangeText={(value) => handleInputChange(value, "purchase price")}
+              value={formData["purchase price"]}
               keyboardType="numeric"
-              placeholder="Enter purchase price per item"
-            />
+              placeholder="Enter purchase price per item" />
           </FormControl>
           <HStack>
             <FormControl
@@ -255,8 +225,7 @@ const NewIncoming = () => {
                   <Text fontSize="xs" fontWeight="normal" color="text.500">
                     {formData.comment.length}/100
                   </Text>
-                </Row>
-              }
+                </Row>}
               label={
                 <>
                   <Text fontWeight="medium" fontSize="sm">
@@ -267,18 +236,17 @@ const NewIncoming = () => {
                     (optional)
                   </Text>
                 </>
-              }
-            >
+              }>
               <TextArea
                 maxLength={100}
                 onChangeText={(value) => handleInputChange(value, "comment")}
-                placeholder="Enter comment here"
-              />
+                value={formData.comment}
+                placeholder="Enter comment here" />
             </FormControl>
           </HStack>
         </Column>
       </KeyboardAwareScroll>
-    </ScreenContainer>
+    </ScreenContainer >
   );
 };
 
