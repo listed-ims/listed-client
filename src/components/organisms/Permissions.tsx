@@ -17,11 +17,13 @@ const Permissions = ({ handleSelectPermission, ...props }: PermissionsProps) => 
   const [transactionSelected, setTransactionSelected] = useState<Set<UserPermission>>(new Set());
 
   const permissionDependencies: Record<string, UserPermission[]> = {
+    VIEW_COLLABORATOR_DETAILS: [UserPermission.VIEW_COLLABORATORS],
     ADD_COLLABORATOR: [UserPermission.VIEW_COLLABORATORS, UserPermission.VIEW_COLLABORATOR_DETAILS],
     UPDATE_COLLABORATOR: [UserPermission.VIEW_COLLABORATORS, UserPermission.VIEW_COLLABORATOR_DETAILS],
     DELETE_COLLABORATOR: [UserPermission.VIEW_COLLABORATORS, UserPermission.VIEW_COLLABORATOR_DETAILS],
     ADD_PRODUCT: [UserPermission.VIEW_PRODUCT_DETAILS],
     UPDATE_PRODUCT: [UserPermission.VIEW_PRODUCT_DETAILS],
+    DELETE_PRODUCT: [UserPermission.VIEW_PRODUCT_DETAILS],
     ADD_INCOMING: [UserPermission.GET_INCOMING_DETAILS, UserPermission.VIEW_PRODUCT_DETAILS],
     GET_INCOMING_DETAILS: [UserPermission.GET_TRANSACTIONS_LIST],
     ADD_OUTGOING_SOLD: [UserPermission.GET_OUTGOING_DETAILS, UserPermission.VIEW_PRODUCT_DETAILS],
@@ -33,9 +35,9 @@ const Permissions = ({ handleSelectPermission, ...props }: PermissionsProps) => 
   }
 
   const reversePermissionDependencies: Record<string, UserPermission[]> = {
-    VIEW_COLLABORATORS: [UserPermission.ADD_COLLABORATOR, UserPermission.UPDATE_COLLABORATOR, UserPermission.DELETE_COLLABORATOR],
+    VIEW_COLLABORATORS: [UserPermission.ADD_COLLABORATOR, UserPermission.UPDATE_COLLABORATOR, UserPermission.DELETE_COLLABORATOR, UserPermission.VIEW_COLLABORATOR_DETAILS],
     VIEW_COLLABORATOR_DETAILS: [UserPermission.ADD_COLLABORATOR, UserPermission.UPDATE_COLLABORATOR, UserPermission.DELETE_COLLABORATOR],
-    VIEW_PRODUCT_DETAILS: [UserPermission.ADD_PRODUCT, UserPermission.UPDATE_PRODUCT, UserPermission.ADD_INCOMING, UserPermission.ADD_OUTGOING_SOLD, UserPermission.ADD_OUTGOING_DEFECTS, UserPermission.ADD_OUTGOING_EXPIRED, UserPermission.ADD_OUTGOING_LOST, UserPermission.ADD_OUTGOING_CONSUMED],
+    VIEW_PRODUCT_DETAILS: [UserPermission.ADD_PRODUCT, UserPermission.UPDATE_PRODUCT, UserPermission.ADD_INCOMING, UserPermission.ADD_OUTGOING_SOLD, UserPermission.ADD_OUTGOING_DEFECTS, UserPermission.ADD_OUTGOING_EXPIRED, UserPermission.ADD_OUTGOING_LOST, UserPermission.ADD_OUTGOING_CONSUMED, UserPermission.DELETE_PRODUCT],
     GET_INCOMING_DETAILS: [UserPermission.ADD_INCOMING],
     GET_OUTGOING_DETAILS: [UserPermission.ADD_OUTGOING_SOLD, UserPermission.ADD_OUTGOING_DEFECTS, UserPermission.ADD_OUTGOING_EXPIRED, UserPermission.ADD_OUTGOING_LOST, UserPermission.ADD_OUTGOING_CONSUMED],
     GET_TRANSACTIONS_LIST: [UserPermission.GET_INCOMING_DETAILS, UserPermission.GET_OUTGOING_DETAILS],
