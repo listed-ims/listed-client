@@ -1,13 +1,14 @@
 import { AlertOutlineIcon } from "@listed-components/atoms";
+import { StoreResponse } from "@listed-types";
 import { Column, Row, Text, useTheme } from "native-base"
 import { InterfaceViewProps } from "native-base/lib/typescript/components/basic/View/types";
 
-interface ProductAlertCardProps extends InterfaceViewProps {
+interface ExpirationsAlertCardProps extends InterfaceViewProps {
   type: "stocks" | "expiration",
-  value: number
+  alertDetails: StoreResponse;
 }
 
-const ProductAlertCard = ({ value, type, ...props }: ProductAlertCardProps) => {
+const ExpirationsAlertCard = ({ alertDetails, type, ...props }: ExpirationsAlertCardProps) => {
   const theme = useTheme();
 
   const alertTitleText = type === "stocks" ? "Stocks" : "Expirations";
@@ -29,7 +30,7 @@ const ProductAlertCard = ({ value, type, ...props }: ProductAlertCardProps) => {
         space="2"
         marginBottom="2"
         justifyContent="space-evenly">
-        <Text fontSize="2xl" fontWeight="bold" color="darkText">{value}</Text>
+        <Text fontSize="2xl" fontWeight="bold" color="darkText">{alertDetails?.totalNearExpiry}</Text>
         <Text fontSize="md" fontWeight="xs" color="darkText">
           {alertDescription + "\nProducts"}
         </Text>
@@ -38,4 +39,4 @@ const ProductAlertCard = ({ value, type, ...props }: ProductAlertCardProps) => {
   )
 }
 
-export default ProductAlertCard
+export default ExpirationsAlertCard

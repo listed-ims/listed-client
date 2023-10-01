@@ -1,8 +1,9 @@
 import { Stack, router } from 'expo-router';
 import React, { useEffect } from 'react'
 import {
+  ExpirationsAlertCard,
   MainButtons,
-  ProductAlertCard,
+  StocksAlertCard,
   SummaryCard,
   TransactionButton
 } from '@listed-components/molecules';
@@ -59,8 +60,7 @@ const Home = () => {
             <Text fontWeight="medium" fontSize="md">
               <Text color="muted.400">Welcome</Text> {userDetails?.username}
             </Text>
-            <SummaryCard totalItemsSold="100" totalRevenue="1,000.00"
-              storeName={storeDetails?.name} />
+            <SummaryCard summaryDetails={storeDetails!} />
           </Column>
           <View marginY={4} />
           <Row width="full" space="4">
@@ -100,8 +100,8 @@ const Home = () => {
               Product Alerts
             </Text>
             <Row width="full" space="4">
-              <ProductAlertCard flex="1" type="stocks" value={24} />
-              <ProductAlertCard flex="1" type="expiration" value={8} />
+              <StocksAlertCard flex="1" type="stocks" alertDetails={storeDetails!}/>
+              <ExpirationsAlertCard flex="1" type="expiration" alertDetails={storeDetails!} />
             </Row>
           </Column>
           <View marginY={3} />
