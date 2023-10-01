@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { ScreenContainer } from "@listed-components/organisms";
 import { Box, Divider, FlatList, Text } from "native-base";
 import { Stack, router } from "expo-router";
-import { ProductListItem, HeaderSearchField } from "@listed-components/molecules";
+import {
+  ProductListItem,
+  HeaderSearchField,
+} from "@listed-components/molecules";
 import { useGetProductList } from "src/hooks/queries";
 import { ProductFilter, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
@@ -23,8 +26,8 @@ const SelectProduct = () => {
     filter === "all"
       ? undefined
       : filter === "low stock"
-        ? ProductFilter.LOW_STOCK
-        : ProductFilter.NO_STOCK,
+      ? ProductFilter.LOW_STOCK
+      : ProductFilter.NO_STOCK,
     undefined,
     1,
     100
@@ -32,14 +35,16 @@ const SelectProduct = () => {
 
   return (
     <ScreenContainer withHeader>
-      <Stack.Screen options={{
-        header: () => {
-          return (<HeaderSearchField />)
-        }
-      }} />
+      <Stack.Screen
+        options={{
+          header: () => {
+            return <HeaderSearchField />;
+          },
+        }}
+      />
       <FlatList
         ListHeaderComponent={
-          <Box background="white" paddingTop="4" paddingBottom="4">
+          <Box background="white" paddingTop="4">
             <Text fontSize="lg" fontWeight="semibold">
               Select Product
             </Text>
@@ -48,16 +53,20 @@ const SelectProduct = () => {
         ItemSeparatorComponent={() => <Divider />}
         data={productList}
         renderItem={({ item }) => (
-          <ProductListItem product={item}
+          <ProductListItem
+            product={item}
             onPress={() => {
               router.push({
                 pathname: Routes.NEW_INCOMING,
                 params: {
                   productId: item.id,
-                  product: `${item.name}${item.variant ? ` - ${item.variant}` : ""}`
-                }
-              })
-            }} />
+                  product: `${item.name}${
+                    item.variant ? ` - ${item.variant}` : ""
+                  }`,
+                },
+              });
+            }}
+          />
         )}
       />
     </ScreenContainer>

@@ -5,6 +5,7 @@ import {
 } from "@listed-components/atoms";
 import { IncomingReceiptDetails } from "@listed-components/molecules";
 import { ScreenContainer } from "@listed-components/organisms";
+import { Routes } from "@listed-constants";
 import { useGetIncomingDetails } from "@listed-hooks";
 import { dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -75,8 +76,8 @@ const IncomingReceipt = () => {
           </Text>
         </Box>
         <Box background="white" marginTop="6" marginBottom="6">
-          <Button size="lg" onPress={() => router.back()}>
-            Close
+          <Button size="lg" onPress={() => router.push(Routes.NEW_INCOMING)}>
+            CLOSE
           </Button>
         </Box>
       </ScrollView>
