@@ -16,7 +16,7 @@ export { default as HeaderSearchField } from "./HeaderSearchField";
 export { default as IncomingReceiptDetails } from "./IncomingReceiptDetails";
 export { default as Toast } from "./Toast";
 export { default as ProductDetail} from "./ProductDetail";
-
 export { default as Quantity } from "./Quantity";
 export { default as CollaboratorListItem } from "./CollaboratorListItem";
 export { default as CollaboratorsFilter } from "./CollaboratorsFilter";
+export { default as OutgoingReceiptDetails } from "./OutgoingReceiptDetails";
