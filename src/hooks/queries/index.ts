@@ -3,3 +3,4 @@ export * from "./userQueries";
 export * from "./productQueries";
 export * from "./incomingQueries";
 export * from "./colllaboratorQueries";
+export * from "./outgoingQueries";
