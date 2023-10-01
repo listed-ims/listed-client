@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Badge,
-  Checkbox,
   Column,
   IPressableProps,
   Pressable,
@@ -9,6 +8,7 @@ import {
   Text,
 } from "native-base";
 import { toTitleCase } from "@listed-utils";
+import { CheckedIcon } from "@listed-components/atoms";
 
 interface StoreListItemProps extends IPressableProps {
   name: string;
@@ -36,16 +36,9 @@ const StoreListItem = ({
       mx="1"
     >
       <Row alignItems="center" justifyContent="space-between" space="2">
-        {current && (
-          <Checkbox
-            aria-label="current store"
-            colorScheme="success"
-            size="sm"
-            defaultIsChecked
-            value=""
-            borderRadius="full"
-          />
-        )}
+        {current && 
+          <CheckedIcon/>
+        }
         <Column flex="2" alignItems="flex-start">
           {current && (
             <Badge colorScheme="success" variant="outline">
@@ -53,10 +46,10 @@ const StoreListItem = ({
             </Badge>
           )}
           <Text fontSize="sm" fontWeight="semibold" color="darkText">
-            {toTitleCase(name)}
+            {name}
           </Text>
           <Text fontSize="xs" color="muted.500">
-            {toTitleCase(userRole)}
+            {userRole}
           </Text>
         </Column>
         <Column flex="1" alignItems="flex-end">

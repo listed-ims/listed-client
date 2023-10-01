@@ -4,9 +4,11 @@ import { RemoveIcon, PlusIcon } from "@listed-components/atoms";
 
 interface QuantityProps {
     quantity: number;
+    onDecrement: () => void;
+    onIncrement: () => void;
 }
 
-const Quantity = ({quantity}: QuantityProps) => {
+const Quantity = ({quantity, onDecrement, onIncrement}: QuantityProps) => {
   return (
     <Box 
     p="1"
@@ -18,6 +20,7 @@ const Quantity = ({quantity}: QuantityProps) => {
         icon={<RemoveIcon />} 
         variant="solid"
         size="xs"
+        onPress={onDecrement}
         />
         <Box
         width={8}
@@ -37,6 +40,7 @@ const Quantity = ({quantity}: QuantityProps) => {
         icon={<PlusIcon />} 
         variant="solid" 
         size="xs"
+        onPress={onIncrement}
         />
       </Row>
     </Box>
