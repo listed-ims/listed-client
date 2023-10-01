@@ -15,13 +15,13 @@ import React, { useState } from "react"
 const Collaborators = () => {
   const { colors } = useTheme();
   const [currentFilter, setCurrentFilter] = useState<"ALL" | Omit<MembershipStatus, "DECLINED">>("ALL");
-  const { userDetails } = useAuth();
 
+  const { userDetails, userPermissions } = useAuth();
 
-  /*
-  TODO: render all filter chips if user is owner, otherwise render only active and pending
-  */
-  const filters = ["ACTIVE", "INACTIVE", "PENDING"] as MembershipStatus[];
+  let filters: MembershipStatus[] = ["ACTIVE", "INACTIVE"] as MembershipStatus[]
+  if (userPermissions.includes(UserPermission.OWNER)) {
+    filters = ["ACTIVE", "INACTIVE", "PENDING"] as MembershipStatus[]
+  }
 
   const {
     data: collaboratorsList,
@@ -51,7 +51,7 @@ const Collaborators = () => {
           filters={filters}
           handleSetFilter={(filter) => { setCurrentFilter(filter) }} />
         <FlatList
-          data={setCollaboratorsCurrentUserFirst(collaboratorsList, userDetails?.id!)}
+          data={setCollaboratorsCurrentUserFirst(collaboratorsList, userDetails?.id!, filters[2] ? undefined : MembershipStatus.PENDING)}
           renderItem={({ item, index }) => (
             <CollaboratorListItem
               key={index}

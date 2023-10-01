@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { Badge, Column, Heading, VStack, Text, ScrollView } from "native-base";
 import {
@@ -13,9 +13,11 @@ import {
   useGetStoreDetails,
   useCloseStoreMutation,
   useUpdateUserMutation,
+  useGetUserPermissions,
 } from "@listed-hooks";
 import CloseStoreModal from "@listed-components/organisms/CloseStoreModal";
 import {
+  GET_PERMISSIONS,
   GET_STORE,
   GET_STORES,
   GET_USER,
@@ -30,7 +32,7 @@ const StoreDetails = () => {
   const queryClient = useQueryClient();
   const [showCurrentStoreModal, setShowCurrentStoreModal] = useState(false);
   const [showCloseStoreModal, setShowCloseStoreModal] = useState(false);
-  const { userDetails, setUserDetails } = useAuth();
+  const { userDetails, setUserDetails, setUserPermissions } = useAuth();
   const { id } = useLocalSearchParams();
 
   const {
@@ -75,6 +77,7 @@ const StoreDetails = () => {
   });
 
   const {
+    data: newCurrentStore,
     mutate: updateUser,
     isError: updateUserError,
     isLoading: updateUserLoading,
@@ -89,6 +92,9 @@ const StoreDetails = () => {
         currentStoreId: data.currentStoreId,
       } as UserResponse);
       queryClient.invalidateQueries({
+        queryKey: [GET_PERMISSIONS]
+      })
+      queryClient.invalidateQueries({
         queryKey: [GET_STORE, data.currentStoreId],
       });
       queryClient.invalidateQueries({ queryKey: [GET_STORES] });
@@ -99,6 +105,18 @@ const StoreDetails = () => {
       console.error({ ...error });
     },
   });
+
+  const {
+    data: userPermissions,
+    isSuccess: userPermissionsSuccess,
+  } = useGetUserPermissions(newCurrentStore?.currentStoreId!, userDetails?.id!);
+
+  useEffect(() => {
+    if (userPermissionsSuccess) {
+      setUserPermissions([...userPermissions])
+    }
+  }, [userPermissions])
+
 
   return (
     <ScreenContainer withHeader>
