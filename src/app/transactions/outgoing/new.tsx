@@ -152,7 +152,7 @@ const NewOutgoing = () => {
   } = useCreateOutgoingMutation({
     onSuccess: (data) => {
       console.log("DATA", data);
-      // router.push(`${Routes.OUTGOING_RECEIPT}?transactionId=${data.id}`);
+      router.push(`${Routes.OUTGOING_RECEIPT}?transactionId=${data.id}`);
     },
     onError: (error) => {
       console.log(error);
