@@ -5,7 +5,8 @@ export const getCollaboratorsService = async (
   storeId: number,
   membershipStatus?: MembershipStatus,
   pageNumber?: number,
-  pageSize?: number
+  pageSize?: number,
+  userId?: number
 ) => {
   try {
     const response = await axiosInstance.get("collaborators", {
@@ -14,6 +15,7 @@ export const getCollaboratorsService = async (
         membershipStatus: membershipStatus,
         pageNumber: pageNumber,
         pageSize: pageSize,
+        userId: userId,
       },
     });
     return response.data as MembershipResponse[];
