@@ -16,10 +16,10 @@ const Collaborators = () => {
   const { colors } = useTheme();
   const [currentFilter, setCurrentFilter] = useState<"ALL" | Omit<MembershipStatus, "DECLINED">>("ALL");
 
-  const { userDetails, userPermissions } = useAuth();
+  const { userDetails, userMembership } = useAuth();
 
   let filters: MembershipStatus[] = ["ACTIVE", "INACTIVE"] as MembershipStatus[]
-  if (userPermissions.includes(UserPermission.OWNER)) {
+  if (userMembership?.permissions.includes(UserPermission.OWNER)) {
     filters = ["ACTIVE", "INACTIVE", "PENDING"] as MembershipStatus[]
   }
 

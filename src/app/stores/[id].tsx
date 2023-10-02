@@ -13,11 +13,11 @@ import {
   useGetStoreDetails,
   useCloseStoreMutation,
   useUpdateUserMutation,
-  useGetUserPermissions,
+  useGetUserMembership,
 } from "@listed-hooks";
 import CloseStoreModal from "@listed-components/organisms/CloseStoreModal";
 import {
-  GET_PERMISSIONS,
+  GET_MEMBERSHIP,
   GET_STORE,
   GET_STORES,
   GET_USER,
@@ -32,7 +32,7 @@ const StoreDetails = () => {
   const queryClient = useQueryClient();
   const [showCurrentStoreModal, setShowCurrentStoreModal] = useState(false);
   const [showCloseStoreModal, setShowCloseStoreModal] = useState(false);
-  const { userDetails, setUserDetails, setUserPermissions } = useAuth();
+  const { userDetails, setUserDetails, setUserMembership } = useAuth();
   const { id } = useLocalSearchParams();
 
   const {
@@ -92,7 +92,7 @@ const StoreDetails = () => {
         currentStoreId: data.currentStoreId,
       } as UserResponse);
       queryClient.invalidateQueries({
-        queryKey: [GET_PERMISSIONS]
+        queryKey: [GET_MEMBERSHIP]
       })
       queryClient.invalidateQueries({
         queryKey: [GET_STORE, data.currentStoreId],
@@ -107,15 +107,15 @@ const StoreDetails = () => {
   });
 
   const {
-    data: userPermissions,
-    isSuccess: userPermissionsSuccess,
-  } = useGetUserPermissions(newCurrentStore?.currentStoreId!, userDetails?.id!);
+    data: userMembership,
+    isSuccess: userMembershipSuccess,
+  } = useGetUserMembership(newCurrentStore?.currentStoreId!, userDetails?.id!);
 
   useEffect(() => {
-    if (userPermissionsSuccess) {
-      setUserPermissions([...userPermissions])
+    if (userMembershipSuccess) {
+      setUserMembership(userMembership)
     }
-  }, [userPermissions])
+  }, [userMembership])
 
 
   return (

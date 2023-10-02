@@ -12,26 +12,26 @@ import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 import { getItemAsync } from 'expo-secure-store';
 import { AUTH_TOKEN_KEY, Routes } from '@listed-constants';
 import { useTokenValidationMutation } from '@listed-hooks';
-import { UserPermission, UserResponse } from '@listed-types';
+import { MembershipResponse, UserResponse } from '@listed-types';
 
 interface AuthContextProps {
   isLoggedIn: boolean;
   userDetails: UserResponse | null | undefined;
-  userPermissions: UserPermission[];
+  userMembership: MembershipResponse | null | undefined;
   login: (token: string) => void;
   logout: () => void;
   setUserDetails: Dispatch<SetStateAction<UserResponse | null | undefined>>;
-  setUserPermissions: Dispatch<SetStateAction<UserPermission[]>>;
+  setUserMembership: Dispatch<SetStateAction<MembershipResponse | null | undefined>>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   isLoggedIn: false,
   userDetails: null,
-  userPermissions: [],
+  userMembership: null,
   login: () => { },
   logout: () => { },
   setUserDetails: () => { },
-  setUserPermissions: () => { },
+  setUserMembership: () => { },
 });
 
 export function useAuth() {
@@ -44,7 +44,7 @@ interface AuthProviderProps {
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [userDetails, setUserDetails] = useState<UserResponse | null | undefined>();
-  const [userPermissions, setUserPermissions] = useState<UserPermission[]>([]);
+  const [userMembership, setUserMembership] = useState<MembershipResponse | null | undefined>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isNavigationReady, setNavigationReady] = useState(false);
 
@@ -124,8 +124,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       logout,
       setUserDetails,
       userDetails,
-      userPermissions,
-      setUserPermissions
+      userMembership,
+      setUserMembership
+
     }}>
       {children}
     </AuthContext.Provider>
