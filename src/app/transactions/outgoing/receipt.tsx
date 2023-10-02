@@ -5,8 +5,13 @@ import {
 } from "@listed-components/atoms";
 import { OutgoingReceiptDetails } from "@listed-components/molecules";
 import { ScreenContainer } from "@listed-components/organisms";
+import { Routes } from "@listed-constants";
 import { useGetOutgoingDetails } from "@listed-hooks";
-import { dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
+import {
+  dateToMonthDDYYYY,
+  dateToReadableTime,
+  toTitleCase,
+} from "@listed-utils";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
   Box,
@@ -44,17 +49,17 @@ const OutgoingReceipt = () => {
           <VStack alignItems="center">
             <OutgoingReceiptIcon />
             <Heading fontSize="md" fontWeight="bold" pt="1">
-              Outgoing - {transactionDetails?.category}
+              Outgoing - {toTitleCase(String(transactionDetails?.category))}
             </Heading>
             <Text fontSize="xs" fontWeight="medium" pt="1">
               {dateToMonthDDYYYY(transactionDate) +
-              " - " +
-              dateToReadableTime(transactionDate)}
+                " - " +
+                dateToReadableTime(transactionDate)}
             </Text>
           </VStack>
         </Box>
 
-        <OutgoingReceiptDetails />
+        <OutgoingReceiptDetails outgoingDetails={transactionDetails!} />
 
         <HStack pt="4" alignItems="center">
           <Spacer>
@@ -75,7 +80,7 @@ const OutgoingReceipt = () => {
           </Text>
         </Box>
         <Box background="white" mt="6" mb="6">
-          <Button size="lg" onPress={() => router.back()}>
+          <Button size="lg" onPress={() => router.push(Routes.NEW_OUTGOING)}>
             CLOSE
           </Button>
         </Box>

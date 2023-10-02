@@ -3,8 +3,8 @@ import { ProductResponse } from "./product";
 import { UserResponse } from "./user";
 
 export interface OutProductRequest {
-    product: ProductResponse;
-    quantity: number;
+  product: ProductResponse;
+  quantity: number;
   }
 
 export interface OutgoingRequest {
@@ -23,7 +23,7 @@ export interface OutProductResponse {
 export interface OutgoingResponse {
     id: number;
     user: UserResponse;
-    product: OutProductResponse[];
+    products: OutProductResponse[];
     category: OutgoingCategory;
     price: number;
     comment: string;

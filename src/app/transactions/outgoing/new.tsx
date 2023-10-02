@@ -9,6 +9,7 @@ import {
   KeyboardAwareScroll,
   ScreenContainer,
   OutProductItem,
+  OutgoingNoProducts,
 } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
@@ -43,6 +44,7 @@ const NewOutgoing = () => {
       return {
         queryKey: ["OUT_PRODUCTS", id],
         queryFn: () => getProductService(parseInt(id)),
+        enabled: !!id,
       };
     }),
   });
@@ -61,12 +63,11 @@ const NewOutgoing = () => {
       },
       customErrorMessage: "Select at least 1 product.",
     },
+    comment: { required: false },
   };
 
-  const { formData, errors, validate, handleInputChange } = useFormValidation(
-    initialFormData,
-    validationRules
-  );
+  const { formData, errors, validate, handleInputChange, resetForm } =
+    useFormValidation(initialFormData, validationRules);
 
   useEffect(() => {
     products
@@ -151,7 +152,8 @@ const NewOutgoing = () => {
     isLoading: createOutgoingLoading,
   } = useCreateOutgoingMutation({
     onSuccess: (data) => {
-      console.log("DATA", data);
+      router.setParams({ ids: "" });
+      resetForm();
       router.push(`${Routes.OUTGOING_RECEIPT}?transactionId=${data.id}`);
     },
     onError: (error) => {
@@ -164,46 +166,48 @@ const NewOutgoing = () => {
       <Stack.Screen options={stackHeaderStyles("Outgoing")} />
       <KeyboardAwareScroll
         elementOnTopOfKeyboard={
-          <Box background="white" paddingTop="4" paddingBottom="6">
-            <Row space="4" pb="4">
-              <Button
-                flex="1"
-                size="sm"
-                variant="outline"
-                borderRadius="full"
-                startIcon={<ScanIcon color={colors.primary[700]} />}
-              >
-                Scan
-              </Button>
-              <Button
-                flex="1"
-                size="sm"
-                variant="outline"
-                borderRadius="full"
-                startIcon={<AddIcon color={colors.primary[700]} />}
-                onPress={() => {
-                  router.push({
-                    pathname: Routes.SELECT_OUTGOING,
-                    params: {
-                      ids: ids ? ids : "",
-                    },
-                  });
-                }}
-              >
-                Add Product
-              </Button>
-            </Row>
-            <Button size="lg" onPress={handleCreateOutgoing}>
-              <Row space={4}>
-                <Text color="white" fontWeight="500">
-                  CHECKOUT
-                </Text>
-                <Text color="white" fontWeight="bold">
-                  {toCurrency(totalPrice)}
-                </Text>
+          formData.products.length !== 0 ? (
+            <Box background="white" paddingTop="4" paddingBottom="6">
+              <Row space="4" pb="4">
+                <Button
+                  flex="1"
+                  size="sm"
+                  variant="outline"
+                  borderRadius="full"
+                  startIcon={<ScanIcon color={colors.primary[700]} />}
+                >
+                  Scan
+                </Button>
+                <Button
+                  flex="1"
+                  size="sm"
+                  variant="outline"
+                  borderRadius="full"
+                  startIcon={<AddIcon color={colors.primary[700]} />}
+                  onPress={() => {
+                    router.push({
+                      pathname: Routes.SELECT_OUTGOING,
+                      params: {
+                        ids: ids ? ids : "",
+                      },
+                    });
+                  }}
+                >
+                  Add Product
+                </Button>
               </Row>
-            </Button>
-          </Box>
+              <Button size="lg" onPress={handleCreateOutgoing}>
+                <Row space={4}>
+                  <Text color="white" fontWeight="500">
+                    CHECKOUT
+                  </Text>
+                  <Text color="white" fontWeight="bold">
+                    {toCurrency(totalPrice)}
+                  </Text>
+                </Row>
+              </Button>
+            </Box>
+          ) : undefined
         }
       >
         <Column space="4" py="4">
@@ -251,49 +255,58 @@ const NewOutgoing = () => {
               </HStack>
             </ScrollView>
           </VStack>
-          <Column space={1}>
-            <Text fontSize="sm" fontWeight="medium">
-              Items
-            </Text>
-            <Column space={2}>
-              {formData.products.map((item: OutProductRequest) => (
-                <OutProductItem
-                  name={item.product.name}
-                  variant={item.product.variant}
-                  price={item.product.salePrice as number}
-                  quantity={item.quantity}
-                  key={item.product.id}
-                  onDecrement={() => handleOnDecrement(item.product.id)}
-                  onIncrement={() => handleOnIncrement(item.product.id)}
-                  onDelete={() => handleOnDelete(item.product.id)}
-                />
-              ))}
-            </Column>
-          </Column>
-          <HStack>
-            <FormControl
-              helperText={
-                <Row flex="1" justifyContent="flex-end">
-                  <Text fontSize="xs" fontWeight="normal" color="text.500">
-                    {formData.comment.length}/100
-                  </Text>
-                </Row>
-              }
-              label={
-                <>
-                  <Text fontWeight="medium" fontSize="sm">
-                    Comment
-                  </Text>
-                </>
-              }
-            >
-              <TextArea
-                maxLength={100}
-                onChangeText={(value) => handleInputChange(value, "comment")}
-                placeholder="Input comment here"
-              />
-            </FormControl>
-          </HStack>
+          {formData.products.length !== 0 ? (
+            <>
+              <Column space={1}>
+                <Text fontSize="sm" fontWeight="medium">
+                  Items
+                </Text>
+                <Column space={2}>
+                  {formData.products.map((item: OutProductRequest) => (
+                    <OutProductItem
+                      name={item.product.name}
+                      variant={item.product.variant}
+                      price={item.product.salePrice as number}
+                      quantity={item.quantity}
+                      key={item.product.id}
+                      onDecrement={() => handleOnDecrement(item.product.id)}
+                      onIncrement={() => handleOnIncrement(item.product.id)}
+                      onDelete={() => handleOnDelete(item.product.id)}
+                    />
+                  ))}
+                </Column>
+              </Column>
+              <HStack>
+                <FormControl
+                  helperText={
+                    <Row flex="1" justifyContent="flex-end">
+                      <Text fontSize="xs" fontWeight="normal" color="text.500">
+                        {formData.comment.length}/100
+                      </Text>
+                    </Row>
+                  }
+                  label={
+                    <>
+                      <Text fontWeight="medium" fontSize="sm">
+                        Comment
+                      </Text>
+                    </>
+                  }
+                >
+                  <TextArea
+                    maxLength={100}
+                    onChangeText={(value) =>
+                      handleInputChange(value, "comment")
+                    }
+                    value={formData.comment}
+                    placeholder="Input comment here"
+                  />
+                </FormControl>
+              </HStack>
+            </>
+          ) : (
+            <OutgoingNoProducts />
+          )}
         </Column>
       </KeyboardAwareScroll>
     </ScreenContainer>
