@@ -11,3 +11,13 @@ export const createOutgoingService = async (
     throw error;
   }
 };
+
+
+export const getOutgoingService = async (transactionId: number) => {
+  try {
+    const response = await axiosInstance.get(`outgoing/${transactionId}`);
+    return response.data as OutgoingResponse;
+  } catch (error) {
+    throw error;
+  }
+};
