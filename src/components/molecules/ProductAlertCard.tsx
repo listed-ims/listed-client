@@ -3,12 +3,12 @@ import { StoreResponse } from "@listed-types";
 import { Column, Row, Text, useTheme } from "native-base"
 import { InterfaceViewProps } from "native-base/lib/typescript/components/basic/View/types";
 
-interface ExpirationsAlertCardProps extends InterfaceViewProps {
+interface ProductAlertCardProps extends InterfaceViewProps {
   type: "stocks" | "expiration",
-  alertDetails: StoreResponse;
+  alertDetails: { totalLowStock?: number; totalNearExpiry?: number };
 }
 
-const ExpirationsAlertCard = ({ alertDetails, type, ...props }: ExpirationsAlertCardProps) => {
+const  ProductAlertCard = ({ alertDetails, type, ...props }:  ProductAlertCardProps) => {
   const theme = useTheme();
 
   const alertTitleText = type === "stocks" ? "Stocks" : "Expirations";
@@ -30,7 +30,9 @@ const ExpirationsAlertCard = ({ alertDetails, type, ...props }: ExpirationsAlert
         space="2"
         marginBottom="2"
         justifyContent="space-evenly">
-        <Text fontSize="2xl" fontWeight="bold" color="darkText">{alertDetails?.totalNearExpiry}</Text>
+        <Text fontSize="2xl" fontWeight="bold" color="darkText">
+        {type === "stocks" ? alertDetails.totalLowStock : alertDetails.totalNearExpiry}
+        </Text>
         <Text fontSize="md" fontWeight="xs" color="darkText">
           {alertDescription + "\nProducts"}
         </Text>
@@ -39,4 +41,4 @@ const ExpirationsAlertCard = ({ alertDetails, type, ...props }: ExpirationsAlert
   )
 }
 
-export default ExpirationsAlertCard
+export default  ProductAlertCard

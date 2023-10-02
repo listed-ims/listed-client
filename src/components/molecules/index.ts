@@ -19,5 +19,4 @@ export { default as Quantity } from "./Quantity";
 export { default as CollaboratorListItem } from "./CollaboratorListItem";
 export { default as CollaboratorsFilter } from "./CollaboratorsFilter";
 export { default as OutgoingReceiptDetails } from "./OutgoingReceiptDetails";
-export { default as StocksAlertCard } from "./StocksAlertCard";
-export { default as ExpirationsAlertCard } from "./ExpirationsAlertCard";
+export { default as ProductAlertCard } from "./ProductAlertCard";
