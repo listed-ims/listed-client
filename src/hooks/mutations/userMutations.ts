@@ -41,12 +41,6 @@ export const useUserRegistrationMutation = (
   return useMutation(registrationService, mutationOptions);
 };
 
-export const useUsernameValidationMutation = (
-  mutationOptions: MutationOptions<any, AxiosError>
-) => {
-  return useMutation(validateUsernameService, mutationOptions);
-};
-
 export const useUpdateUserMutation = (
   mutationOptions: MutationOptions<UserResponse, AxiosError, UserRequest>
 ) => {

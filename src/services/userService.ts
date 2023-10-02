@@ -41,16 +41,20 @@ export const getUserService = async () => {
 
 export const validateTokenService = async () => {
   try {
-    const response = await axiosInstance.post("users/validation/token");
+    const response = await axiosInstance.get("users/validation/token");
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const validateUsernameService = async () => {
+export const validateUsernameService = async (username: string) => {
   try {
-    const response = await axiosInstance.post("users/validation/username");
+    const response = await authAxiosInstance.get("users/validation/username", {
+      params: {
+        username: username,
+      },
+    });
     return response.data;
   } catch (error) {
     throw error;

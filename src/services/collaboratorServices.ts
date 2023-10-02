@@ -1,4 +1,8 @@
-import { MembershipResponse, MembershipStatus } from "@listed-types";
+import {
+  MembershipRequest,
+  MembershipResponse,
+  MembershipStatus,
+} from "@listed-types";
 import { axiosInstance } from "./axios";
 
 export const getCollaboratorsService = async (
@@ -19,6 +23,20 @@ export const getCollaboratorsService = async (
       },
     });
     return response.data as MembershipResponse[];
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addCollaboratorService = async (
+  membershipRequest: MembershipRequest
+) => {
+  try {
+    const response = await axiosInstance.post(
+      "collaborators",
+      membershipRequest
+    );
+    return response.data as MembershipResponse;
   } catch (error) {
     throw error;
   }
