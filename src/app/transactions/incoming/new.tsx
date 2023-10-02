@@ -61,7 +61,7 @@ const NewIncoming = () => {
     comment: { required: false, }
   }
 
-  const { formData, errors, validate, handleInputChange } = useFormValidation(
+  const { formData, errors, validate, handleInputChange, resetForm } = useFormValidation(
     initialFormData,
     validationRules
   );
@@ -105,6 +105,8 @@ const NewIncoming = () => {
     isError: createIncomingError,
     isLoading: createIncomingLoading } = useCreateIncomingMutation({
       onSuccess(data) {
+        resetForm();
+        setExpirationDisplay("");
         queryClient.setQueryData([GET_INCOMING, data.id], data);
         router.push(`${Routes.INCOMING_RECEIPT}?transactionId=${data.id}`);
       }
@@ -168,7 +170,10 @@ const NewIncoming = () => {
               </>
             }
           >
-            <Pressable onPress={() => setShowDatePicker(true)}
+            <Pressable onPress={() => {
+              setExpirationDate(tomorrow)
+              setShowDatePicker(true)
+            }}
               style={{ flex: 1 }}>
               <TextField
                 isReadOnly
@@ -198,6 +203,7 @@ const NewIncoming = () => {
             isInvalid={!!errors.quantity}>
             <TextField
               onChangeText={(value) => handleInputChange(value, "quantity")}
+              value={formData.quantity}
               keyboardType="numeric"
               placeholder="Enter product quantity" />
           </FormControl>
@@ -208,6 +214,7 @@ const NewIncoming = () => {
             isInvalid={!!errors["purchase price"]}>
             <TextField
               onChangeText={(value) => handleInputChange(value, "purchase price")}
+              value={formData["purchase price"]}
               keyboardType="numeric"
               placeholder="Enter purchase price per item" />
           </FormControl>
@@ -233,6 +240,7 @@ const NewIncoming = () => {
               <TextArea
                 maxLength={100}
                 onChangeText={(value) => handleInputChange(value, "comment")}
+                value={formData.comment}
                 placeholder="Enter comment here" />
             </FormControl>
           </HStack>
