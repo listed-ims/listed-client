@@ -50,3 +50,4 @@ export { default as UncheckedIcon } from "./UncheckedIcon";
 export { default as OutgoingReceiptIcon } from "./OutgoingReceiptIcon";
 export { default as MailIcon } from "./MailIcon";
 export { default as StoreIcon } from "./StoreIcon";
+export { default as SmallMail } from "./SmallMail";

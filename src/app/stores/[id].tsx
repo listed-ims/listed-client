@@ -26,7 +26,8 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { StoreDetailsIcon } from "@listed-components/atoms";
 import { stackHeaderStyles } from "@listed-styles";
-import { UserRequest, UserResponse } from "@listed-types";
+import { MembershipStatus, UserRequest, UserResponse } from "@listed-types";
+import { StoreInvite } from "@listed-components/molecules";
 
 const StoreDetails = () => {
   const queryClient = useQueryClient();
@@ -40,6 +41,13 @@ const StoreDetails = () => {
     isError: storeError,
     isFetching: storeFetching,
   } = useGetStoreDetails(parseInt(id as string));
+
+  const {
+    data: storeMembership,
+  } = useGetUserMembership(
+    parseInt(id as string),
+    userDetails?.id!
+  );
 
   const handleOnMakeCurrent = () => {
     updateUser({
@@ -131,24 +139,34 @@ const StoreDetails = () => {
                 CURRENT STORE
               </Badge>
             )}
-            <Text fontSize="xs" fontWeight="medium" color="darkText">
-              {`${userDetails?.username}, you are the owner!`}
-            </Text>
+            {storeMembership?.membershipStatus !== MembershipStatus.PENDING &&
+              <Text fontSize="xs" fontWeight="medium" color="darkText">
+                {`${userDetails?.username}, you are the owner!`}
+              </Text>
+            }
           </VStack>
-          <StoreSummaryCard
-            owner={userDetails?.username}
-            status={storeDetails?.status}
-            totalProducts={storeDetails?.totalProducts}
-            totalPriceValue={storeDetails?.totalPriceValue}
-            isInvite={false}
-          />
-          {storeDetails?.id !== userDetails?.currentStoreId &&
-            storeDetails?.status === StoreStatus.OPEN && (
-              <MakeCurrentStoreCard onMakeCurrent={handleOnMakeCurrent} />
-            )}
-          {storeDetails?.status === StoreStatus.OPEN && (
-            <CloseStoreCard onClose={() => setShowCloseStoreModal(true)} />
-          )}
+          {storeMembership?.membershipStatus !== MembershipStatus.PENDING
+            ? <>
+              <StoreSummaryCard
+                owner={userDetails?.username}
+                status={storeDetails?.status}
+                totalProducts={storeDetails?.totalProducts}
+                totalPriceValue={storeDetails?.totalPriceValue}
+                isInvite={false}
+              />
+              {storeDetails?.id !== userDetails?.currentStoreId &&
+                storeDetails?.status === StoreStatus.OPEN && (
+                  <MakeCurrentStoreCard onMakeCurrent={handleOnMakeCurrent} />
+                )}
+              {storeDetails?.status === StoreStatus.OPEN && (
+                <CloseStoreCard onClose={() => setShowCloseStoreModal(true)} />
+              )}
+            </>
+            : <StoreInvite
+              storeDetails={storeDetails!}
+              storeMembership={storeMembership!}
+            />
+          }
         </Column>
       </ScrollView>
       <CurrentStoreModal
