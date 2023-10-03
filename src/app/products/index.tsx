@@ -25,12 +25,14 @@ import {
 } from "@listed-components/atoms";
 import { ProductFilter, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
-import { useGetProductList } from "src/hooks/queries";
+import { useGetProductList, useGetStoreDetails } from "src/hooks/queries";
 
 const Products = () => {
   const [filter, setFilter] = useState<"all" | "low stock" | "no stock">("all");
 
   const { userDetails } = useAuth();
+
+  const { colors } = useTheme();
 
   const {
     data: productList,
@@ -50,7 +52,11 @@ const Products = () => {
     100
   );
 
-  const { colors } = useTheme();
+  const {
+    data: storeDetails,
+    isError: storeError,
+    isFetching: storeFetching,
+  } = useGetStoreDetails(userDetails?.currentStoreId);
 
   return (
     <ScreenContainer withHeader>
@@ -86,7 +92,7 @@ const Products = () => {
                     Stocks On Hand
                   </Text>
                   <Text fontSize="sm" fontWeight="medium">
-                    1000
+                    {storeDetails?.totalProducts}
                   </Text>
                 </VStack>
                 <VStack justifyContent="flex-end">
