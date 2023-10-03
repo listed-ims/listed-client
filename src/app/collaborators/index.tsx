@@ -1,12 +1,13 @@
 import { AddIcon, Button } from "@listed-components/atoms"
 import { CollaboratorListItem, CollaboratorsFilter } from "@listed-components/molecules"
 import { ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms"
-import { Routes } from "@listed-constants"
+import { GET_COLLABORATOR, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
 import { useGetCollaborators } from "@listed-hooks"
 import { stackHeaderStyles } from "@listed-styles"
 import { MembershipStatus, UserPermission } from "@listed-types"
 import { hasPermission, setCollaboratorsCurrentUserFirst, } from "@listed-utils"
+import { useQueryClient } from "@tanstack/react-query"
 import { Stack, router } from "expo-router"
 import { Column, FlatList, useTheme } from "native-base"
 import React, { useState } from "react"
@@ -14,6 +15,7 @@ import React, { useState } from "react"
 
 const Collaborators = () => {
   const { colors } = useTheme();
+  const queryClient = useQueryClient();
   const [currentFilter, setCurrentFilter] = useState<"ALL" | Omit<MembershipStatus, "DECLINED">>("ALL");
 
   const { userDetails, userMembership } = useAuth();
@@ -63,6 +65,10 @@ const Collaborators = () => {
           data={setCollaboratorsCurrentUserFirst(collaboratorsList, userDetails?.id!, filters[2] ? undefined : MembershipStatus.PENDING)}
           renderItem={({ item, index }) => (
             <CollaboratorListItem
+              onPress={() => {
+                queryClient.setQueryData([GET_COLLABORATOR, item.id], item);
+                router.push(`${Routes.COLLABORATORS}/${item.id}`)
+              }}
               key={index}
               name={item.user.name}
               membershipStatus={item.membershipStatus}

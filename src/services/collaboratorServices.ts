@@ -63,3 +63,12 @@ export const updateCollaboratorService = async (
     throw error;
   }
 };
+
+export const getCollaboratorDetailsService = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(`collaborators/${id}`);
+    return response.data as MembershipResponse;
+  } catch (error) {
+    throw error;
+  }
+};
