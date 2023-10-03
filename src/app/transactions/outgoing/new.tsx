@@ -9,6 +9,7 @@ import {
   KeyboardAwareScroll,
   ScreenContainer,
   OutProductItem,
+  renderUnauthorizedModal,
   OutgoingNoProducts,
 } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -29,15 +30,18 @@ import { getProductService } from "@listed-services";
 import {
   OutProductRequest,
   OutProductResponse,
+  UserPermission,
   ValidationRules,
 } from "@listed-types";
 import { useCreateOutgoingMutation, useFormValidation } from "@listed-hooks";
 import { useEffect } from "react";
-import { toCurrency } from "@listed-utils";
+import { hasPermission, toCurrency } from "@listed-utils";
+import { useAuth } from "@listed-contexts";
 
 const NewOutgoing = () => {
   const { ids } = useLocalSearchParams();
   const { colors } = useTheme();
+  const { userMembership } = useAuth()
 
   const products = useQueries({
     queries: (ids?.toString().split(",") || []).map((id) => {
@@ -161,9 +165,19 @@ const NewOutgoing = () => {
     },
   });
 
+  const handleAuthorization = (permission?: UserPermission) => {
+    return renderUnauthorizedModal(
+      !hasPermission(
+        userMembership?.permissions!,
+        permission || UserPermission.ADD_OUTGOING_SOLD
+      )
+    )
+  }
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Outgoing")} />
+      {handleAuthorization()}
       <KeyboardAwareScroll
         elementOnTopOfKeyboard={
           formData.products.length !== 0 ? (
@@ -220,36 +234,46 @@ const NewOutgoing = () => {
                 <SelectButton
                   label="SALES"
                   selected={formData.category === OutgoingCategory.SALES}
-                  onPress={() =>
+                  onPress={() => {
+                    handleAuthorization(UserPermission.ADD_OUTGOING_SOLD)
                     handleInputChange(OutgoingCategory.SALES, "category")
+                  }
                   }
                 />
                 <SelectButton
                   label="DEFECTS"
                   selected={formData.category === OutgoingCategory.DEFECTS}
-                  onPress={() =>
+                  onPress={() => {
+                    handleAuthorization(UserPermission.ADD_OUTGOING_DEFECTS)
                     handleInputChange(OutgoingCategory.DEFECTS, "category")
+                  }
                   }
                 />
                 <SelectButton
                   label="EXPIRED"
                   selected={formData.category === OutgoingCategory.EXPIRED}
-                  onPress={() =>
+                  onPress={() => {
+                    handleAuthorization(UserPermission.ADD_OUTGOING_EXPIRED)
                     handleInputChange(OutgoingCategory.EXPIRED, "category")
+                  }
                   }
                 />
                 <SelectButton
                   label="LOST"
                   selected={formData.category === OutgoingCategory.LOST}
-                  onPress={() =>
+                  onPress={() => {
+                    handleAuthorization(UserPermission.ADD_OUTGOING_LOST)
                     handleInputChange(OutgoingCategory.LOST, "category")
+                  }
                   }
                 />
                 <SelectButton
                   label="CONSUMED"
                   selected={formData.category === OutgoingCategory.CONSUMED}
-                  onPress={() =>
+                  onPress={() => {
+                    handleAuthorization(UserPermission.ADD_OUTGOING_CONSUMED)
                     handleInputChange(OutgoingCategory.CONSUMED, "category")
+                  }
                   }
                 />
               </HStack>

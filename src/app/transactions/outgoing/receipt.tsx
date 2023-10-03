@@ -4,13 +4,16 @@ import {
   OutgoingReceiptIcon,
 } from "@listed-components/atoms";
 import { OutgoingReceiptDetails } from "@listed-components/molecules";
-import { ScreenContainer } from "@listed-components/organisms";
+import { ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms";
+import { useAuth } from "@listed-contexts";
 import { Routes } from "@listed-constants";
 import { useGetOutgoingDetails } from "@listed-hooks";
+import { UserPermission } from "@listed-types";
 import {
   dateToMonthDDYYYY,
   dateToReadableTime,
   toTitleCase,
+  hasPermission
 } from "@listed-utils";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
@@ -26,6 +29,7 @@ import {
 
 const OutgoingReceipt = () => {
   const { transactionId } = useLocalSearchParams();
+  const { userMembership } = useAuth();
   const {
     data: transactionDetails,
     isError: transactionError,
@@ -36,9 +40,19 @@ const OutgoingReceipt = () => {
     transactionDetails?.transactionDate.toString()!
   );
 
+  const handleAuthorization = () => {
+    return renderUnauthorizedModal(
+      !hasPermission(
+        userMembership?.permissions!,
+        UserPermission.GET_OUTGOING_DETAILS
+      )
+    )
+  }
+
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
+      {handleAuthorization()}
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box pt="8" pb="6">
           <Text fontSize="sm" fontWeight="medium" textAlign="center">

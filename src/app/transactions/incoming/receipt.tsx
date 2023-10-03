@@ -4,10 +4,12 @@ import {
   ListedIcon,
 } from "@listed-components/atoms";
 import { IncomingReceiptDetails } from "@listed-components/molecules";
-import { ScreenContainer } from "@listed-components/organisms";
+import { ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms";
 import { Routes } from "@listed-constants";
+import { useAuth } from "@listed-contexts";
 import { useGetIncomingDetails } from "@listed-hooks";
-import { dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
+import { UserPermission } from "@listed-types";
+import { dateToMonthDDYYYY, dateToReadableTime, hasPermission } from "@listed-utils";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
   Box,
@@ -22,6 +24,7 @@ import {
 
 const IncomingReceipt = () => {
   const { transactionId } = useLocalSearchParams();
+  const { userMembership } = useAuth();
   const {
     data: transactionDetails,
     isError: transactionError,
@@ -32,9 +35,19 @@ const IncomingReceipt = () => {
     transactionDetails?.transactionDate.toString()!
   );
 
+  const handleAuthorization = () => {
+    return renderUnauthorizedModal(
+      !hasPermission(
+        userMembership?.permissions!,
+        UserPermission.GET_INCOMING_DETAILS
+      )
+    )
+  }
+
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
+      {handleAuthorization()}
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box paddingTop="8" paddingBottom="6">
           <Text fontSize="sm" fontWeight="medium" textAlign="center">

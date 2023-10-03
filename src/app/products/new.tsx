@@ -3,6 +3,7 @@ import { FormControl, TextField } from "@listed-components/molecules";
 import {
   KeyboardAwareScroll,
   ScreenContainer,
+  renderUnauthorizedModal,
 } from "@listed-components/organisms";
 import { GET_PRODUCTS, ProductUnit, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
@@ -13,7 +14,8 @@ import {
   useValidateBarcode,
 } from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
-import { AddProductRequest, ValidationRules } from "@listed-types";
+import { AddProductRequest, UserPermission, ValidationRules } from "@listed-types";
+import { hasPermission } from "@listed-utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { Stack, router } from "expo-router";
 import { VStack, Text, HStack, Box, Column, useTheme } from "native-base";
@@ -21,7 +23,7 @@ import React from "react";
 
 const NewProduct = () => {
   const queryClient = useQueryClient();
-  const { userDetails } = useAuth();
+  const { userDetails, userMembership } = useAuth();
 
   const initialFormData = {
     "product name": "",
@@ -96,11 +98,21 @@ const NewProduct = () => {
     },
   });
 
-  const {colors} = useTheme();
+  const { colors } = useTheme();
+
+  const handleAuthorization = () => {
+    return renderUnauthorizedModal(
+      !hasPermission(
+        userMembership?.permissions!,
+        UserPermission.ADD_PRODUCT
+      )
+    )
+  }
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("New Product")} />
+      {handleAuthorization()}
       <KeyboardAwareScroll
         elementOnTopOfKeyboard={
           <Box pt="4" pb="6" background="white">
