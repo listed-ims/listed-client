@@ -6,6 +6,10 @@ export interface StoreResponse {
   status: StoreStatus;
   totalPriceValue: number;
   totalProducts: number;
+  totalLowStock: number;
+  totalNearExpiry: number;
+  totalRevenue: number;
+  totalItemsSold: number;
 }
 
 export interface StoreRequest {
