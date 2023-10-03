@@ -17,17 +17,18 @@ import {
   SearchIcon
 } from "@listed-components/atoms";
 import { FormControl, TextArea, TextField } from "@listed-components/molecules";
-import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
+import { KeyboardAwareScroll, ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { GET_INCOMING, Routes } from "@listed-constants";
 import { stackHeaderStyles } from "@listed-styles";
-import { dateToMMDDYY } from "@listed-utils";
-import { IncomingRequest, ValidationRules } from "@listed-types";
+import { dateToMMDDYY, hasPermission } from "@listed-utils";
+import { IncomingRequest, UserPermission, ValidationRules } from "@listed-types";
 import { useCreateIncomingMutation, useFormValidation } from "@listed-hooks";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@listed-contexts";
 
 const NewIncoming = () => {
   const { colors } = useTheme();
@@ -35,6 +36,7 @@ const NewIncoming = () => {
   const [expirationDate, setExpirationDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const { productId, product } = useLocalSearchParams();
+  const { userMembership } = useAuth();
   const queryClient = useQueryClient();
   const tomorrow = new Date();
   tomorrow.setDate(new Date().getDate() + 1);
@@ -112,9 +114,19 @@ const NewIncoming = () => {
       }
     });
 
+  const handleAuthorization = () => {
+    return renderUnauthorizedModal(
+      !hasPermission(
+        userMembership?.permissions!,
+        UserPermission.ADD_INCOMING
+      )
+    )
+  }
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Incoming")} />
+      {handleAuthorization()}
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
           <Button size="lg"

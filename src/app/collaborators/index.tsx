@@ -1,12 +1,12 @@
 import { AddIcon, Button } from "@listed-components/atoms"
 import { CollaboratorListItem, CollaboratorsFilter } from "@listed-components/molecules"
-import { ScreenContainer } from "@listed-components/organisms"
+import { ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms"
 import { Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
 import { useGetCollaborators } from "@listed-hooks"
 import { stackHeaderStyles } from "@listed-styles"
 import { MembershipStatus, UserPermission } from "@listed-types"
-import { setCollaboratorsCurrentUserFirst } from "@listed-utils"
+import { hasPermission, setCollaboratorsCurrentUserFirst, } from "@listed-utils"
 import { Stack, router } from "expo-router"
 import { Column, FlatList, useTheme } from "native-base"
 import React, { useState } from "react"
@@ -39,10 +39,19 @@ const Collaborators = () => {
           MembershipStatus.PENDING,
   )
 
+  const handleAuthorization = () => {
+    return renderUnauthorizedModal(
+      !hasPermission(
+        userMembership?.permissions!,
+        UserPermission.VIEW_COLLABORATORS
+      )
+    )
+  }
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Collaborators")} />
+      {handleAuthorization()}
       <Column height="full" space="4"
         paddingTop="4"
         paddingBottom="6"
