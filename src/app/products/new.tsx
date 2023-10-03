@@ -24,7 +24,7 @@ const NewProduct = () => {
   const { userDetails } = useAuth();
 
   const initialFormData = {
-    name: "",
+    "product name": "",
     barcode: "",
     variant: "",
     "sale price": "",
@@ -33,7 +33,7 @@ const NewProduct = () => {
   };
 
   const validationRules: ValidationRules = {
-    name: { required: true },
+    "product name": { required: true },
     "sale price": {
       required: true,
       custom: (value: string) => {
@@ -59,7 +59,7 @@ const NewProduct = () => {
       addProduct({
         storeId: userDetails?.currentStoreId,
         productRequest: {
-          name: formData.name,
+          name: formData["product name"],
           barcode: formData.barcode,
           variant: formData.variant,
           salePrice: formData["sale price"],
@@ -119,11 +119,11 @@ const NewProduct = () => {
           <VStack>
             <FormControl
               label="Product"
-              errorMessage={errors.name}
-              isInvalid={!!errors.name}
+              errorMessage={errors["product name"]}
+              isInvalid={!!errors["product name"]}
             >
               <TextField
-                onChangeText={(value) => handleInputChange(value, "name")}
+                onChangeText={(value) => handleInputChange(value, "product name")}
                 placeholder="Enter product name"
               />
             </FormControl>
