@@ -1,10 +1,6 @@
-import { GET_COLLABORATORS, GET_PERMISSIONS } from "@listed-constants";
+import { GET_COLLABORATORS, GET_MEMBERSHIP } from "@listed-constants";
 import { getCollaboratorsService } from "@listed-services";
-import {
-  MembershipResponse,
-  MembershipStatus,
-  UserPermission,
-} from "@listed-types";
+import { MembershipResponse, MembershipStatus } from "@listed-types";
 import { useQuery } from "@tanstack/react-query";
 
 const fiveMinutes = 1000 * 60 * 5;
@@ -25,9 +21,9 @@ export const useGetCollaborators = (
   return query;
 };
 
-export const useGetUserPermissions = (storeId: number, userId: number) => {
-  return useQuery<UserPermission[]>(
-    [GET_PERMISSIONS, { storeId, userId }],
+export const useGetUserMembership = (storeId: number, userId: number) => {
+  return useQuery<MembershipResponse>(
+    [GET_MEMBERSHIP, { storeId, userId }],
     () =>
       getCollaboratorsService(
         storeId,
@@ -36,7 +32,7 @@ export const useGetUserPermissions = (storeId: number, userId: number) => {
         undefined,
         userId
       ).then((response) => {
-        return response[0].permissions;
+        return response[0];
       }),
     {
       staleTime: Infinity,

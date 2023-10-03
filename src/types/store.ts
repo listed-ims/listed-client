@@ -1,11 +1,13 @@
 import { StoreStatus } from "@listed-constants";
+import { UserResponse } from "./user";
 
 export interface StoreResponse {
   id: number;
   name: string;
+  owner: UserResponse;
   status: StoreStatus;
-  totalPriceValue: number;
   totalProducts: number;
+  totalPriceValue: number;
   totalLowStock: number;
   totalNearExpiry: number;
   totalRevenue: number;

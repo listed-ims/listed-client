@@ -10,13 +10,14 @@ import { Column, View, Row, Text } from 'native-base';
 import { ScrollView } from 'react-native';
 import { DashboardNoStore, ScreenContainer } from '@listed-components/organisms';
 import { Routes } from '@listed-constants';
-import { useGetStoreDetails, useGetUserDetails, useGetUserPermissions } from '@listed-hooks';
+import { useGetStoreDetails, useGetUserDetails, useGetUserMembership } from '@listed-hooks';
 import { useAuth } from '@listed-contexts';
+import { MembershipStatus } from '@listed-types';
 
 
 const Home = () => {
 
-  const { setUserDetails, setUserPermissions } = useAuth();
+  const { setUserDetails, setUserMembership } = useAuth();
 
   const {
     data: userDetails,
@@ -32,27 +33,29 @@ const Home = () => {
   } = useGetStoreDetails(userDetails?.currentStoreId);
 
   const {
-    data: userPermissions,
-    isError: userPermissionsError,
-    isFetching: userPermissionsFetching,
-    isSuccess: userPermissionsSuccess,
-  } = useGetUserPermissions(userDetails?.currentStoreId!, userDetails?.id!);
+    data: userMembership,
+    isError: userMembershipError,
+    isFetching: userMembershipFetching,
+    isSuccess: userMembershipSuccess,
+  } = useGetUserMembership(userDetails?.currentStoreId!, userDetails?.id!);
 
   useEffect(() => {
     if (userSuccess) {
       setUserDetails(userDetails)
     }
-    if (userPermissionsSuccess) {
-      setUserPermissions([...userPermissions])
+    if (userMembershipSuccess) {
+      setUserMembership(userMembership)
     }
-  }, [userDetails, userPermissions])
+  }, [userDetails, userMembership])
 
 
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      {userDetails?.currentStoreId ?
-        <ScrollView
+      {userDetails?.currentStoreId === null
+        || userMembership?.membershipStatus === MembershipStatus.PENDING
+        ? <DashboardNoStore />
+        : <ScrollView
           showsVerticalScrollIndicator={false}
         >
           <Column marginTop="6" space="2">
@@ -104,8 +107,7 @@ const Home = () => {
             </Row>
           </Column>
           <View marginY={3} />
-        </ScrollView> :
-        <DashboardNoStore username={userDetails?.username} />
+        </ScrollView>
       }
     </ScreenContainer >
   )

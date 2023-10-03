@@ -2,6 +2,7 @@ import {
   MembershipRequest,
   MembershipResponse,
   MembershipStatus,
+  UserPermission,
 } from "@listed-types";
 import { axiosInstance } from "./axios";
 
@@ -35,6 +36,27 @@ export const addCollaboratorService = async (
     const response = await axiosInstance.post(
       "collaborators",
       membershipRequest
+    );
+    return response.data as MembershipResponse;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateCollaboratorService = async (
+  id: number,
+  membershipStatus?: MembershipStatus,
+  permissions?: UserPermission[]
+) => {
+  try {
+    const response = await axiosInstance.put(
+      `collaborators/${id}`,
+      permissions,
+      {
+        params: {
+          membershipStatus: membershipStatus,
+        },
+      }
     );
     return response.data as MembershipResponse;
   } catch (error) {
