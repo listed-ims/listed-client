@@ -10,3 +10,4 @@ export { default as DeleteProductModal } from "./DeleteProductModal";
 export { default as OutProductItem } from "./OutProductItem";
 export { default as Permissions } from "./Permissions";
 export * from "./UnauthorizedModal";
+export { default as OutgoingNoProducts } from "./OutgoingNoProducts";

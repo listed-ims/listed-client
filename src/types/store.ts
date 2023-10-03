@@ -11,7 +11,7 @@ export interface StoreResponse {
   totalLowStock: number;
   totalNearExpiry: number;
   totalRevenue: number;
-  totalItemsSolve: number;
+  totalItemsSold: number;
 }
 
 export interface StoreRequest {
