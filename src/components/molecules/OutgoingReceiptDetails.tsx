@@ -2,14 +2,15 @@ import { toCurrency } from "@listed-utils";
 import { Box, Column, Divider, Row, Text } from "native-base";
 import FormControl from "./FormControl";
 import TextArea from "./TextArea";
+import { OutgoingResponse } from "@listed-types";
 
 interface OutgoingReceiptDetailsProps {
-  // outgoingDetails: OutgoingResponse;
+  outgoingDetails: OutgoingResponse;
 }
 
-const OutgoingReceiptDetails = ({}:
-   // outgoingDetails,
-OutgoingReceiptDetailsProps) => {
+const OutgoingReceiptDetails = ({
+  outgoingDetails,
+}: OutgoingReceiptDetailsProps) => {
   return (
     <Column paddingX="4" paddingTop="4">
       <Row paddingBottom="1">
@@ -17,7 +18,7 @@ OutgoingReceiptDetailsProps) => {
           Reference Number:
         </Text>
         <Text flex="1" fontSize="xs" fontWeight="bold">
-          100123-1
+          {outgoingDetails?.referenceNumber}
         </Text>
       </Row>
 
@@ -26,22 +27,16 @@ OutgoingReceiptDetailsProps) => {
       </Row>
 
       <Column>
-        <Row paddingBottom="1">
-          <Text flex="1" fontSize="xs">
-            Gatorade 100 ml - 2pcs
-          </Text>
-          <Text flex="1" fontSize="xs" fontWeight="bold">
-            {toCurrency(40 as number)}
-          </Text>
-        </Row>
-        <Row paddingBottom="1">
-          <Text flex="1" fontSize="xs">
-            Nature’s Spring 100 ml - 2pcs
-          </Text>
-          <Text flex="1" fontSize="xs" fontWeight="bold">
-            {toCurrency(40 as number)}
-          </Text>
-        </Row>
+        {outgoingDetails?.products.map((product, index) => (
+          <Row key={index} paddingBottom="1">
+            <Text flex="1" fontSize="xs">
+              {product.product.name} - {product.quantity} pcs
+            </Text>
+            <Text flex="1" fontSize="xs" fontWeight="bold">
+              {toCurrency(product.price as number)}
+            </Text>
+          </Row>
+        ))}
       </Column>
 
       <Row paddingBottom="1">
@@ -53,7 +48,7 @@ OutgoingReceiptDetailsProps) => {
           Total Price:
         </Text>
         <Text flex="1" fontSize="xs" fontWeight="bold">
-          {toCurrency(80 as number)}
+          {toCurrency(outgoingDetails?.price as number)}
         </Text>
       </Row>
 
@@ -67,7 +62,7 @@ OutgoingReceiptDetailsProps) => {
         </Text>
         <Box flex="1">
           <Text flex="1" fontSize="xs" fontWeight="bold">
-            Jeonghan
+            {outgoingDetails?.user.name}
           </Text>
           <Text flex="1" fontSize="xs" fontWeight="medium">
             (owner)
@@ -76,8 +71,12 @@ OutgoingReceiptDetailsProps) => {
       </Row>
 
       <FormControl label={<Text fontSize="xs">Comment</Text>}>
-        <TextArea isReadOnly variant="outline">
-          comment
+        <TextArea
+          isReadOnly
+          variant="outline"
+          fontWeight={outgoingDetails?.comment ? "normal" : "thin"}
+        >
+          {outgoingDetails?.comment || "N/A"}
         </TextArea>
       </FormControl>
     </Column>

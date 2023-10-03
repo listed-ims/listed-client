@@ -62,8 +62,7 @@ const Home = () => {
             <Text fontWeight="medium" fontSize="md">
               <Text color="muted.400">Welcome</Text> {userDetails?.username}
             </Text>
-            <SummaryCard totalItemsSold="100" totalRevenue="1,000.00"
-              storeName={storeDetails?.name} />
+            <SummaryCard summaryDetails={storeDetails!} />
           </Column>
           <View marginY={4} />
           <Row width="full" space="4">
@@ -103,8 +102,8 @@ const Home = () => {
               Product Alerts
             </Text>
             <Row width="full" space="4">
-              <ProductAlertCard flex="1" type="stocks" value={24} />
-              <ProductAlertCard flex="1" type="expiration" value={8} />
+            <ProductAlertCard flex="1" type="stocks" alertDetails={{ totalLowStock: storeDetails?.totalLowStock! }} />
+              <ProductAlertCard flex="1" type="expiration" alertDetails={{ totalNearExpiry: storeDetails?.totalNearExpiry! }} />
             </Row>
           </Column>
           <View marginY={3} />
