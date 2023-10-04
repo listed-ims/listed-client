@@ -45,7 +45,7 @@ const CollaboratorListItem = ({
                 "info" :
                 membershipStatus === MembershipStatus.PENDING ?
                   "warning" :
-                  "danger"
+                  "error"
             }
             variant="solid">
             {toTitleCase(membershipStatus)}

@@ -12,3 +12,4 @@ export { default as Permissions } from "./Permissions";
 export * from "./UnauthorizedModal";
 export { default as OutgoingNoProducts } from "./OutgoingNoProducts";
 export { default as PermissionDetails } from "./PermissionDetails";
+export { default as RemoveCollaboratorModal } from "./RemoveCollaboratorModal";
