@@ -44,6 +44,8 @@ const IncomingReceipt = () => {
     )
   }
 
+  const userPermissions = userMembership?.permissions || [];
+
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
@@ -68,7 +70,7 @@ const IncomingReceipt = () => {
           </VStack>
         </Box>
 
-        <IncomingReceiptDetails incomingDetails={transactionDetails!} />
+        <IncomingReceiptDetails incomingDetails={transactionDetails!} userPermissions={userPermissions!}  />
 
         <HStack paddingTop="4" alignItems="center">
           <Spacer>
