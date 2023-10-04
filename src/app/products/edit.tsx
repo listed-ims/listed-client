@@ -33,7 +33,7 @@ const EditProduct = () => {
   } = useGetProductDetails(parseInt(productId as string));
 
   const initialFormData = {
-    name: productDetails?.name,
+    "product name": productDetails?.name,
     barcode: productDetails?.barcode,
     variant: productDetails?.variant,
     "sale price": String(productDetails?.salePrice),
@@ -41,7 +41,7 @@ const EditProduct = () => {
   };
 
   const validationRules: ValidationRules = {
-    name: { required: true },
+    "product name": { required: true },
     "sale price": {
       required: true,
       custom: (value: string) => {
@@ -101,7 +101,7 @@ const EditProduct = () => {
       updateProduct({
         productId: productDetails?.id,
         productRequest: {
-          name: formData.name,
+          name: formData["product name"],
           barcode: formData.barcode,
           variant: formData.variant,
           salePrice: formData["sale price"],
@@ -132,8 +132,8 @@ const EditProduct = () => {
           <Row paddingY="6">
             <Text fontSize="18px" fontWeight="600">Edit Product Details</Text>
           </Row>
-          <FormControl label="Product" errorMessage={errors.name} isInvalid={!!errors.name}>
-            <TextField flex="1" placeholder="Enter product name" value={formData.name} onChangeText={(value) => handleInputChange(value, "name")} />
+          <FormControl label="Product"  errorMessage={errors["product name"]} isInvalid={!!errors["product name"]}>
+            <TextField flex="1" placeholder="Enter product name" value={formData["product name"]} onChangeText={(value) => handleInputChange(value, "product name")}/>
 
           </FormControl>
           <FormControl label={
