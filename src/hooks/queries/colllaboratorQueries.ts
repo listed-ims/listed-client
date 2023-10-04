@@ -42,7 +42,7 @@ export const useGetUserMembership = (storeId: number, userId: number) => {
         return response[0];
       }),
     {
-      staleTime: Infinity,
+      staleTime: fiveMinutes,
       enabled: !!storeId && !!userId,
     }
   );
@@ -53,7 +53,7 @@ export const useGetCollaboratorDetails = (id: number) => {
     [GET_COLLABORATOR, id],
     () => getCollaboratorDetailsService(id),
     {
-      staleTime: Infinity,
+      staleTime: fiveMinutes,
       enabled: !!id,
     }
   );

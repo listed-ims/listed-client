@@ -1,12 +1,18 @@
 import { Button } from "@listed-components/atoms"
+import { FormControl, Toast } from "@listed-components/molecules"
 import { Permissions, ScreenContainer } from "@listed-components/organisms"
-import { useGetCollaboratorDetails } from "@listed-hooks"
+import { GET_COLLABORATOR, GET_COLLABORATORS } from "@listed-constants"
+import { useFormValidation, useGetCollaboratorDetails, useUpdateUserMembershipStatusMutation, useUpdateUserPermissionMutation } from "@listed-hooks"
 import { stackHeaderStyles } from "@listed-styles"
-import { Stack, useLocalSearchParams } from "expo-router"
-import { Box, Column, HStack, Row, ScrollView, Text, View } from "native-base"
+import { MembershipStatus, UserPermission, ValidationRules } from "@listed-types"
+import { useQueryClient } from "@tanstack/react-query"
+import { Stack, router, useLocalSearchParams } from "expo-router"
+import { Box, Column, HStack, Row, ScrollView, Text, View, useToast } from "native-base"
 
 const CollaboratorEdit = () => {
   const { id } = useLocalSearchParams();
+  const toast = useToast();
+  const queryClient = useQueryClient();
 
   const {
     data: collaboratorDetails,
@@ -14,9 +20,85 @@ const CollaboratorEdit = () => {
     isError: collaboratorDetailsError,
   } = useGetCollaboratorDetails(Number(id))
 
+  const initialFormData = {
+    permissions: collaboratorDetails?.permissions || []
+  }
+
+  const validationRules: ValidationRules = {
+    permissions: {
+      custom(value) {
+        return value.length > 0
+      },
+      customErrorMessage: "Please select at least one permission."
+    }
+  }
+
+  const { formData, errors, validate, handleInputChange } = useFormValidation(
+    initialFormData,
+    validationRules
+  )
+
+  const isInactive = collaboratorDetails?.membershipStatus === MembershipStatus.INACTIVE
+
+  const {
+    mutate: updateCollaborator,
+  } = useUpdateUserPermissionMutation({
+    onSuccess: (data) => {
+      queryClient.invalidateQueries([GET_COLLABORATORS]);
+      queryClient.setQueriesData([GET_COLLABORATOR, data.id], data);
+      toast.show({
+        render: () => {
+          return <Toast message="Collaborator permissions updated." />
+        }
+      });
+      router.back();
+    }
+  })
+
+  const {
+    mutate: updateCollaboratorStatus
+  } = useUpdateUserMembershipStatusMutation({
+    onSuccess: (data) => {
+      queryClient.invalidateQueries([GET_COLLABORATORS]);
+      queryClient.setQueriesData([GET_COLLABORATOR, data.id], data);
+      toast.show({
+        render: () => {
+          return <Toast message="Collaborator is invited again." />
+        }
+      });
+      router.back();
+    }
+  })
+
+  const handleSave = () => {
+    if (validate()) {
+      updateCollaborator([
+        Number(id),
+        formData.permissions,
+      ])
+    }
+  }
+
+  const handleInviteAgain = () => {
+    if (validate()) {
+      updateCollaboratorStatus([
+        Number(id),
+        MembershipStatus.PENDING
+      ])
+    }
+  }
+
+  const handlePermissionChange = (permissions: Set<UserPermission>) => {
+    handleInputChange([...permissions], "permissions")
+  }
+
   return (
     <ScreenContainer withHeader>
-      <Stack.Screen options={stackHeaderStyles("Edit Collaborator")} />
+      <Stack.Screen options={stackHeaderStyles(
+        `${isInactive
+          ? "Invite Again"
+          : "Edit Collaborator"}`
+      )} />
       <ScrollView>
         <HStack py="4">
           <Text fontSize="lg" fontWeight="semibold">
@@ -48,19 +130,37 @@ const CollaboratorEdit = () => {
           </View>
           <View>
             <Text>Permissions</Text>
+            {!!errors.permissions && <FormControl
+              children={undefined}
+              marginTop="-2"
+              errorMessage={errors.permissions}
+              isInvalid={!!errors.permissions}
+            />}
             <Permissions selectedPermissions={
               new Set([...collaboratorDetails?.permissions!])
             }
               marginLeft="4"
-              handleSelectPermission={() => { console.log("hello") }}
+              handleSelectPermission={handlePermissionChange}
             />
           </View>
         </Column>
       </ScrollView>
       <Box background=" white" paddingTop="4" paddingBottom="6">
         <Row space="4" >
-          <Button flex="1" >SAVE</Button>
-          <Button flex="1" variant="outline">CANCEL</Button>
+          {isInactive
+            ? <Button flex="1"
+              onPress={handleInviteAgain}
+            >INVITE AGAIN</Button>
+            : <>
+              <Button flex="1"
+                onPress={handleSave} >SAVE</Button>
+              <Button flex="1" variant="outline"
+                onPress={() => {
+                  router.back();
+                }}
+              >CANCEL</Button>
+            </>
+          }
         </Row>
       </Box>
     </ScreenContainer>
