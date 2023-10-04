@@ -1,11 +1,12 @@
 import { Button, PeopleIcon } from "@listed-components/atoms"
 import { PermissionDetails, ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms"
+import { Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
 import { useGetCollaboratorDetails } from "@listed-hooks"
 import { stackHeaderStyles } from "@listed-styles"
 import { UserPermission } from "@listed-types"
 import { hasPermission, ownerOrCollaborator, } from "@listed-utils"
-import { Stack, useLocalSearchParams } from "expo-router"
+import { Stack, router, useLocalSearchParams } from "expo-router"
 import { Badge, Center, Column, Heading, ScrollView, Text } from "native-base"
 
 
@@ -58,7 +59,11 @@ const CollaboratorDetails = () => {
             ownerOrCollaborator(collaboratorDetails?.permissions!) === "COLLABORATOR"
             &&
             <>
-              <Button>
+              <Button
+                onPress={() =>
+                  router.push(`${Routes.EDIT_COLLABORATOR}?id=${id}`)
+                }
+              >
                 EDIT
               </Button>
               <Button variant="warnOutline">

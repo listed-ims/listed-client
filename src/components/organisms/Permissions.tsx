@@ -7,10 +7,11 @@ import { PermissionCategory } from "@listed-constants";
 
 interface PermissionsProps extends InterfaceBoxProps {
   handleSelectPermission: (selectedPermissions: Set<UserPermission>) => void;
+  selectedPermissions?: Set<UserPermission>;
 }
 
 const Permissions = ({ handleSelectPermission, ...props }: PermissionsProps) => {
-  const [selectedPermissions, setSelectedPermissions] = useState<Set<UserPermission>>(new Set())
+  const [selectedPermissions, setSelectedPermissions] = useState<Set<UserPermission>>(props.selectedPermissions || new Set())
   const [collaboratorsSelected, setCollaboratorsSelected] = useState<Set<UserPermission>>(new Set());
   const [productsSelected, setProductsSelected] = useState<Set<UserPermission>>(new Set());
   const [incomingSelected, setIncomingSelected] = useState<Set<UserPermission>>(new Set());
