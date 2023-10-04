@@ -1,3 +1,4 @@
+import { PermissionCategory } from "@listed-constants";
 import { UserResponse } from "./user";
 
 export enum UserPermission {
@@ -50,95 +51,95 @@ export const UserPermissionMap = {
   ADD_COLLABORATOR: {
     permission: UserPermission.ADD_COLLABORATOR,
     description: "Add collaborator.",
-    category: "Collaborators",
+    category: PermissionCategory.COLLABORATORS,
   },
   UPDATE_COLLABORATOR: {
     permission: UserPermission.UPDATE_COLLABORATOR,
     description: "Update collaborator.",
-    category: "Collaborators",
+    category: PermissionCategory.COLLABORATORS,
   },
   DELETE_COLLABORATOR: {
     permission: UserPermission.DELETE_COLLABORATOR,
     description: "Remove collaborator.",
-    category: "Collaborators",
+    category: PermissionCategory.COLLABORATORS,
   },
   VIEW_COLLABORATORS: {
     permission: UserPermission.VIEW_COLLABORATORS,
     description: "View collaborators list.",
-    category: "Collaborators",
+    category: PermissionCategory.COLLABORATORS,
   },
   VIEW_COLLABORATOR_DETAILS: {
     permission: UserPermission.VIEW_COLLABORATOR_DETAILS,
     description: "View collaborator details.",
-    category: "Collaborators",
+    category: PermissionCategory.COLLABORATORS,
   },
 
   ADD_PRODUCT: {
     permission: UserPermission.ADD_PRODUCT,
     description: "Add product.",
-    category: "Products",
+    category: PermissionCategory.PRODUCTS,
   },
   UPDATE_PRODUCT: {
     permission: UserPermission.UPDATE_PRODUCT,
     description: "Update product details.",
-    category: "Products",
+    category: PermissionCategory.PRODUCTS,
   },
   VIEW_PRODUCT_DETAILS: {
     permission: UserPermission.VIEW_PRODUCT_DETAILS,
     description: "View product details.",
-    category: "Products",
+    category: PermissionCategory.PRODUCTS,
   },
   DELETE_PRODUCT: {
     permission: UserPermission.DELETE_PRODUCT,
     description: "Delete product.",
-    category: "Products",
+    category: PermissionCategory.PRODUCTS,
   },
 
   ADD_INCOMING: {
     permission: UserPermission.ADD_INCOMING,
     description: "Perform incoming transaction.",
-    category: "Incoming",
+    category: PermissionCategory.INCOMING,
   },
   GET_INCOMING_DETAILS: {
     permission: UserPermission.GET_INCOMING_DETAILS,
     description: "Get incoming details.",
-    category: "Incoming",
+    category: PermissionCategory.INCOMING,
   },
 
   ADD_OUTGOING_SOLD: {
     permission: UserPermission.ADD_OUTGOING_SOLD,
     description: "Out items as sold.",
-    category: "Outgoing",
+    category: PermissionCategory.OUTGOING,
   },
   ADD_OUTGOING_DEFECTS: {
     permission: UserPermission.ADD_OUTGOING_DEFECTS,
     description: "Out items as defects.",
-    category: "Outgoing",
+    category: PermissionCategory.OUTGOING,
   },
   ADD_OUTGOING_EXPIRED: {
     permission: UserPermission.ADD_OUTGOING_EXPIRED,
     description: "Out items as expired.",
-    category: "Outgoing",
+    category: PermissionCategory.OUTGOING,
   },
   ADD_OUTGOING_LOST: {
     permission: UserPermission.ADD_OUTGOING_LOST,
     description: "Out items as lost.",
-    category: "Outgoing",
+    category: PermissionCategory.OUTGOING,
   },
   ADD_OUTGOING_CONSUMED: {
     permission: UserPermission.ADD_OUTGOING_CONSUMED,
     description: "Out items as consumed.",
-    category: "Outgoing",
+    category: PermissionCategory.OUTGOING,
   },
   GET_OUTGOING_DETAILS: {
     permission: UserPermission.GET_OUTGOING_DETAILS,
     description: "Get outgoing details.",
-    category: "Outgoing",
+    category: PermissionCategory.OUTGOING,
   },
 
   GET_TRANSACTIONS_LIST: {
     permission: UserPermission.GET_TRANSACTIONS_LIST,
     description: "Get transactions list.",
-    category: "Transactions",
+    category: PermissionCategory.TRANSACTIONS,
   },
 } as const;

@@ -3,6 +3,7 @@ import { Column, Text } from "native-base"
 import { Dispatch, SetStateAction, useState } from "react"
 import { Checkbox } from "@listed-components/atoms"
 import { InterfaceBoxProps } from "native-base/lib/typescript/components/primitives/Box";
+import { PermissionCategory } from "@listed-constants";
 
 interface PermissionsProps extends InterfaceBoxProps {
   handleSelectPermission: (selectedPermissions: Set<UserPermission>) => void;
@@ -45,19 +46,19 @@ const Permissions = ({ handleSelectPermission, ...props }: PermissionsProps) => 
 
 
   const collaborators = Object.values(UserPermissionMap).filter((permission) => {
-    return permission.category === "Collaborators"
+    return permission.category === PermissionCategory.COLLABORATORS
   })
   const products = Object.values(UserPermissionMap).filter((permission) => {
-    return permission.category === "Products"
+    return permission.category === PermissionCategory.PRODUCTS
   })
   const incoming = Object.values(UserPermissionMap).filter((permission) => {
-    return permission.category === "Incoming"
+    return permission.category === PermissionCategory.INCOMING
   })
   const outgoing = Object.values(UserPermissionMap).filter((permission) => {
-    return permission.category === "Outgoing"
+    return permission.category === PermissionCategory.OUTGOING
   })
   const transactions = Object.values(UserPermissionMap).filter((permission) => {
-    return permission.category === "Transactions"
+    return permission.category === PermissionCategory.TRANSACTIONS
   })
 
   const isCheckedByDependent = (permission: keyof typeof UserPermissionMap) => {

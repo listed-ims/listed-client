@@ -1,5 +1,12 @@
-import { GET_COLLABORATORS, GET_MEMBERSHIP } from "@listed-constants";
-import { getCollaboratorsService } from "@listed-services";
+import {
+  GET_COLLABORATOR,
+  GET_COLLABORATORS,
+  GET_MEMBERSHIP,
+} from "@listed-constants";
+import {
+  getCollaboratorDetailsService,
+  getCollaboratorsService,
+} from "@listed-services";
 import { MembershipResponse, MembershipStatus } from "@listed-types";
 import { useQuery } from "@tanstack/react-query";
 
@@ -37,6 +44,17 @@ export const useGetUserMembership = (storeId: number, userId: number) => {
     {
       staleTime: Infinity,
       enabled: !!storeId && !!userId,
+    }
+  );
+};
+
+export const useGetCollaboratorDetails = (id: number) => {
+  return useQuery<MembershipResponse>(
+    [GET_COLLABORATOR, id],
+    () => getCollaboratorDetailsService(id),
+    {
+      staleTime: Infinity,
+      enabled: !!id,
     }
   );
 };
