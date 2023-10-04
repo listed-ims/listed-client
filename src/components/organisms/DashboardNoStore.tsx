@@ -1,5 +1,5 @@
 import { AddStoreIcon, Button, MailIcon, StoreIcon } from "@listed-components/atoms";
-import { CreateStoreCard } from "@listed-components/molecules";
+import { CreateStoreCard, DeclineInviteModal } from "@listed-components/molecules";
 import { GET_MEMBERSHIP, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetStoreDetails, useUpdateUserMembershipStatusMutation } from "@listed-hooks";
@@ -7,10 +7,12 @@ import { MembershipStatus } from "@listed-types";
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Box, Center, Column, Heading, Row, Text } from "native-base";
+import { useState } from "react";
 
 
 const DashboardNoStore = () => {
   const { userMembership, setUserMembership, userDetails } = useAuth();
+  const [showDeclineInviteModal, setShowDeclineInviteModal] = useState(false)
   const queryClient = useQueryClient();
 
   const handleAccept = () => {
@@ -107,13 +109,18 @@ const DashboardNoStore = () => {
               ACCEPT
             </Button>
             <Button flex="1" variant="outline"
-              onPress={handleDecline}
+              onPress={() => setShowDeclineInviteModal(true)}
             >
               DECLINE
             </Button>
           </Row>
         </Column>
       }
+      <DeclineInviteModal
+        onConfirm={handleDecline}
+        onCancel={() => setShowDeclineInviteModal(false)}
+        isOpen={showDeclineInviteModal}
+      />
     </Column >
   )
 }
