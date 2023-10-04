@@ -80,10 +80,12 @@ const CollaboratorEdit = () => {
   }
 
   const handleInviteAgain = () => {
-    updateCollaboratorStatus([
-      Number(id),
-      MembershipStatus.PENDING
-    ])
+    if (validate()) {
+      updateCollaboratorStatus([
+        Number(id),
+        MembershipStatus.PENDING
+      ])
+    }
   }
 
   const handlePermissionChange = (permissions: Set<UserPermission>) => {
