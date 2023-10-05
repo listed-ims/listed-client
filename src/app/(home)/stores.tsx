@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Column, FlatList, HStack, Text, useTheme } from "native-base";
 import { Stack, router } from "expo-router";
-import { ScreenContainer } from "@listed-components/organisms";
+import { NoStoreFound, ScreenContainer } from "@listed-components/organisms";
 import { AddIcon, Button } from "@listed-components/atoms";
 import {
   StoreListFilterGroup,
@@ -40,6 +40,7 @@ const Stores = () => {
           <Text fontSize="xl" fontWeight="semibold">
             Stores
           </Text>
+          {storeList && storeList.length > 0 ? (
           <Button
             size="sm"
             px="4"
@@ -51,7 +52,10 @@ const Stores = () => {
           >
             Add Store
           </Button>
+          ) : undefined }
         </HStack>
+        {storeList && storeList.length > 0 ? (
+        <>
         <StoreListFilterGroup
           filter={filter}
           handleSetFilter={(filter) => setFilter(filter)}
@@ -78,6 +82,10 @@ const Stores = () => {
             )}
           />
         </Box>
+        </>
+        ) : (
+          <NoStoreFound/>
+        )}
       </Column>
     </ScreenContainer>
   );
