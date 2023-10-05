@@ -1,5 +1,4 @@
 import { Button, PeopleIcon } from "@listed-components/atoms"
-import { Toast } from "@listed-components/molecules"
 import { PermissionDetails, RemoveCollaboratorModal, ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms"
 import { GET_COLLABORATOR, GET_COLLABORATORS, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
@@ -84,7 +83,7 @@ const CollaboratorDetails = () => {
           </Center>
           <Heading fontSize="md">{collaboratorDetails?.user.name}</Heading>
           <Text>{collaboratorDetails?.user.username}</Text>
-          <Badge variant="solid" colorScheme="success">
+          <Badge variant="outline" colorScheme="success">
             {ownerOrCollaborator(collaboratorDetails?.permissions!)}
           </Badge>
           <Badge variant="solid"
