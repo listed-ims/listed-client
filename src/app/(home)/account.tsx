@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { ScreenContainer } from '@listed-components/organisms'
-import { FormControl, TextArea } from '@listed-components/molecules'
+import { FormControl, TextArea, TextField } from '@listed-components/molecules'
 import { Text } from 'native-base'
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { Button } from '@listed-components/atoms'
+import BottomModal from '@listed-components/organisms/BottomModal'
 
 const Account = () => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
 
   const onChange = (event: DateTimePickerEvent, date?: Date | undefined) => {
     const currentDate = date;
@@ -18,6 +20,7 @@ const Account = () => {
   const showDatepicker = () => {
     setShow(true)
   };
+
 
   return (
     <ScreenContainer>
@@ -37,6 +40,13 @@ const Account = () => {
           onChange={onChange}
         />
       )}
+        <Button onPress={() => {setShowFilter(true)}}>Show Modal</Button>
+
+        <BottomModal open={showFilter} onDismiss={() => setShowFilter(false)}> 
+          <FormControl label="Store name">
+            <TextField placeholder="Enter store name"/>
+          </FormControl>
+        </BottomModal>
     </ScreenContainer>
   )
 }
