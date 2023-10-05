@@ -12,7 +12,7 @@ const NoStoreFound = () => {
         <NoStoreIcon />
         <Column alignItems="center" space={1} py={4} alignSelf="stretch">
           <Text fontSize="lg" fontWeight="semibold">
-            No Store found
+            No store found
           </Text>
           <Column>
             <Text textAlign="center">You don’t have any store yet.</Text>
