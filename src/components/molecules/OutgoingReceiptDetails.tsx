@@ -1,16 +1,21 @@
-import { toCurrency } from "@listed-utils";
+import { ownerOrCollaborator, toCurrency, toTitleCase } from "@listed-utils";
 import { Box, Column, Divider, Row, Text } from "native-base";
 import FormControl from "./FormControl";
 import TextArea from "./TextArea";
-import { OutgoingResponse } from "@listed-types";
+import { OutgoingResponse, UserPermission } from "@listed-types";
 
 interface OutgoingReceiptDetailsProps {
   outgoingDetails: OutgoingResponse;
+  userPermissions: UserPermission[];
 }
 
 const OutgoingReceiptDetails = ({
   outgoingDetails,
+  userPermissions,
 }: OutgoingReceiptDetailsProps) => {
+
+  const userRole = ownerOrCollaborator(userPermissions);
+
   return (
     <Column paddingX="4" paddingTop="4">
       <Row paddingBottom="1">
@@ -65,7 +70,7 @@ const OutgoingReceiptDetails = ({
             {outgoingDetails?.user.name}
           </Text>
           <Text flex="1" fontSize="xs" fontWeight="medium">
-            (owner)
+            ({toTitleCase(userRole)})
           </Text>
         </Box>
       </Row>
