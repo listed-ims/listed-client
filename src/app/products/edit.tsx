@@ -164,7 +164,7 @@ const EditProduct = () => {
 
           <FormControl label="Sale Price per Item" errorMessage={errors["sale price"]} isInvalid={!!errors["sale price"]}>
 
-            <TextField flex="1" placeholder='Enter sale price' value={formData["sale price"]}
+            <TextField flex="1" placeholder='Enter sale price' keyboardType="numeric" value={formData["sale price"]}
               onChangeText={(value) => handleInputChange(value, "sale price")} startDataLabel={'Php'} />
           </FormControl>
 
@@ -177,7 +177,7 @@ const EditProduct = () => {
             errorMessage={errors.threshold}
             isInvalid={!!errors.threshold}
           >
-            <TextField placeholder="Enter low warning point" value={formData.threshold ? String(formData.threshold) : ""} onChangeText={(value) => handleInputChange(value, "threshold")} endDataLabel={productDetails?.unit} />
+            <TextField placeholder="Enter low warning point" keyboardType="numeric" value={formData.threshold ? String(formData.threshold) : ""} onChangeText={(value) => handleInputChange(value, "threshold")} endDataLabel={productDetails?.unit} />
           </FormControl>
         </Column>
       </KeyboardAwareScrollView>
