@@ -93,7 +93,10 @@ const Home = () => {
                 onPress={() => {
                   router.push(Routes.COLLABORATORS)
                 }} />
-              <MainButtons flex="1" type="transactions" />
+              <MainButtons flex="1" type="transactions" 
+              onPress={() => {
+                router.push(Routes.TRANSACTIONS)
+              }}/>
             </Row>
           </Column>
           <View marginY={3} />

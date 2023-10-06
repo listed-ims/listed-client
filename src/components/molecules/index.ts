@@ -21,3 +21,4 @@ export { default as CollaboratorsFilter } from "./CollaboratorsFilter";
 export { default as OutgoingReceiptDetails } from "./OutgoingReceiptDetails";
 export { default as StoreInvite } from "./StoreInvite";
 export { default as ProductAlertCard } from "./ProductAlertCard";
+export { default as BottomSheet} from "./BottomSheet";
