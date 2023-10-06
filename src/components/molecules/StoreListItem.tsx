@@ -9,8 +9,12 @@ import {
 } from "native-base";
 import { toTitleCase } from "@listed-utils";
 import { CheckedIcon } from "@listed-components/atoms";
+import { useGetUserMembership } from "@listed-hooks";
+import { MembershipStatus } from "@listed-types";
 
 interface StoreListItemProps extends IPressableProps {
+  storeId?: number;
+  userId?: number;
   name: string;
   userRole: string;
   status: "open" | "closed";
@@ -18,12 +22,18 @@ interface StoreListItemProps extends IPressableProps {
 }
 
 const StoreListItem = ({
+  storeId,
+  userId,
   name,
   userRole,
   status,
   current,
   ...props
 }: StoreListItemProps) => {
+
+  const { data: userMembership, isSuccess: userMembershipSuccess } =
+    useGetUserMembership(storeId!, userId!);
+
   return (
     <Pressable
       {...props}
@@ -43,6 +53,11 @@ const StoreListItem = ({
           {current && (
             <Badge colorScheme="success" variant="outline">
               CURRENT STORE
+            </Badge>
+          )}
+          {userMembership?.membershipStatus === MembershipStatus.PENDING && (
+            <Badge colorScheme="error" variant="outline">
+              NEW INVITE
             </Badge>
           )}
           <Text fontSize="sm" fontWeight="semibold" color="darkText">

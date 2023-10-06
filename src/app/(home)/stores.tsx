@@ -30,7 +30,7 @@ const Stores = () => {
     100
   );
 
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   return (
     <ScreenContainer>
@@ -65,6 +65,8 @@ const Stores = () => {
             })}
             renderItem={({ item }) => (
               <StoreListItem
+                storeId={item.id}
+                userId={userDetails?.id}
                 name={item.name}
                 userRole={"Owner"}
                 status={item.status == "OPEN" ? "open" : "closed"}

@@ -4,7 +4,10 @@ import {
   OutgoingReceiptIcon,
 } from "@listed-components/atoms";
 import { OutgoingReceiptDetails } from "@listed-components/molecules";
-import { ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms";
+import {
+  ScreenContainer,
+  renderUnauthorizedModal,
+} from "@listed-components/organisms";
 import { useAuth } from "@listed-contexts";
 import { Routes } from "@listed-constants";
 import { useGetOutgoingDetails } from "@listed-hooks";
@@ -13,7 +16,7 @@ import {
   dateToMonthDDYYYY,
   dateToReadableTime,
   toTitleCase,
-  hasPermission
+  hasPermission,
 } from "@listed-utils";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
@@ -46,8 +49,10 @@ const OutgoingReceipt = () => {
         userMembership?.permissions!,
         UserPermission.GET_OUTGOING_DETAILS
       )
-    )
-  }
+    );
+  };
+
+  const userPermission = userMembership?.permissions || [];
 
   return (
     <ScreenContainer>
@@ -73,7 +78,10 @@ const OutgoingReceipt = () => {
           </VStack>
         </Box>
 
-        <OutgoingReceiptDetails outgoingDetails={transactionDetails!} />
+        <OutgoingReceiptDetails
+          outgoingDetails={transactionDetails!}
+          userPermissions={userPermission!}
+        />
 
         <HStack pt="4" alignItems="center">
           <Spacer>
