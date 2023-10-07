@@ -9,11 +9,12 @@ const Checkmark = (props: SvgProps) => (
     {...props}
   >
     <Path
-      stroke="#fff"
+      stroke={props.color || "#fff"}
       strokeLinecap="round"
       strokeLinejoin="round"
       d="M9.75 3 4.5 9 2.25 6.75"
     />
+    
   </Svg>
 )
 export default Checkmark
