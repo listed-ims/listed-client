@@ -13,4 +13,5 @@ export * from "./UnauthorizedModal";
 export { default as OutgoingNoProducts } from "./OutgoingNoProducts";
 export { default as PermissionDetails } from "./PermissionDetails";
 export { default as RemoveCollaboratorModal } from "./RemoveCollaboratorModal";
+export { default as CameraPreviewMask } from "./CameraPreviewMask";
 export { default as NoStoreFound } from "./NoStoreFound";

@@ -53,6 +53,7 @@ const OutgoingNoProducts = () => {
               variant="outline"
               borderRadius="full"
               startIcon={<ScanIcon color={colors.primary[700]} />}
+              onPress={() => router.push(Routes.BARCODE)}
             >
               Scan
             </Button>

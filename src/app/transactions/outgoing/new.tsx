@@ -189,6 +189,7 @@ const NewOutgoing = () => {
                   variant="outline"
                   borderRadius="full"
                   startIcon={<ScanIcon color={colors.primary[700]} />}
+                  onPress={() => router.push(Routes.BARCODE)}
                 >
                   Scan
                 </Button>
@@ -332,8 +333,8 @@ const NewOutgoing = () => {
             <OutgoingNoProducts />
           )}
         </Column>
-      </KeyboardAwareScroll>
-    </ScreenContainer>
+      </KeyboardAwareScroll >
+    </ScreenContainer >
   );
 };
 

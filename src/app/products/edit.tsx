@@ -132,8 +132,8 @@ const EditProduct = () => {
           <Row paddingY="6">
             <Text fontSize="18px" fontWeight="600">Edit Product Details</Text>
           </Row>
-          <FormControl label="Product"  errorMessage={errors["product name"]} isInvalid={!!errors["product name"]}>
-            <TextField flex="1" placeholder="Enter product name" value={formData["product name"]} onChangeText={(value) => handleInputChange(value, "product name")}/>
+          <FormControl label="Product" errorMessage={errors["product name"]} isInvalid={!!errors["product name"]}>
+            <TextField flex="1" placeholder="Enter product name" value={formData["product name"]} onChangeText={(value) => handleInputChange(value, "product name")} />
 
           </FormControl>
           <FormControl label={
@@ -149,7 +149,12 @@ const EditProduct = () => {
           >
             <Row space="2">
               <TextField flex="1" placeholder='Scan barcode' value={formData.barcode} onChangeText={(value) => handleInputChange(value, "barcode")} />
-              <Button fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>Scan</Button>
+              <Button
+                onPress={() => router.push(Routes.BARCODE)}
+                fontSize="sm"
+                startIcon={<ScanIcon color={colors.white} />}>
+                Scan
+              </Button>
             </Row>
           </FormControl>
           <FormControl label={
