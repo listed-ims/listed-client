@@ -26,8 +26,14 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { StoreDetailsIcon } from "@listed-components/atoms";
 import { stackHeaderStyles } from "@listed-styles";
-import { MembershipStatus, UserRequest, UserResponse } from "@listed-types";
+import { 
+  MembershipStatus, 
+  UserPermission, 
+  UserRequest, 
+  UserResponse 
+} from "@listed-types";
 import { StoreInvite } from "@listed-components/molecules";
+import { ownerOrCollaborator } from "@listed-utils";
 
 const StoreDetails = () => {
   const queryClient = useQueryClient();
@@ -134,21 +140,27 @@ const StoreDetails = () => {
           <VStack space="1" alignItems="center">
             <StoreDetailsIcon />
             <Heading size="md">{storeDetails?.name}</Heading>
-            {storeDetails?.id === userDetails?.currentStoreId && (
-              <Badge colorScheme="success" variant="solid">
-                CURRENT STORE
-              </Badge>
-            )}
-            {storeMembership?.membershipStatus !== MembershipStatus.PENDING &&
+            {storeDetails?.id === userDetails?.currentStoreId &&
+              storeMembership?.membershipStatus !== MembershipStatus.PENDING && (
+                <Badge colorScheme="success" variant="solid">
+                  CURRENT STORE
+                </Badge>
+              )}
+            {storeMembership?.membershipStatus !== MembershipStatus.PENDING && (
               <Text fontSize="xs" fontWeight="medium" color="darkText">
-                {`${userDetails?.username}, you are the owner!`}
+                {`${userDetails?.name}, you are ${
+                  ownerOrCollaborator(storeMembership?.permissions || []) ===
+                  UserPermission.OWNER
+                    ? "the owner"
+                    : "a collaborator"
+                }!`}
               </Text>
-            }
+            )}
           </VStack>
-          {storeMembership?.membershipStatus !== MembershipStatus.PENDING
-            ? <>
+          {storeMembership?.membershipStatus !== MembershipStatus.PENDING ? (
+            <>
               <StoreSummaryCard
-                owner={userDetails?.username}
+                owner={storeDetails?.owner.name}
                 status={storeDetails?.status}
                 totalProducts={storeDetails?.totalProducts}
                 totalPriceValue={storeDetails?.totalPriceValue}
@@ -162,11 +174,12 @@ const StoreDetails = () => {
                 <CloseStoreCard onClose={() => setShowCloseStoreModal(true)} />
               )}
             </>
-            : <StoreInvite
+          ) : (
+            <StoreInvite
               storeDetails={storeDetails!}
               storeMembership={storeMembership!}
             />
-          }
+          )}
         </Column>
       </ScrollView>
       <CurrentStoreModal
