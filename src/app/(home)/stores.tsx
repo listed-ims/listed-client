@@ -10,11 +10,12 @@ import {
 import { Routes, StoreStatus } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetStoreList } from "@listed-hooks";
+import { MembershipStatus } from "@listed-types";
 
 const Stores = () => {
   const [filter, setFilter] = useState<"all" | "open" | "closed">("all");
 
-  const { userDetails } = useAuth();
+  const { userDetails, userMembership } = useAuth();
 
   const {
     data: storeList,
@@ -72,9 +73,8 @@ const Stores = () => {
                 storeId={item.id}
                 userId={userDetails?.id}
                 name={item.name}
-                userRole={"Owner"}
                 status={item.status == "OPEN" ? "open" : "closed"}
-                current={userDetails?.currentStoreId === item.id}
+                current={userDetails?.currentStoreId === item.id && userMembership?.membershipStatus !== MembershipStatus.PENDING}
                 onPress={() => {
                   router.push(`${Routes.STORES}/${item.id}}`);
                 }}
