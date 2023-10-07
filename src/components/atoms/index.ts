@@ -63,4 +63,4 @@ export { default as SmallTransactions } from "./SmallTransactions";
 export { default as NoStoreIcon } from "./NoStoreIcon";
 export { default as OptionsIcon} from "./OptionsIcon";
 export { default as MultiSelectButton} from "./MultiSelectButton";
-
+export { default as NoProductsIcon } from "./NoProductsIcon"

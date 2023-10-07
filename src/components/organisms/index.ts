@@ -14,3 +14,4 @@ export { default as OutgoingNoProducts } from "./OutgoingNoProducts";
 export { default as PermissionDetails } from "./PermissionDetails";
 export { default as RemoveCollaboratorModal } from "./RemoveCollaboratorModal";
 export { default as NoStoreFound } from "./NoStoreFound";
+export { default as NoProductsFound } from "./NoProductsFound";
