@@ -60,7 +60,7 @@ const Home = () => {
         >
           <Column marginTop="6" space="2">
             <Text fontWeight="medium" fontSize="md">
-              <Text color="muted.400">Welcome</Text> {userDetails?.username}
+              <Text color="muted.400">Welcome</Text> {userDetails?.username}!
             </Text>
             <SummaryCard summaryDetails={storeDetails!} />
           </Column>

@@ -9,7 +9,7 @@ export { default as ProductListItem } from "./ProductListItem";
 export { default as StoreListItem } from "./StoreListItem";
 export { default as StoreListFilterGroup } from "./StoreListFilterGroup";
 export { default as TextArea } from "./TextArea";
-export { default as CreateStoreCard } from "./CreateStoreCard";
+export { default as CreateStoreButton } from "./CreateStoreButton";
 export { default as ProdcutListFilter } from "./ProdcutListFilter";
 export { default as HeaderSearchField } from "./HeaderSearchField";
 export { default as IncomingReceiptDetails } from "./IncomingReceiptDetails";
