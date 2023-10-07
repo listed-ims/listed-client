@@ -162,7 +162,9 @@ const NewIncoming = () => {
                   }
                 />
               </Pressable>
-              <Button fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>
+              <Button
+                onPress={() => router.push(Routes.BARCODE)}
+                fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>
                 Scan
               </Button>
             </HStack>

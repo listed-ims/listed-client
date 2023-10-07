@@ -166,7 +166,11 @@ const NewProduct = () => {
                   }}
                   placeholder="Scan barcode"
                 />
-                <Button startIcon={<ScanIcon color={colors.white} />}>Scan</Button>
+                <Button
+                  onPress={() => router.push(Routes.BARCODE)}
+                  startIcon={<ScanIcon color={colors.white} />}>
+                  Scan
+                </Button>
               </HStack>
             </FormControl>
             <FormControl

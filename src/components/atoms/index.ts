@@ -60,6 +60,7 @@ export { default as SmallInventory } from "./SmallInventory";
 export { default as SmallOutgoing } from "./SmallOutgoing";
 export { default as SmallProducts } from "./SmallProducts";
 export { default as SmallTransactions } from "./SmallTransactions";
-export { default as OptionsIcon} from "./OptionsIcon";
-export { default as MultiSelectButton} from "./MultiSelectButton";
-
+export { default as Close } from "./Close";
+export { default as OptionsIcon } from "./OptionsIcon";
+export { default as MultiSelectButton } from "./MultiSelectButton";
+export { default as NotFound } from "./NotFound";

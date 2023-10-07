@@ -15,6 +15,7 @@ import {
   FlatList,
   Divider,
   useTheme,
+  Pressable,
 } from "native-base";
 import {
   AddIcon,
@@ -45,8 +46,8 @@ const Products = () => {
     filter === "all"
       ? undefined
       : filter === "low stock"
-      ? ProductFilter.LOW_STOCK
-      : ProductFilter.NO_STOCK,
+        ? ProductFilter.LOW_STOCK
+        : ProductFilter.NO_STOCK,
     undefined,
     1,
     100
@@ -66,7 +67,13 @@ const Products = () => {
           headerRight: () => (
             <HStack space="4" alignItems="center">
               <HeaderSearchIcon />
-              <HeaderScanIcon />
+              <Pressable
+                padding="1"
+                borderRadius="full"
+                _pressed={{ background: 'muted.300' }}
+                onPress={() => router.push(Routes.BARCODE)}>
+                <HeaderScanIcon />
+              </Pressable>
             </HStack>
           ),
         }}
