@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Stack, router } from "expo-router";
 import { stackHeaderStyles } from "@listed-styles";
-import { ScreenContainer } from "@listed-components/organisms";
+import { NoProductsFound, ScreenContainer } from "@listed-components/organisms";
 import {
   ProdcutListFilter,
   ProductListItem,
@@ -85,6 +85,8 @@ const Products = () => {
         />
         <Box flex={1}>
           <FlatList
+            contentContainerStyle={{ flexGrow: 1 }}
+            ListEmptyComponent={<NoProductsFound />}
             ListHeaderComponent={() => (
               <HStack
                 bg="muted.100"
@@ -119,18 +121,20 @@ const Products = () => {
             )}
           />
         </Box>
-        <Button
-          alignSelf="flex-end"
-          size="sm"
-          px="4"
-          startIcon={<AddIcon color={colors.white} />}
-          borderRadius="full"
-          onPress={() => {
-            router.push(Routes.NEW_PRODUCT);
-          }}
-        >
-          Add Product
-        </Button>
+        {productList && productList.length > 0 ? (
+          <Button
+            alignSelf="flex-end"
+            size="sm"
+            px="4"
+            startIcon={<AddIcon color={colors.white} />}
+            borderRadius="full"
+            onPress={() => {
+              router.push(Routes.NEW_PRODUCT);
+            }}
+          >
+            Add Product
+          </Button>
+        ) : undefined}
       </Column>
     </ScreenContainer>
   );
