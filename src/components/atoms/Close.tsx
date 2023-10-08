@@ -1,20 +1,19 @@
 import * as React from "react"
 import Svg, { SvgProps, Path } from "react-native-svg"
-
-const Checkmark = (props: SvgProps) => (
+const Close = (props: SvgProps) => (
   <Svg
-    width={12}
-    height={12}
+    width={16}
+    height={16}
     fill="none"
     {...props}
   >
     <Path
-      stroke={props.color || "#fff"}
+      stroke="#2E9958"
       strokeLinecap="round"
       strokeLinejoin="round"
-      d="M9.75 3 4.5 9 2.25 6.75"
+      strokeWidth={1.643}
+      d="M13.75 13.75 2.25 2.25m11.5 0-11.5 11.5"
     />
-    
   </Svg>
 )
-export default Checkmark
+export default Close

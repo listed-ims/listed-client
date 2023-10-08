@@ -60,7 +60,7 @@ const Home = () => {
         >
           <Column marginTop="6" space="2">
             <Text fontWeight="medium" fontSize="md">
-              <Text color="muted.400">Welcome</Text> {userDetails?.username}
+              <Text color="muted.400">Welcome</Text> {userDetails?.username}!
             </Text>
             <SummaryCard summaryDetails={storeDetails!} />
           </Column>
@@ -93,7 +93,10 @@ const Home = () => {
                 onPress={() => {
                   router.push(Routes.COLLABORATORS)
                 }} />
-              <MainButtons flex="1" type="transactions" />
+              <MainButtons flex="1" type="transactions" 
+              onPress={() => {
+                router.push(Routes.TRANSACTIONS)
+              }}/>
             </Row>
           </Column>
           <View marginY={3} />

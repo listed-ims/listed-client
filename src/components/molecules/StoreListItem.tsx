@@ -7,7 +7,7 @@ import {
   Row,
   Text,
 } from "native-base";
-import { toTitleCase } from "@listed-utils";
+import { ownerOrCollaborator, toTitleCase } from "@listed-utils";
 import { CheckedIcon } from "@listed-components/atoms";
 import { useGetUserMembership } from "@listed-hooks";
 import { MembershipStatus } from "@listed-types";
@@ -16,7 +16,6 @@ interface StoreListItemProps extends IPressableProps {
   storeId?: number;
   userId?: number;
   name: string;
-  userRole: string;
   status: "open" | "closed";
   current: boolean;
 }
@@ -25,7 +24,6 @@ const StoreListItem = ({
   storeId,
   userId,
   name,
-  userRole,
   status,
   current,
   ...props
@@ -50,21 +48,22 @@ const StoreListItem = ({
           <CheckedIcon/>
         }
         <Column flex="2" alignItems="flex-start">
-          {current && (
+          {current ? (
             <Badge colorScheme="success" variant="outline">
               CURRENT STORE
             </Badge>
-          )}
-          {userMembership?.membershipStatus === MembershipStatus.PENDING && (
+          ) : userMembership?.membershipStatus === MembershipStatus.PENDING ? (
             <Badge colorScheme="error" variant="outline">
               NEW INVITE
             </Badge>
-          )}
+          ) : null}
           <Text fontSize="sm" fontWeight="semibold" color="darkText">
             {name}
           </Text>
           <Text fontSize="xs" color="muted.500">
-            {userRole}
+            {toTitleCase(
+              ownerOrCollaborator(userMembership?.permissions || [])
+            )}
           </Text>
         </Column>
         <Column flex="1" alignItems="flex-end">

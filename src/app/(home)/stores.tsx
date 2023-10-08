@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Column, FlatList, HStack, Text, useTheme } from "native-base";
 import { Stack, router } from "expo-router";
-import { ScreenContainer } from "@listed-components/organisms";
+import { NoStoreFound, ScreenContainer } from "@listed-components/organisms";
 import { AddIcon, Button } from "@listed-components/atoms";
 import {
   StoreListFilterGroup,
@@ -10,11 +10,12 @@ import {
 import { Routes, StoreStatus } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetStoreList } from "@listed-hooks";
+import { MembershipStatus } from "@listed-types";
 
 const Stores = () => {
   const [filter, setFilter] = useState<"all" | "open" | "closed">("all");
 
-  const { userDetails } = useAuth();
+  const { userDetails, userMembership } = useAuth();
 
   const {
     data: storeList,
@@ -40,6 +41,7 @@ const Stores = () => {
           <Text fontSize="xl" fontWeight="semibold">
             Stores
           </Text>
+          {storeList && storeList.length > 0 ? (
           <Button
             size="sm"
             px="4"
@@ -51,7 +53,10 @@ const Stores = () => {
           >
             Add Store
           </Button>
+          ) : undefined }
         </HStack>
+        {storeList && storeList.length > 0 ? (
+        <>
         <StoreListFilterGroup
           filter={filter}
           handleSetFilter={(filter) => setFilter(filter)}
@@ -68,9 +73,8 @@ const Stores = () => {
                 storeId={item.id}
                 userId={userDetails?.id}
                 name={item.name}
-                userRole={"Owner"}
                 status={item.status == "OPEN" ? "open" : "closed"}
-                current={userDetails?.currentStoreId === item.id}
+                current={userDetails?.currentStoreId === item.id && userMembership?.membershipStatus !== MembershipStatus.PENDING}
                 onPress={() => {
                   router.push(`${Routes.STORES}/${item.id}}`);
                 }}
@@ -78,6 +82,10 @@ const Stores = () => {
             )}
           />
         </Box>
+        </>
+        ) : (
+          <NoStoreFound/>
+        )}
       </Column>
     </ScreenContainer>
   );

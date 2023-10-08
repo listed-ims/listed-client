@@ -132,8 +132,8 @@ const EditProduct = () => {
           <Row paddingY="6">
             <Text fontSize="18px" fontWeight="600">Edit Product Details</Text>
           </Row>
-          <FormControl label="Product"  errorMessage={errors["product name"]} isInvalid={!!errors["product name"]}>
-            <TextField flex="1" placeholder="Enter product name" value={formData["product name"]} onChangeText={(value) => handleInputChange(value, "product name")}/>
+          <FormControl label="Product" errorMessage={errors["product name"]} isInvalid={!!errors["product name"]}>
+            <TextField flex="1" placeholder="Enter product name" value={formData["product name"]} onChangeText={(value) => handleInputChange(value, "product name")} />
 
           </FormControl>
           <FormControl label={
@@ -149,7 +149,12 @@ const EditProduct = () => {
           >
             <Row space="2">
               <TextField flex="1" placeholder='Scan barcode' value={formData.barcode} onChangeText={(value) => handleInputChange(value, "barcode")} />
-              <Button fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>Scan</Button>
+              <Button
+                onPress={() => router.push(Routes.BARCODE)}
+                fontSize="sm"
+                startIcon={<ScanIcon color={colors.white} />}>
+                Scan
+              </Button>
             </Row>
           </FormControl>
           <FormControl label={
@@ -164,7 +169,7 @@ const EditProduct = () => {
 
           <FormControl label="Sale Price per Item" errorMessage={errors["sale price"]} isInvalid={!!errors["sale price"]}>
 
-            <TextField flex="1" placeholder='Enter sale price' value={formData["sale price"]}
+            <TextField flex="1" placeholder='Enter sale price' keyboardType="numeric" value={formData["sale price"]}
               onChangeText={(value) => handleInputChange(value, "sale price")} startDataLabel={'Php'} />
           </FormControl>
 
@@ -177,7 +182,7 @@ const EditProduct = () => {
             errorMessage={errors.threshold}
             isInvalid={!!errors.threshold}
           >
-            <TextField placeholder="Enter low warning point" value={formData.threshold ? String(formData.threshold) : ""} onChangeText={(value) => handleInputChange(value, "threshold")} endDataLabel={productDetails?.unit} />
+            <TextField placeholder="Enter low warning point" keyboardType="numeric" value={formData.threshold ? String(formData.threshold) : ""} onChangeText={(value) => handleInputChange(value, "threshold")} endDataLabel={productDetails?.unit} />
           </FormControl>
         </Column>
       </KeyboardAwareScrollView>

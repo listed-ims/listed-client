@@ -29,7 +29,13 @@
     },
     "plugins": [
       "expo-router",
-      "./plugins/android-datepicker-color-config-plugin.js"
+      "./plugins/android-datepicker-color-config-plugin.js",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ]
     ],
     "experiments": {
       "tsconfigPaths": true

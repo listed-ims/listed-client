@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Stack, router } from "expo-router";
 import { stackHeaderStyles } from "@listed-styles";
-import { ScreenContainer } from "@listed-components/organisms";
+import { NoProductsFound, ScreenContainer } from "@listed-components/organisms";
 import {
   ProdcutListFilter,
   ProductListItem,
@@ -15,6 +15,7 @@ import {
   FlatList,
   Divider,
   useTheme,
+  Pressable,
 } from "native-base";
 import {
   AddIcon,
@@ -45,8 +46,8 @@ const Products = () => {
     filter === "all"
       ? undefined
       : filter === "low stock"
-      ? ProductFilter.LOW_STOCK
-      : ProductFilter.NO_STOCK,
+        ? ProductFilter.LOW_STOCK
+        : ProductFilter.NO_STOCK,
     undefined,
     1,
     100
@@ -66,7 +67,13 @@ const Products = () => {
           headerRight: () => (
             <HStack space="4" alignItems="center">
               <HeaderSearchIcon />
-              <HeaderScanIcon />
+              <Pressable
+                padding="1"
+                borderRadius="full"
+                _pressed={{ background: 'muted.300' }}
+                onPress={() => router.push(Routes.BARCODE)}>
+                <HeaderScanIcon />
+              </Pressable>
             </HStack>
           ),
         }}
@@ -78,6 +85,8 @@ const Products = () => {
         />
         <Box flex={1}>
           <FlatList
+            contentContainerStyle={{ flexGrow: 1 }}
+            ListEmptyComponent={<NoProductsFound />}
             ListHeaderComponent={() => (
               <HStack
                 bg="muted.100"
@@ -112,18 +121,20 @@ const Products = () => {
             )}
           />
         </Box>
-        <Button
-          alignSelf="flex-end"
-          size="sm"
-          px="4"
-          startIcon={<AddIcon color={colors.white} />}
-          borderRadius="full"
-          onPress={() => {
-            router.push(Routes.NEW_PRODUCT);
-          }}
-        >
-          Add Product
-        </Button>
+        {productList && productList.length > 0 ? (
+          <Button
+            alignSelf="flex-end"
+            size="sm"
+            px="4"
+            startIcon={<AddIcon color={colors.white} />}
+            borderRadius="full"
+            onPress={() => {
+              router.push(Routes.NEW_PRODUCT);
+            }}
+          >
+            Add Product
+          </Button>
+        ) : undefined}
       </Column>
     </ScreenContainer>
   );
