@@ -1,24 +1,19 @@
-import { OutIcon } from "@listed-components/atoms";
-import { Box, Column, Flex, Row, Text } from "native-base";
+import { OutgoingCategory } from "@listed-constants";
+import { toTitleCase } from "@listed-utils";
+import { Column, Row, Text } from "native-base";
 
-interface TransactionListsProps{
-transaction: string,
+interface TransactionListItemProps{
+title: string | OutgoingCategory,
 username: string,
 date: string,
 time: string
 }
-const TransactionLists = ( {transaction,username,date,time}: TransactionListsProps) => {
-  const TransactionLists = ({
-    transaction,
-    username,
-    date,
-    time
-  })
-
+const TransactionListItem = ( {title,username,date,time}: TransactionListItemProps) => {
+  
   return (
     <Row justifyContent="space-between" alignItems="flex-start" padding="2">
       <Column>
-      <Text fontSize="sm" fontWeight="medium">{transaction}</Text>
+      <Text fontSize="sm" fontWeight="medium">{toTitleCase(String(title))}</Text>
       <Text fontSize="xs" fontWeight="medium" color="muted.600">{username}</Text>
       </Column>
       <Column>
@@ -28,5 +23,5 @@ const TransactionLists = ( {transaction,username,date,time}: TransactionListsPro
     </Row>
   );
 }
-export default TransactionLists;
+export default TransactionListItem;
 

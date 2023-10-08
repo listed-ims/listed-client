@@ -1,91 +1,40 @@
 import { Button, MultiSelectButton, OptionsIcon, ScanIcon, SearchIcon} from "@listed-components/atoms";
-import { BottomSheet, FormControl, TextField } from "@listed-components/molecules";
-import TransactionLists from "@listed-components/molecules/TransactionLists";
+import { BottomSheet, FormControl, TextField, TransactionListItem } from "@listed-components/molecules";
 import { ScreenContainer } from "@listed-components/organisms";
+import { useAuth } from "@listed-contexts";
+import { useGetIncomingTransactions, useGetOutgoingTransactions } from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
-import { toTitleCase } from "@listed-utils";
+import { dateToMonthDDYYYY, dateToReadableTime} from "@listed-utils";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Stack } from "expo-router";
 import { Box, Column, Divider, FlatList, Pressable, Row, Text, View, useTheme } from "native-base";
 import { useState } from "react";
 
 
-const mock_data = [
-  {
-    transaction: "Mik-Mik",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-
-  },
-  {
-    transaction: "Banana",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-  },
-  {
-    transaction: "Dutch Mill",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-  },
-  {
-    transaction: "Chuckie",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-  },
-  {
-    transaction: "Apple",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-  },
-  {
-    transaction: "cheeze it",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-  },
-  {
-    transaction: "Yogurt",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-  },
-  {
-    transaction: "Milo",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-  },
-  {
-    transaction: "Coffee",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-  },
-  {
-    transaction: "Bubble Gum",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-  },
-  {
-    transaction: "Sugar sweet",
-    username: "by: faith abigirl",
-    date: "9/2/2023",
-    time: "8:50 PM",
-  }
-]
 const transactions = () => {
-  const [transactions, setTransactions] = useState(mock_data);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const { colors } = useTheme();
   const [date, setDate] = useState(new Date());
-  
+  const {userDetails} = useAuth();
+  const [transaction,setTransaction] = useState<"incoming" | "outgoing">("incoming");
+
+  const {
+    data: incomingTransactions,
+    isError: incomingTransactionsError,
+    isFetching: incomingTransactionsFetching,
+    hasNextPage: incomingTransactionsHasNextPage,
+    fetchNextPage: incomingTransactionsFetchNextPage,
+  } = useGetIncomingTransactions(userDetails?.currentStoreId!,undefined,undefined,null,10);
+
+  const{
+    data: outgoingTransactions,
+    isError: outgoingTransactionsError,
+    isFetching: outgoingTransactionsFetching,
+    hasNextPage: outgoingTransactionsHasNextPage,
+    fetchNextPage: outgoingTransactionsFetchNextPage,
+  } = useGetOutgoingTransactions(userDetails?.currentStoreId!,undefined,undefined,null,undefined,10);
+
 
   const toggleBottomSheet = () => {
     setIsBottomSheetVisible(true);
@@ -100,24 +49,53 @@ const transactions = () => {
       </Row>
       <Column space="4" display="inline-flex" paddingBottom="4">
         <Row space="2" flex-direction="column" align-items="flex-start" >
-          <Button borderRadius="4" flex="1" variant="subtle"> INCOMING</Button>
-          <Button borderRadius="4" flex="1" variant="unstyled"> OUTGOING</Button>
+          <Button borderRadius="4" flex="1" 
+          variant={transaction === "incoming"? "subtle" : "unstyled" }
+          onPress={()=>setTransaction("incoming")} > INCOMING</Button>
+
+          <Button borderRadius="4" flex="1" 
+          variant={transaction === "outgoing" ? "subtle" : "unstyled"}
+          onPress={()=>setTransaction("outgoing")}> OUTGOING</Button>
         </Row>
         <Button variant="outline" alignSelf="flex-start" px="5" size="sm" borderRadius="full" onPress={toggleBottomSheet} startIcon={<OptionsIcon />}>Filter</Button>
       </Column>
       <Box flex={1} paddingBottom="4">
-        <FlatList 
+       {transaction === "incoming" ? 
+       <FlatList 
           ItemSeparatorComponent={() => <Divider/>}
-          data={transactions}
+          data={incomingTransactions?.pages.flatMap((page) => page)}
           renderItem={({ item }) => (
-            <TransactionLists
-              transaction={item.transaction}
-              username={item.username}
-              date={item.date}
-              time={item.time}
+            <TransactionListItem
+              title={item.product.name}
+              username={item.user.username}
+              date={dateToMonthDDYYYY(new Date (item.transactionDate.toString()))}
+              time={dateToReadableTime(new Date (item.transactionDate.toString()))}
             />
           )}
+          onEndReachedThreshold={0.5}
+          onEndReached={()=> {
+            if(!incomingTransactionsFetching && incomingTransactionsHasNextPage)
+            incomingTransactionsFetchNextPage();
+          }}
+        />:
+        <FlatList 
+          ItemSeparatorComponent={() => <Divider/>}
+          data={outgoingTransactions?.pages.flatMap((page) => page)}
+          renderItem={({ item }) => (
+            <TransactionListItem
+              title= {item.category}
+              username={item.user.username}
+              date={dateToMonthDDYYYY(new Date (item.transactionDate.toString()))}
+              time={dateToReadableTime(new Date (item.transactionDate.toString()))}
+            />
+          )}
+          onEndReachedThreshold={0.5}
+          onEndReached={()=>{
+            if (!outgoingTransactionsFetching && outgoingTransactionsHasNextPage)
+            outgoingTransactionsFetchNextPage();
+          }}
         />
+        }
       </Box>
       <BottomSheet open={isBottomSheetVisible} onDismiss={() => setIsBottomSheetVisible(false)}>
         <Column alignItems="flex-start" display="flex" space="6" padding="6">
