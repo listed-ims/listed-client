@@ -57,7 +57,7 @@ const HomeTabsNav = () => {
         <Tabs.Screen name="account"
           options={{
             tabBarIcon: ({ focused }) =>
-              <AccountIcon selected={focused} />
+              <AccountIcon selected={focused} color={colors.primary[700]} />
           }} />
       </Tabs >
     </>

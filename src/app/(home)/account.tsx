@@ -1,44 +1,47 @@
-import React, { useState } from 'react'
-import { ScreenContainer } from '@listed-components/organisms'
-import { FormControl, TextArea } from '@listed-components/molecules'
-import { Text } from 'native-base'
-import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
-import { Button } from '@listed-components/atoms'
+import { AccountIcon, Button } from "@listed-components/atoms";
+import { UserDetails } from "@listed-components/molecules";
+import { ScreenContainer } from "@listed-components/organisms";
+import { useAuth } from "@listed-contexts";
+import { useGetUserDetails } from "@listed-hooks";
+import { Box, Center, Column, Heading, Text, useTheme } from "native-base";
 
 const Account = () => {
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-
-  const onChange = (event: DateTimePickerEvent, date?: Date | undefined) => {
-    const currentDate = date;
-    setShow(false);
-    setDate(currentDate!);
+  const { logout } = useAuth();
+  const { colors } = useTheme();
+  const handleLogout = () => {
+    logout();
   };
 
-  const showDatepicker = () => {
-    setShow(true)
-  };
+  const {
+    data: userDetails,
+    isError: userError,
+    isFetching: userFetching,
+    isSuccess: userSuccess,
+  } = useGetUserDetails();
 
   return (
     <ScreenContainer>
-      <FormControl
-        helperText={<Text fontSize="xs" color="text.500" textAlign="right">0/50</Text>}
-        label="Comment">
-        <TextArea placeholder="Enter comment here" />
-      </FormControl>
-      <Button onPress={showDatepicker}>Open Date Picker</Button>
-      <Text>selected: {date.toDateString().slice(4)}</Text>
-      {show && (
-        <RNDateTimePicker
-          accentColor={"#2E9958"}
-          value={date}
-          mode="date"
-          is24Hour={true}
-          onChange={onChange}
-        />
-      )}
-    </ScreenContainer>
-  )
-}
+      <Column space="1" alignItems="center" marginBottom="8" marginTop="15">
+        <Center
+          width="12"
+          height="12"
+          backgroundColor="primary.700"
+          borderRadius="full"
+        >
+          <AccountIcon color={colors.white} selected={true} />
+        </Center>
+        <Box>
+          <Heading fontSize="md">{userDetails?.name}</Heading>
+        </Box>
+      </Column>
 
-export default Account
+      <UserDetails userDetails={userDetails!} />
+
+      <Button marginTop="6" variant="warnSubtle" onPress={handleLogout}>
+        LOGOUT
+      </Button>
+    </ScreenContainer>
+  );
+};
+
+export default Account;
