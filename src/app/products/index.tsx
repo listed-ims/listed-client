@@ -15,7 +15,6 @@ import {
   FlatList,
   Divider,
   useTheme,
-  Center,
   Pressable,
 } from "native-base";
 import {
