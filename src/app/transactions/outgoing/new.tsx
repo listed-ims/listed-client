@@ -24,8 +24,8 @@ import {
   useTheme,
 } from "native-base";
 import { stackHeaderStyles } from "@listed-styles";
-import { OutgoingCategory, Routes } from "@listed-constants";
-import { useQueries } from "@tanstack/react-query";
+import { GET_OUTGOING_TRANSACTIONS, OutgoingCategory, Routes } from "@listed-constants";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { getProductService } from "@listed-services";
 import {
   OutProductRequest,
@@ -42,6 +42,7 @@ const NewOutgoing = () => {
   const { ids } = useLocalSearchParams();
   const { colors } = useTheme();
   const { userMembership } = useAuth()
+  const queryClient = useQueryClient();
 
   const products = useQueries({
     queries: (ids?.toString().split(",") || []).map((id) => {
@@ -158,6 +159,7 @@ const NewOutgoing = () => {
     onSuccess: (data) => {
       router.setParams({ ids: "" });
       resetForm();
+      queryClient.invalidateQueries({queryKey:[GET_OUTGOING_TRANSACTIONS]})
       router.push(`${Routes.OUTGOING_RECEIPT}?transactionId=${data.id}`);
     },
     onError: (error) => {
