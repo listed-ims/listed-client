@@ -1,5 +1,3 @@
-import UserDetails from "./UserDetails";
-
 export { default as MainButtons } from "./MainButtons";
 export { default as SummaryCard } from "./SummaryCard";
 export { default as TransactionButton } from "./TransactionButton";
@@ -25,6 +23,5 @@ export { default as StoreInvite } from "./StoreInvite";
 export { default as ProductAlertCard } from "./ProductAlertCard";
 export { default as BottomSheet} from "./BottomSheet";
 export { default as DeclineInviteModal } from "../molecules/DeclineInviteModal";
-export { default as UserDetails } from "../molecules/UserDetails";
 
 

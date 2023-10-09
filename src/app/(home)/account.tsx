@@ -1,9 +1,18 @@
 import { AccountIcon, Button } from "@listed-components/atoms";
-import { UserDetails } from "@listed-components/molecules";
 import { ScreenContainer } from "@listed-components/organisms";
 import { useAuth } from "@listed-contexts";
 import { useGetUserDetails } from "@listed-hooks";
-import { Box, Center, Column, Heading, Text, useTheme } from "native-base";
+import {
+  Box,
+  Center,
+  Column,
+  Divider,
+  Heading,
+  Row,
+  Text,
+  View,
+  useTheme,
+} from "native-base";
 
 const Account = () => {
   const { logout } = useAuth();
@@ -35,7 +44,40 @@ const Account = () => {
         </Box>
       </Column>
 
-      <UserDetails userDetails={userDetails!} />
+      <View>
+        <Text fontWeight="medium" color="text.500" marginBottom="1">
+          ACCOUNT DETAILS
+        </Text>
+        <Column
+          paddingY="4"
+          paddingX="4"
+          borderRadius="sm"
+          borderWidth="1"
+          borderColor="muted.300"
+        >
+          <Column alignItems="center">
+            <Row paddingBottom="1">
+              <Text flex="1" fontSize="sm">
+                Name:
+              </Text>
+              <Text flex="1" fontSize="sm" fontWeight="bold">
+                {userDetails?.name}
+              </Text>
+            </Row>
+
+            <Divider />
+
+            <Row paddingTop="1">
+              <Text flex="1" fontSize="sm">
+                Username:
+              </Text>
+              <Text flex="1" fontSize="sm" fontWeight="bold">
+                {userDetails?.username}
+              </Text>
+            </Row>
+          </Column>
+        </Column>
+      </View>
 
       <Button marginTop="6" variant="warnSubtle" onPress={handleLogout}>
         LOGOUT
