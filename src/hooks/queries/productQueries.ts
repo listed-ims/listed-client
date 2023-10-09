@@ -9,7 +9,9 @@ import {
   getProductsService,
   validateBarcodeService,
 } from "@listed-services";
+import { ProductResponse } from "@listed-types";
 import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 export const useGetProductList = (
   storeId: number,
@@ -51,8 +53,24 @@ export const useValidateBarcode = (storeId: number, barcode: string) => {
 const fiveMinutes = 1000 * 60 * 5;
 
 export const useGetProductDetails = (productId: number) => {
-  return useQuery([GET_PRODUCT, productId], () => getProductService(productId),
-  {
-    staleTime: fiveMinutes,
-  });
+  return useQuery(
+    [GET_PRODUCT, productId],
+    () => getProductService(productId),
+    {
+      staleTime: fiveMinutes,
+    }
+  );
+};
+
+export const useGetProductWithBarcode = (storeId: number, barcode: string) => {
+  return useQuery<ProductResponse, AxiosError>(
+    [GET_PRODUCT, { storeId, barcode }],
+    () =>
+      getProductsService(storeId, barcode).then(
+        (products) => products[0] || null
+      ),
+    {
+      enabled: !!barcode,
+    }
+  );
 };

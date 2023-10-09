@@ -20,7 +20,7 @@ const CameraPreviewMask = () => {
           justifyContent="center"
           alignItems="center"
           _pressed={{
-            backgroundColor: "offWhite.900"
+            backgroundColor: "primary.100"
           }}
           onPress={() => { router.back() }}
         >

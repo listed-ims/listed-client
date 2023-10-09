@@ -6,13 +6,16 @@ import {
   HeaderSearchField,
   ProductListItem,
 } from "@listed-components/molecules";
-import { ProductFilter, Routes } from "@listed-constants";
+import { GET_PRODUCT, ProductFilter, Routes } from "@listed-constants";
 import { useGetProductList } from "@listed-hooks";
 import { useAuth } from "@listed-contexts";
 import { Button } from "@listed-components/atoms";
+import { useQueryClient } from "@tanstack/react-query";
+import { ProductResponse } from "@listed-types";
 
 const SelectProduct = () => {
   const { ids } = useLocalSearchParams();
+  const queryClient = useQueryClient();
 
   const { userDetails } = useAuth();
 
@@ -33,21 +36,25 @@ const SelectProduct = () => {
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
 
-  const handleLongPress = (productId: number) => {
+  const handleLongPress = (product: ProductResponse) => {
     setShowCheckboxes(true);
-    handleCheckboxChange(productId);
+    handleCheckboxChange(product);
   };
 
-  const handleCheckboxChange = (productId: number) => {
+  const handleCheckboxChange = (product: ProductResponse) => {
     const updatedSelectedProducts = [...selectedProducts];
 
-    if (updatedSelectedProducts.includes(productId)) {
+    if (updatedSelectedProducts.includes(product.id)) {
       updatedSelectedProducts.splice(
-        updatedSelectedProducts.indexOf(productId),
+        updatedSelectedProducts.indexOf(product.id),
         1
       );
     } else {
-      updatedSelectedProducts.push(productId);
+      queryClient.setQueryData(
+        [GET_PRODUCT, product.id],
+        product
+      );
+      updatedSelectedProducts.push(product.id);
     }
     setSelectedProducts(updatedSelectedProducts);
   };
@@ -90,11 +97,12 @@ const SelectProduct = () => {
             product={item}
             showCheckbox={showCheckboxes}
             isChecked={selectedProducts.indexOf(item.id) != -1}
-            onLongPress={() => handleLongPress(item.id)}
+            onLongPress={() => handleLongPress(item)}
             onPress={() => {
               if (showCheckboxes) {
-                handleCheckboxChange(item.id);
+                handleCheckboxChange(item);
               } else {
+                queryClient.setQueryData([GET_PRODUCT, item.id], item);
                 router.push({
                   pathname: Routes.NEW_OUTGOING,
                   params: {
