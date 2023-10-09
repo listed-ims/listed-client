@@ -1,23 +1,31 @@
-import { Button, MultiSelectButton, OptionsIcon, ScanIcon, SearchIcon} from "@listed-components/atoms";
+import { Button, CloseIcon, IconButton, MultiSelectButton, OptionsIcon, ScanIcon, SearchIcon} from "@listed-components/atoms";
 import { BottomSheet, FormControl, TextField, TransactionListItem } from "@listed-components/molecules";
-import { ScreenContainer } from "@listed-components/organisms";
+import { ScreenContainer} from "@listed-components/organisms";
 import { useAuth } from "@listed-contexts";
-import { useGetIncomingTransactions, useGetOutgoingTransactions } from "@listed-hooks";
+import { useGetCollaborators, useGetIncomingTransactions, useGetOutgoingTransactions } from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
-import { dateToMonthDDYYYY, dateToReadableTime} from "@listed-utils";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { MembershipStatus} from "@listed-types";
+import { dateToMMDDYY, dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
+import RNDateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Stack } from "expo-router";
 import { Box, Column, Divider, FlatList, Pressable, Row, Text, View, useTheme } from "native-base";
 import { useState } from "react";
 
 
 const transactions = () => {
+  const { colors } = useTheme();
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const { colors } = useTheme();
   const [date, setDate] = useState(new Date());
-  const {userDetails} = useAuth();
   const [transaction,setTransaction] = useState<"incoming" | "outgoing">("incoming");
+  const { userDetails, userMembership } = useAuth();
+
+  const [filter,setFilter] = useState({
+    categories: [] as string[],
+    performers: [] as number[],
+    product: "",
+    date: "",
+  })
 
   const {
     data: incomingTransactions,
@@ -25,22 +33,59 @@ const transactions = () => {
     isFetching: incomingTransactionsFetching,
     hasNextPage: incomingTransactionsHasNextPage,
     fetchNextPage: incomingTransactionsFetchNextPage,
-  } = useGetIncomingTransactions(userDetails?.currentStoreId!,undefined,undefined,null,10);
+  } = useGetIncomingTransactions(
+    userDetails?.currentStoreId!,
+    undefined,
+    undefined,
+    null,
+    30
+  );
 
-  const{
+  const {
     data: outgoingTransactions,
     isError: outgoingTransactionsError,
     isFetching: outgoingTransactionsFetching,
     hasNextPage: outgoingTransactionsHasNextPage,
     fetchNextPage: outgoingTransactionsFetchNextPage,
-  } = useGetOutgoingTransactions(userDetails?.currentStoreId!,undefined,undefined,null,undefined,10);
+  } = useGetOutgoingTransactions(
+    userDetails?.currentStoreId!,
+    undefined,
+    undefined,
+    null,
+    undefined,
+    30
+  );
 
 
   const toggleBottomSheet = () => {
     setIsBottomSheetVisible(true);
   };
 
+  const {
+    data: collaboratorsList,
+    isError: collaboratorsListError,
+    isFetching: collaboratorsListFetching,
+    isSuccess: collaboratorsListSuccess,
+  } = useGetCollaborators(
+    userDetails?.currentStoreId as number,
+  )
 
+  const handleOnDateChange = (
+    event: DateTimePickerEvent,
+    date?: Date | undefined
+  ) => {
+    setShowDatePicker(false);
+    if (event.type === "dismissed") return;
+    setDate(date!)
+    if (date instanceof Date) {
+      setFilter({...filter, "date": dateToMMDDYY(date)});
+    }
+  };
+
+  const handleOnFilterDone = () => {
+    setIsBottomSheetVisible(false);
+  }
+  
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Transactions")} />
@@ -67,7 +112,7 @@ const transactions = () => {
           renderItem={({ item }) => (
             <TransactionListItem
               title={item.product.name}
-              username={item.user.username}
+              name={item.user.name}
               date={dateToMonthDDYYYY(new Date (item.transactionDate.toString()))}
               time={dateToReadableTime(new Date (item.transactionDate.toString()))}
             />
@@ -84,7 +129,7 @@ const transactions = () => {
           renderItem={({ item }) => (
             <TransactionListItem
               title= {item.category}
-              username={item.user.username}
+              name={item.user.name}
               date={dateToMonthDDYYYY(new Date (item.transactionDate.toString()))}
               time={dateToReadableTime(new Date (item.transactionDate.toString()))}
             />
@@ -98,53 +143,74 @@ const transactions = () => {
         }
       </Box>
       <BottomSheet open={isBottomSheetVisible} onDismiss={() => setIsBottomSheetVisible(false)}>
-        <Column alignItems="flex-start" display="flex" space="6" padding="6">
+        <Column alignItems="flex-start" display="flex" space="4" paddingX="2">
           <Row display="flex" justifyContent="space-between" alignSelf="stretch" alignItems="center">
-            <Text fontSize="md" fontWeight="bold">Filter Outgoing</Text>
-            <Button borderRadius="md">DONE</Button>
+            <Text fontSize="md" fontWeight="bold">{`Filter ${transaction === "incoming" ? "Incoming" : "Outgoing"}`}</Text>
+            <Button borderRadius="md" onPress={handleOnFilterDone}>DONE</Button>
           </Row>
+          { transaction === "outgoing" && 
           <FormControl display="flex" alignItems="flex-start" label="Outgoing category">
             <Row flexWrap="wrap" space="2" alignContent="flex-start" alignItems="flex-start" display="flex" style={{rowGap:8}}>
-              <MultiSelectButton label={"SALES"} selected={true}/>
-              <MultiSelectButton label={"DEFECTS"} selected={false}/>
-              <MultiSelectButton label={"EXPIRED"} selected={false}/>
-              <MultiSelectButton label={"LOST"} selected={false}/>
-              <MultiSelectButton label={"CONSUMED"} selected={false}/>
+              {["SALES", "DEFECTS", "EXPIRED", "LOST", "CONSUMED"].map((category, index) => (
+                <MultiSelectButton 
+                  key={index}
+                  label={category} 
+                  selected={filter.categories.includes(category)} 
+                  onPress={() => {
+                    filter.categories.includes(category)
+                      ? setFilter({...filter, "categories": filter.categories.filter(c => c !== category)})
+                      : setFilter({...filter, "categories": [...filter.categories, category]})
+                  }}
+                />
+              ))}
             </Row>
           </FormControl>
+          }
           <FormControl label="Date">
             <Pressable
               onPress={() => { setShowDatePicker(true) }}
               style={{ flex: 1 }}>
               <TextField
+                value={filter.date}
                 isReadOnly
                 flex="1"
-                placeholder="Select expiration date"
+                placeholder="Select date"
+                rightElement={filter.date !== "" ?
+                  <IconButton variant="subtle" marginRight="2"
+                    icon={<CloseIcon />}
+                    onPress={() => setFilter({...filter, "date": ""})}
+                  /> : undefined}
               />
 
             </Pressable>
             {showDatePicker && (
               <RNDateTimePicker
                 accentColor={colors.primary[700]}
+                maximumDate={new Date()}
                 value={date}
                 mode="date"
-                onChange={(event, date) => {
-                  setDate(date!);
-                  setShowDatePicker(false);
-                }}
+                onChange={handleOnDateChange}
               />
             )}
           </FormControl>
           <FormControl display="flex" alignItems="flex-start" label="Performer">
             <Row flexWrap="wrap" space="2"  alignContent="flex-start" alignItems="flex-start" display="flex" style={{rowGap:8}}>
-              <MultiSelectButton label={"Abigirl"} selected={true}/>
-              <MultiSelectButton label={"Jemyboy"} selected={false}/>
-              <MultiSelectButton label={"Monic"} selected={false}/>
-              <MultiSelectButton label={"Deveru"} selected={false}/>
+              {collaboratorsList?.filter(collaborator => collaborator.membershipStatus!== MembershipStatus.PENDING).map((collaborator, index) => (
+                <MultiSelectButton 
+                  key={index} 
+                  label={collaborator.user.name.split(" ")[0]} 
+                  selected={filter.performers.includes(collaborator.user.id)}
+                  onPress={() => {
+                    filter.performers.includes(collaborator.user.id)
+                      ? setFilter({...filter, "performers": filter.performers.filter(id => id !== collaborator.user.id)})
+                      : setFilter({...filter, "performers": [...filter.performers, collaborator.user.id]})
+                  }}
+                />)
+              )}
             </Row>
           </FormControl>
           <FormControl display="flex" alignItems="flex-start" label="Product">
-            <Row flex="2">
+            <Row space="2">
               <Pressable style={{ flex: 1 }}
               // onPress={() => {
               //   router.push(Routes.SELECT_PRODUCT)
@@ -162,7 +228,7 @@ const transactions = () => {
                   }
                 />
               </Pressable>
-              <Button fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>
+              <Button fontSize="sm" startIcon={<ScanIcon color={colors.white}/>}>
                 Scan
               </Button>
             </Row>
