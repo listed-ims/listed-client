@@ -1,8 +1,5 @@
-import { Button, CloseIcon, IconButton, MultiSelectButton, OptionsIcon, ScanIcon, SearchIcon} from "@listed-components/atoms";
-import { BottomSheet, FormControl, TextField, TransactionListItem } from "@listed-components/molecules";
-import { ScreenContainer} from "@listed-components/organisms";
-import { Routes } from "@listed-constants";
 import { Button, OptionsIcon } from "@listed-components/atoms";
+import { Routes } from "@listed-constants";
 import { TransactionListItem } from "@listed-components/molecules";
 import {
   ScreenContainer,
@@ -14,19 +11,9 @@ import {
   useGetOutgoingTransactions,
 } from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
-import { MembershipStatus} from "@listed-types";
-import { dateToMMDDYY, dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
-import RNDateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import { Stack, router } from "expo-router";
-import { Box, Column, Divider, FlatList, Pressable, Row, Text, View, useTheme } from "native-base";
-import { useState } from "react";
 import { TransactionFilter } from "@listed-types";
-import {
-  dateToMMDDYY,
-  dateToMonthDDYYYY,
-  dateToReadableTime,
-} from "@listed-utils";
-import { Stack } from "expo-router";
+import { dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
+import { Stack, router } from "expo-router";
 import {
   Box,
   Column,
@@ -36,8 +23,7 @@ import {
   Text,
   useTheme,
 } from "native-base";
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
 
 const transactions = () => {
   const noFilter = {
@@ -123,44 +109,6 @@ const transactions = () => {
             OUTGOING
           </Button>
         </Row>
-        <Button variant="outline" alignSelf="flex-start" px="5" size="sm" borderRadius="full" onPress={toggleBottomSheet} startIcon={<OptionsIcon />}>Filter</Button>
-      </Column>
-
-      <Box flex={1} paddingBottom="4">
-       {transaction === "incoming" ? 
-       <FlatList 
-          ItemSeparatorComponent={() => <Divider/>}
-          data={incomingTransactions?.pages.flatMap((page) => page)}
-          renderItem={({ item }) => (
-            <TransactionListItem
-             onPress = {() => {
-               router.push(`${Routes.INCOMING}/${item.id}`);
-              }}
-              title={item.product.name}
-              name={item.user.name}
-              date={dateToMonthDDYYYY(new Date (item.transactionDate.toString()))}
-              time={dateToReadableTime(new Date (item.transactionDate.toString()))}
-            />
-          )}
-          onEndReachedThreshold={0.5}
-          onEndReached={()=> {
-            if(!incomingTransactionsFetching && incomingTransactionsHasNextPage)
-            incomingTransactionsFetchNextPage();
-          }}
-        />:
-        <FlatList 
-          ItemSeparatorComponent={() => <Divider/>}
-          data={outgoingTransactions?.pages.flatMap((page) => page)}
-          renderItem={({ item }) => (
-            <TransactionListItem
-              onPress = {() => {
-                router.push(`${Routes.OUTGOING}/${item.id}`);
-              }}
-              title= {item.category}
-              name={item.user.name}
-              date={dateToMonthDDYYYY(new Date (item.transactionDate.toString()))}
-              time={dateToReadableTime(new Date (item.transactionDate.toString()))}
-
         <Button
           variant={
             (transaction === "incoming" &&
@@ -192,6 +140,7 @@ const transactions = () => {
           Filter
         </Button>
       </Column>
+
       <Box flex={1} paddingBottom="4">
         {transaction === "incoming" ? (
           <FlatList
@@ -199,6 +148,9 @@ const transactions = () => {
             data={incomingTransactions?.pages.flatMap((page) => page)}
             renderItem={({ item }) => (
               <TransactionListItem
+                onPress={() => {
+                  router.push(`${Routes.INCOMING}/${item.id}`);
+                }}
                 title={item.product.name}
                 name={item.user.name}
                 date={dateToMonthDDYYYY(
@@ -224,6 +176,9 @@ const transactions = () => {
             data={outgoingTransactions?.pages.flatMap((page) => page)}
             renderItem={({ item }) => (
               <TransactionListItem
+                onPress={() => {
+                  router.push(`${Routes.OUTGOING}/${item.id}`);
+                }}
                 title={item.category}
                 name={item.user.name}
                 date={dateToMonthDDYYYY(
