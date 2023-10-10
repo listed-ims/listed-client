@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScreenContainer } from "@listed-components/organisms";
+import { NoProductsFound, ScreenContainer } from "@listed-components/organisms";
 import { Box, Divider, FlatList, Text } from "native-base";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
@@ -80,11 +80,18 @@ const SelectProduct = () => {
         }}
       />
       <FlatList
+        contentContainerStyle={{ flexGrow: 1 }}
+        ListEmptyComponent={<NoProductsFound />}
         ListHeaderComponent={
-          <Box background="white" py="4">
-            <Text fontSize="sm" fontWeight="medium">
-              Selected Products: {selectedProducts.length}
+          <Box background="white">
+            <Text fontSize="lg" fontWeight="semibold" py={4}>
+              Select Product
             </Text>
+            {productList && productList.length > 0 ? (
+              <Text fontSize="sm" fontWeight="medium" pb={4}>
+                Selected Products: {selectedProducts.length}
+              </Text>
+            ) : undefined}
           </Box>
         }
         ItemSeparatorComponent={() => <Divider />}

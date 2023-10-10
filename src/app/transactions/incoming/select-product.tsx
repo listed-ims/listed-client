@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScreenContainer } from "@listed-components/organisms";
+import { NoProductsFound, ScreenContainer } from "@listed-components/organisms";
 import { Box, Divider, FlatList, Text } from "native-base";
 import { Stack, router } from "expo-router";
 import {
@@ -42,7 +42,10 @@ const SelectProduct = () => {
           },
         }}
       />
-      <FlatList marginBottom="6"
+      <FlatList
+        marginBottom="6"
+        contentContainerStyle={{ flexGrow: 1 }}
+        ListEmptyComponent={<NoProductsFound />}
         ListHeaderComponent={
           <Box background="white" py="4">
             <Text fontSize="lg" fontWeight="semibold">

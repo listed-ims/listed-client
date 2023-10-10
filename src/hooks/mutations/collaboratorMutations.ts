@@ -21,16 +21,16 @@ export const useCreateCollaboratorMutation = (
   return useMutation(addCollaboratorService, mutationOptions);
 };
 
-export const useUpdateUserPermissionMutation = (
+export const useUpdateUserMembershipMutation = (
   mutationOptions: MutationOptions<
     MembershipResponse,
     AxiosError<{ message: string }>,
-    [number, UserPermission[]]
+    [number, UserPermission[], MembershipStatus | undefined]
   >
 ) => {
   return useMutation(
-    ([id, permissions]) =>
-      updateCollaboratorService(id, undefined, permissions),
+    ([id, permissions, membershipStatus]) =>
+      updateCollaboratorService(id, membershipStatus, permissions),
     mutationOptions
   );
 };
