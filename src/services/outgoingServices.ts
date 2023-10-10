@@ -13,7 +13,6 @@ export const createOutgoingService = async (
   }
 };
 
-
 export const getOutgoingService = async (transactionId: number) => {
   try {
     const response = await axiosInstance.get(`outgoing/${transactionId}`);
@@ -25,27 +24,28 @@ export const getOutgoingService = async (transactionId: number) => {
 
 export const getOutgoingListService = async (
   storeId: number,
-  userIds?: number[],
+  userIds?: string,
   productId?: number,
-  date?: Date | null,
-  categories?: OutgoingCategory[],
+  date?: string,
+  categories?: string,
   pageNumber?: number,
-  pageSize?: number) =>{
-    try {
-      const response = await axiosInstance.get(`outgoing`,{
-        params:{
-          storeId: storeId,
-          userIds: userIds,
-          productId: productId,
-          startDate: date,
-          endDate: date,
-          categories: categories,
-          pageNumber: pageNumber,
-          pageSize: pageSize
-        }
-      });
-      return response.data as OutgoingResponse[];
-    } catch (error) {
-      throw error;
-    }
+  pageSize?: number
+) => {
+  try {
+    const response = await axiosInstance.get(`outgoing`, {
+      params: {
+        storeId: storeId,
+        userIds: userIds,
+        productId: productId,
+        startDate: date,
+        endDate: date,
+        categories: categories,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+      },
+    });
+    return response.data as OutgoingResponse[];
+  } catch (error) {
+    throw error;
   }
+};

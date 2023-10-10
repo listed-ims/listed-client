@@ -1,4 +1,8 @@
-import { GET_OUTGOING, GET_OUTGOING_TRANSACTIONS, OutgoingCategory } from "@listed-constants";
+import {
+  GET_OUTGOING,
+  GET_OUTGOING_TRANSACTIONS,
+  OutgoingCategory,
+} from "@listed-constants";
 import { getOutgoingListService, getOutgoingService } from "@listed-services";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
@@ -15,35 +19,40 @@ export const useGetOutgoingDetails = (transactionId?: number) => {
   );
 };
 
-export const useGetOutgoingTransactions =(
+export const useGetOutgoingTransactions = (
   storeId: number,
-  userIds?: number[],
+  userIds?: string,
   productId?: number,
-  date?: Date | null,
-  categories?: OutgoingCategory[],
+  date?: string,
+  categories?: string,
   pageSize?: number
 ) => {
-  return useInfiniteQuery([GET_OUTGOING_TRANSACTIONS,
+  return useInfiniteQuery(
+    [
+      GET_OUTGOING_TRANSACTIONS,
+      {
+        storeId,
+        userIds,
+        productId,
+        date,
+        categories,
+        pageSize,
+      },
+    ],
+    ({ pageParam = 1 }) =>
+      getOutgoingListService(
+        storeId,
+        userIds,
+        productId,
+        date,
+        categories,
+        pageParam,
+        pageSize
+      ),
     {
-      storeId,
-      userIds,
-      productId,
-      date,
-      categories,
-      pageSize
-    }], ({ pageParam = 1 }) => getOutgoingListService(
-      storeId,
-      userIds,
-      productId,
-      date,
-      categories,
-      pageParam,
-      pageSize
-    ), {
-    enabled: !!storeId,
-    getNextPageParam: (lastPage, pages) =>
-      lastPage.length < pageSize!
-        ? undefined
-        : pages.length + 1
-  })
-}
+      enabled: !!storeId,
+      getNextPageParam: (lastPage, pages) =>
+        lastPage.length < pageSize! ? undefined : pages.length + 1,
+    }
+  );
+};
