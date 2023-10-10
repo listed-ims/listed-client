@@ -53,7 +53,13 @@ const OutgoingNoProducts = () => {
               variant="outline"
               borderRadius="full"
               startIcon={<ScanIcon color={colors.primary[700]} />}
-              onPress={() => router.push(Routes.BARCODE)}
+              onPress={() => router.push({
+                pathname: Routes.BARCODE,
+                params: {
+                  nextRoute: Routes.NEW_OUTGOING,
+                  ids: ids ? ids : "",
+                },
+              })}
             >
               Scan
             </Button>

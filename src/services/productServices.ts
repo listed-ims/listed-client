@@ -2,7 +2,8 @@ import { ProductFilter } from "@listed-constants";
 import { axiosInstance } from "./axios";
 import {
   AddProductRequest,
-  ProductResponse, UpdateRequest,
+  ProductResponse,
+  UpdateRequest,
 } from "@listed-types";
 
 export const getProductsService = async (
@@ -37,7 +38,6 @@ export const validateBarcodeService = async (
   barcode: string
 ) => {
   try {
-    console.log("Validating");
     const response = await axiosInstance.get("products/validation/barcode", {
       params: {
         storeId: storeId,
@@ -78,15 +78,17 @@ export const getProductService = async (productId: number) => {
 
 export const updateProductService = async (productRequest: UpdateRequest) => {
   try {
-    const response = await axiosInstance.put(`products/${productRequest.productId}`,productRequest.productRequest)
+    const response = await axiosInstance.put(
+      `products/${productRequest.productId}`,
+      productRequest.productRequest
+    );
     return response.data as ProductResponse;
-  }catch(error){
+  } catch (error) {
     throw error;
   }
 };
 
-
-export const deleteProductService = async (productId: number) =>{
+export const deleteProductService = async (productId: number) => {
   try {
     const response = await axiosInstance.delete(`products/${productId}`);
     return response.data as ProductResponse;

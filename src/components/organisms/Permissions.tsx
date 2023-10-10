@@ -1,17 +1,17 @@
 import { UserPermission, UserPermissionMap } from "@listed-types"
 import { Column, Text } from "native-base"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Checkbox } from "@listed-components/atoms"
 import { InterfaceBoxProps } from "native-base/lib/typescript/components/primitives/Box";
 import { PermissionCategory } from "@listed-constants";
 
 interface PermissionsProps extends InterfaceBoxProps {
   handleSelectPermission: (selectedPermissions: Set<UserPermission>) => void;
-  selectedPermissions?: Set<UserPermission>;
+  permissions?: Set<UserPermission>;
 }
 
-const Permissions = ({ handleSelectPermission, ...props }: PermissionsProps) => {
-  const [selectedPermissions, setSelectedPermissions] = useState<Set<UserPermission>>(props.selectedPermissions || new Set())
+const Permissions = ({ handleSelectPermission, permissions, ...props }: PermissionsProps) => {
+  const [selectedPermissions, setSelectedPermissions] = useState<Set<UserPermission>>(permissions || new Set())
   const [collaboratorsSelected, setCollaboratorsSelected] = useState<Set<UserPermission>>(new Set());
   const [productsSelected, setProductsSelected] = useState<Set<UserPermission>>(new Set());
   const [incomingSelected, setIncomingSelected] = useState<Set<UserPermission>>(new Set());
@@ -69,9 +69,9 @@ const Permissions = ({ handleSelectPermission, ...props }: PermissionsProps) => 
       })
   }
 
-  const handlePermissionChange = () => {
+  useEffect(() => {
     handleSelectPermission(selectedPermissions);
-  }
+  }, [selectedPermissions])
 
   const handleSelectChange = (
     isSelected: boolean,
@@ -104,9 +104,11 @@ const Permissions = ({ handleSelectPermission, ...props }: PermissionsProps) => 
         return new Set([...prev, value as UserPermission])
       })
     } else if (!isSelected && value) {
-      const newSet = new Set(selectedPermissions)
-      newSet.delete(value as UserPermission);
-      setSelectedPermissions(newSet);
+      setSelectedPermissions((prev) => {
+        const newSet = new Set([...selectedPermissions])
+        newSet.delete(value as UserPermission);
+        return newSet;
+      });
       setSelected((prev) => {
         const newSet = new Set(prev)
         newSet.delete(value as UserPermission)
@@ -128,7 +130,6 @@ const Permissions = ({ handleSelectPermission, ...props }: PermissionsProps) => 
         }
       })
     }
-    handlePermissionChange();
   };
 
   return (

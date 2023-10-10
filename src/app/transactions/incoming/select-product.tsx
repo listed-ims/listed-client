@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { NoProductsFound, ScreenContainer } from "@listed-components/organisms";
 import { Box, Divider, FlatList, Text } from "native-base";
-import { Stack, router } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
   ProductListItem,
   HeaderSearchField,
 } from "@listed-components/molecules";
 import { useGetProductList } from "src/hooks/queries";
-import { ProductFilter, Routes } from "@listed-constants";
+import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 
 const SelectProduct = () => {
-  const [filter, setFilter] = useState<"all" | "low stock" | "no stock">("all");
+  const { route } = useLocalSearchParams<{route: Routes}>();
 
   const { userDetails } = useAuth();
 
@@ -23,11 +23,7 @@ const SelectProduct = () => {
     userDetails?.currentStoreId as number,
     undefined,
     undefined,
-    filter === "all"
-      ? undefined
-      : filter === "low stock"
-      ? ProductFilter.LOW_STOCK
-      : ProductFilter.NO_STOCK,
+    undefined,
     undefined,
     1,
     100
@@ -60,7 +56,7 @@ const SelectProduct = () => {
             product={item}
             onPress={() => {
               router.push({
-                pathname: Routes.NEW_INCOMING,
+                pathname: route === Routes.NEW_INCOMING ? Routes.NEW_INCOMING : Routes.TRANSACTIONS,
                 params: {
                   productId: item.id,
                   product: `${item.name}${

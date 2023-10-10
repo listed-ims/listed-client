@@ -40,7 +40,7 @@ const AddCollaborator = () => {
   }
 
   const handleSubmit = () => {
-    if (validate() && !usernameIsValid?.valid) {
+    if (validate() && usernameIsValid?.valid === false) {
       addCollaborator({
         storeId: userDetails?.currentStoreId,
         username: formData.username,

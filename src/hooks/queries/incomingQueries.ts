@@ -1,6 +1,6 @@
-import { GET_INCOMING } from "@listed-constants";
-import { getIncomingService } from "@listed-services";
-import { useQuery } from "@tanstack/react-query";
+import { GET_INCOMING, GET_INCOMING_TRANSACTIONS } from "@listed-constants";
+import { getIncomingListService, getIncomingService } from "@listed-services";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 const fiveMinutes = 1000 * 60 * 5;
 
@@ -11,6 +11,40 @@ export const useGetIncomingDetails = (transactionId?: number) => {
     {
       enabled: !!transactionId,
       staleTime: fiveMinutes,
+    }
+  );
+};
+
+export const useGetIncomingTransactions = (
+  storeId: number,
+  userIds?: string,
+  productId?: number,
+  date?: string,
+  pageSize?: number
+) => {
+  return useInfiniteQuery(
+    [
+      GET_INCOMING_TRANSACTIONS,
+      {
+        storeId,
+        userIds,
+        productId,
+        date,
+        pageSize,
+      },
+    ],
+    ({ pageParam = 1 }) =>
+      getIncomingListService(
+        storeId,
+        userIds,
+        productId,
+        date,
+        pageParam,
+        pageSize
+      ),
+    {
+      getNextPageParam: (lastPage, pages) =>
+        lastPage.length < pageSize! ? undefined : pages.length + 1,
     }
   );
 };
