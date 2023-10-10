@@ -17,13 +17,15 @@ import { stackHeaderStyles } from "@listed-styles";
 import { AddProductRequest, UserPermission, ValidationRules } from "@listed-types";
 import { hasPermission } from "@listed-utils";
 import { useQueryClient } from "@tanstack/react-query";
-import { Stack, router } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { VStack, Text, HStack, Box, Column, useTheme } from "native-base";
-import React from "react";
+import React, { useEffect } from "react";
 
 const NewProduct = () => {
   const queryClient = useQueryClient();
   const { userDetails, userMembership } = useAuth();
+  const { colors } = useTheme();
+  const { barcode } = useLocalSearchParams<{ barcode: string }>();
 
   const initialFormData = {
     "product name": "",
@@ -55,6 +57,12 @@ const NewProduct = () => {
     initialFormData,
     validationRules
   );
+
+  useEffect(() => {
+    if (barcode) {
+      handleInputChange(barcode, "barcode");
+    }
+  }, [barcode])
 
   const handleAddProduct = () => {
     if (validate() && barcodeValidation?.valid !== false) {
@@ -97,8 +105,6 @@ const NewProduct = () => {
       console.error({ ...error });
     },
   });
-
-  const { colors } = useTheme();
 
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
@@ -161,13 +167,19 @@ const NewProduct = () => {
               <HStack space="2">
                 <TextField
                   flex="1"
+                  value={formData.barcode}
                   onChangeText={(value) => {
                     handleInputChange(value, "barcode");
                   }}
                   placeholder="Scan barcode"
                 />
                 <Button
-                  onPress={() => router.push(Routes.BARCODE)}
+                  onPress={() => router.push({
+                    pathname: Routes.BARCODE,
+                    params: {
+                      nextRoute: Routes.NEW_PRODUCT,
+                    }
+                  })}
                   startIcon={<ScanIcon color={colors.white} />}>
                   Scan
                 </Button>

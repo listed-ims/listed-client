@@ -163,7 +163,12 @@ const NewIncoming = () => {
                 />
               </Pressable>
               <Button
-                onPress={() => router.push(Routes.BARCODE)}
+                onPress={() => router.push({
+                  pathname: Routes.BARCODE,
+                  params: {
+                    nextRoute: Routes.NEW_INCOMING,
+                  },
+                })}
                 fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>
                 Scan
               </Button>

@@ -1,7 +1,7 @@
 import { FormControl, TextField, Toast } from '@listed-components/molecules'
 import ScreenContainer from '@listed-components/organisms/ScreenContainer'
 import { Box, Column, Row, Text, useTheme, useToast } from 'native-base'
-import React, { } from 'react'
+import React, { useEffect } from 'react'
 import { Stack, router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { Button, ScanIcon } from "@listed-components/atoms";
 import { stackHeaderStyles } from '@listed-styles'
@@ -15,12 +15,12 @@ import { renderUnauthorizedModal } from '@listed-components/organisms'
 import { hasPermission } from '@listed-utils'
 
 const EditProduct = () => {
-  const { productId } = useLocalSearchParams();
+  const { productId, barcode } = useLocalSearchParams<{ productId: string, barcode: string }>();
   const queryClient = useQueryClient();
   const navigation = useNavigation();
   const { userDetails, userMembership } = useAuth();
   const toast = useToast();
-
+  const { colors } = useTheme();
 
   const handleCancel = () => {
     navigation.goBack();
@@ -61,6 +61,12 @@ const EditProduct = () => {
     initialFormData,
     validationRules
   );
+
+  useEffect(() => {
+    if (barcode) {
+      handleInputChange(barcode, "barcode");
+    }
+  }, [barcode])
 
   const {
     mutate: updateProduct,
@@ -112,8 +118,6 @@ const EditProduct = () => {
     }
   };
 
-  const { colors } = useTheme();
-
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
       !hasPermission(
@@ -127,13 +131,20 @@ const EditProduct = () => {
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Edit Product")} />
       {handleAuthorization()}
-      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}>
         <Column>
           <Row paddingY="6">
             <Text fontSize="18px" fontWeight="600">Edit Product Details</Text>
           </Row>
-          <FormControl label="Product" errorMessage={errors["product name"]} isInvalid={!!errors["product name"]}>
-            <TextField flex="1" placeholder="Enter product name" value={formData["product name"]} onChangeText={(value) => handleInputChange(value, "product name")} />
+          <FormControl label="Product"
+            errorMessage={errors["product name"]}
+            isInvalid={!!errors["product name"]}>
+            <TextField flex="1"
+              placeholder="Enter product name"
+              value={formData["product name"]}
+              onChangeText={(value) => handleInputChange(value, "product name")} />
 
           </FormControl>
           <FormControl label={
@@ -148,9 +159,18 @@ const EditProduct = () => {
             isInvalid={initialFormData.barcode !== formData.barcode && barcodeValidation?.valid === false}
           >
             <Row space="2">
-              <TextField flex="1" placeholder='Scan barcode' value={formData.barcode} onChangeText={(value) => handleInputChange(value, "barcode")} />
+              <TextField flex="1"
+                placeholder='Scan barcode'
+                value={formData.barcode}
+                onChangeText={(value) => handleInputChange(value, "barcode")} />
               <Button
-                onPress={() => router.push(Routes.BARCODE)}
+                onPress={() => router.push({
+                  pathname: Routes.BARCODE,
+                  params: {
+                    nextRoute: Routes.EDIT_PRODUCT,
+                    productId: productDetails?.id,
+                  }
+                })}
                 fontSize="sm"
                 startIcon={<ScanIcon color={colors.white} />}>
                 Scan
@@ -164,13 +184,21 @@ const EditProduct = () => {
             </>
           }
           >
-            <TextField placeholder='Enter variant' value={formData.variant} onChangeText={(value) => handleInputChange(value, "variant")} />
+            <TextField placeholder='Enter variant'
+              value={formData.variant}
+              onChangeText={(value) => handleInputChange(value, "variant")} />
           </FormControl>
 
-          <FormControl label="Sale Price per Item" errorMessage={errors["sale price"]} isInvalid={!!errors["sale price"]}>
+          <FormControl label="Sale Price per Item"
+            errorMessage={errors["sale price"]}
+            isInvalid={!!errors["sale price"]}>
 
-            <TextField flex="1" placeholder='Enter sale price' keyboardType="numeric" value={formData["sale price"]}
-              onChangeText={(value) => handleInputChange(value, "sale price")} startDataLabel={'Php'} />
+            <TextField flex="1"
+              placeholder='Enter sale price'
+              keyboardType="numeric"
+              value={formData["sale price"]}
+              onChangeText={(value) => handleInputChange(value, "sale price")}
+              startDataLabel={'Php'} />
           </FormControl>
 
           <FormControl label={
@@ -182,7 +210,11 @@ const EditProduct = () => {
             errorMessage={errors.threshold}
             isInvalid={!!errors.threshold}
           >
-            <TextField placeholder="Enter low warning point" keyboardType="numeric" value={formData.threshold ? String(formData.threshold) : ""} onChangeText={(value) => handleInputChange(value, "threshold")} endDataLabel={productDetails?.unit} />
+            <TextField placeholder="Enter low warning point"
+              keyboardType="numeric"
+              value={formData.threshold ? String(formData.threshold) : ""}
+              onChangeText={(value) => handleInputChange(value, "threshold")}
+              endDataLabel={productDetails?.unit} />
           </FormControl>
         </Column>
       </KeyboardAwareScrollView>

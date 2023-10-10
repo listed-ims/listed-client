@@ -24,7 +24,7 @@ import {
   useTheme,
 } from "native-base";
 import { stackHeaderStyles } from "@listed-styles";
-import { GET_OUTGOING_TRANSACTIONS, OutgoingCategory, Routes } from "@listed-constants";
+import { GET_OUTGOING_TRANSACTIONS, OutgoingCategory, Routes, GET_PRODUCT } from "@listed-constants";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { getProductService } from "@listed-services";
 import {
@@ -47,9 +47,10 @@ const NewOutgoing = () => {
   const products = useQueries({
     queries: (ids?.toString().split(",") || []).map((id) => {
       return {
-        queryKey: ["OUT_PRODUCTS", id],
+        queryKey: [GET_PRODUCT, parseInt(id)],
         queryFn: () => getProductService(parseInt(id)),
         enabled: !!id,
+        staleTime: 1000 * 60 * 5,
       };
     }),
   });
@@ -191,7 +192,13 @@ const NewOutgoing = () => {
                   variant="outline"
                   borderRadius="full"
                   startIcon={<ScanIcon color={colors.primary[700]} />}
-                  onPress={() => router.push(Routes.BARCODE)}
+                  onPress={() => router.push({
+                    pathname: Routes.BARCODE,
+                    params: {
+                      nextRoute: Routes.NEW_OUTGOING,
+                      ids: ids ? ids : "",
+                    },
+                  })}
                 >
                   Scan
                 </Button>
