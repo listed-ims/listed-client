@@ -54,7 +54,7 @@ const SelectProduct = () => {
             product={item}
             onPress={() => {
               router.push({
-                pathname: Routes.NEW_INCOMING,
+                pathname: Routes.TRANSACTIONS,
                 params: {
                   productId: item.id,
                   product: `${item.name}${
