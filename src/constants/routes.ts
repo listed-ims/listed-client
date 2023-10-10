@@ -19,5 +19,8 @@ export enum Routes {
   BARCODE = "/barcode",
   TRANSACTIONS = "/transactions/transactions",
   TRANSACTIONS = "/transactions",
+  INCOMING = "/transactions/incoming",
+  OUTGOING = "/transactions/outgoing"
+
 
 }

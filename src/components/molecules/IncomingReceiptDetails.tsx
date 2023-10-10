@@ -23,7 +23,7 @@ const IncomingReceiptDetails = ({
           Reference Number:
         </Text>
         <Text flex="1" fontSize="xs" fontWeight="bold">
-          {incomingDetails.referenceNumber}
+          {incomingDetails?.referenceNumber}
         </Text>
       </Row>
 
@@ -32,7 +32,7 @@ const IncomingReceiptDetails = ({
           Product:
         </Text>
         <Text flex="1" fontSize="xs" fontWeight="bold">
-          {incomingDetails.product.name}
+          {incomingDetails?.product.name}
         </Text>
       </Row>
 
@@ -43,9 +43,9 @@ const IncomingReceiptDetails = ({
         <Text
           flex="1"
           fontSize="xs"
-          fontWeight={incomingDetails.product.variant ? "bold" : "thin"}
+          fontWeight={incomingDetails?.product.variant ? "bold" : "thin"}
         >
-          {incomingDetails.product.variant || "N/A"}
+          {incomingDetails?.product.variant || "N/A"}
         </Text>
       </Row>
 
@@ -56,11 +56,11 @@ const IncomingReceiptDetails = ({
         <Text
           flex="1"
           fontSize="xs"
-          fontWeight={incomingDetails.expirationDate ? "bold" : "thin"}
+          fontWeight={incomingDetails?.expirationDate ? "bold" : "thin"}
         >
-          {incomingDetails.expirationDate ? (
+          {incomingDetails?.expirationDate ? (
             dateToMonthDDYYYY(
-              new Date(incomingDetails.expirationDate?.toString()!)
+              new Date(incomingDetails?.expirationDate?.toString()!)
             )
           ) : (
             <Text fontSize="xs">N/A</Text>
@@ -73,7 +73,7 @@ const IncomingReceiptDetails = ({
           Purhase Price / Item:
         </Text>
         <Text flex="1" fontSize="xs" fontWeight="bold">
-          {toCurrency(incomingDetails.purchasePrice as number)}
+          {toCurrency(incomingDetails?.purchasePrice as number)}
         </Text>
       </Row>
 
@@ -82,8 +82,8 @@ const IncomingReceiptDetails = ({
           Quantity:
         </Text>
         <Text flex="1" fontSize="xs" fontWeight="bold">
-          {incomingDetails.initialQuantity}{" "}
-          {incomingDetails.product.unit.toLowerCase()}
+          {incomingDetails?.initialQuantity}{" "}
+          {incomingDetails?.product.unit.toLowerCase()}
         </Text>
       </Row>
 
@@ -97,8 +97,8 @@ const IncomingReceiptDetails = ({
         </Text>
         <Text flex="1" fontSize="xs" fontWeight="bold">
           {toCurrency(
-            (incomingDetails.purchasePrice *
-              incomingDetails.initialQuantity) as number
+            (incomingDetails?.purchasePrice *
+              incomingDetails?.initialQuantity) as number
           )}
         </Text>
       </Row>
@@ -113,7 +113,7 @@ const IncomingReceiptDetails = ({
         </Text>
         <Box flex="1">
           <Text flex="1" fontSize="xs" fontWeight="bold">
-            {incomingDetails.user.name}
+            {incomingDetails?.user.name}
           </Text>
           <Text flex="1" fontSize="xs" fontWeight="medium">
           ({toTitleCase(userRole)})
@@ -125,9 +125,9 @@ const IncomingReceiptDetails = ({
         <TextArea
           isReadOnly
           variant="outline"
-          fontWeight={incomingDetails.comment ? "normal" : "thin"}
+          fontWeight={incomingDetails?.comment ? "normal" : "thin"}
         >
-          {incomingDetails.comment || "N/A"}
+          {incomingDetails?.comment || "N/A"}
         </TextArea>
       </FormControl>
     </Column>

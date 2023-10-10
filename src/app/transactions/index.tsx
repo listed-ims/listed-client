@@ -1,4 +1,5 @@
 import { Button, OptionsIcon } from "@listed-components/atoms";
+import { Routes } from "@listed-constants";
 import { TransactionListItem } from "@listed-components/molecules";
 import {
   ScreenContainer,
@@ -11,12 +12,8 @@ import {
 } from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
 import { TransactionFilter } from "@listed-types";
-import {
-  dateToMMDDYY,
-  dateToMonthDDYYYY,
-  dateToReadableTime,
-} from "@listed-utils";
-import { Stack } from "expo-router";
+import { dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
+import { Stack, router } from "expo-router";
 import {
   Box,
   Column,
@@ -26,7 +23,7 @@ import {
   Text,
   useTheme,
 } from "native-base";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const transactions = () => {
   const noFilter = {
@@ -143,6 +140,7 @@ const transactions = () => {
           Filter
         </Button>
       </Column>
+
       <Box flex={1} paddingBottom="4">
         {transaction === "incoming" ? (
           <FlatList
@@ -150,6 +148,9 @@ const transactions = () => {
             data={incomingTransactions?.pages.flatMap((page) => page)}
             renderItem={({ item }) => (
               <TransactionListItem
+                onPress={() => {
+                  router.push(`${Routes.INCOMING}/${item.id}`);
+                }}
                 title={item.product.name}
                 name={item.user.name}
                 date={dateToMonthDDYYYY(
@@ -175,6 +176,9 @@ const transactions = () => {
             data={outgoingTransactions?.pages.flatMap((page) => page)}
             renderItem={({ item }) => (
               <TransactionListItem
+                onPress={() => {
+                  router.push(`${Routes.OUTGOING}/${item.id}`);
+                }}
                 title={item.category}
                 name={item.user.name}
                 date={dateToMonthDDYYYY(
