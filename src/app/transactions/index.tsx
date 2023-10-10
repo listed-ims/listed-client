@@ -1,13 +1,14 @@
 import { Button, CloseIcon, IconButton, MultiSelectButton, OptionsIcon, ScanIcon, SearchIcon} from "@listed-components/atoms";
 import { BottomSheet, FormControl, TextField, TransactionListItem } from "@listed-components/molecules";
 import { ScreenContainer} from "@listed-components/organisms";
+import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetCollaborators, useGetIncomingTransactions, useGetOutgoingTransactions } from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
 import { MembershipStatus} from "@listed-types";
 import { dateToMMDDYY, dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
 import RNDateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { Box, Column, Divider, FlatList, Pressable, Row, Text, View, useTheme } from "native-base";
 import { useState } from "react";
 
@@ -104,6 +105,7 @@ const transactions = () => {
         </Row>
         <Button variant="outline" alignSelf="flex-start" px="5" size="sm" borderRadius="full" onPress={toggleBottomSheet} startIcon={<OptionsIcon />}>Filter</Button>
       </Column>
+
       <Box flex={1} paddingBottom="4">
        {transaction === "incoming" ? 
        <FlatList 
@@ -111,6 +113,9 @@ const transactions = () => {
           data={incomingTransactions?.pages.flatMap((page) => page)}
           renderItem={({ item }) => (
             <TransactionListItem
+             onPress = {() => {
+               router.push(`${Routes.INCOMING}/${item.id}`);
+              }}
               title={item.product.name}
               name={item.user.name}
               date={dateToMonthDDYYYY(new Date (item.transactionDate.toString()))}
@@ -128,6 +133,9 @@ const transactions = () => {
           data={outgoingTransactions?.pages.flatMap((page) => page)}
           renderItem={({ item }) => (
             <TransactionListItem
+              onPress = {() => {
+                router.push(`${Routes.OUTGOING}/${item.id}`);
+              }}
               title= {item.category}
               name={item.user.name}
               date={dateToMonthDDYYYY(new Date (item.transactionDate.toString()))}

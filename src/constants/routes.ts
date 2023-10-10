@@ -18,4 +18,7 @@ export enum Routes {
   EDIT_COLLABORATOR = "/collaborators/edit",
   BARCODE = "/barcode",
   TRANSACTIONS = "/transactions",
+  INCOMING = "/transactions/incoming",
+  OUTGOING = "/transactions/outgoing"
+
 }
