@@ -24,7 +24,7 @@ import RNDateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { GET_INCOMING, Routes } from "@listed-constants";
 import { stackHeaderStyles } from "@listed-styles";
-import { dateToMMDDYY, hasPermission } from "@listed-utils";
+import { dateToMMDDYY, hasPermission, localeStringToDate } from "@listed-utils";
 import { IncomingRequest, UserPermission, ValidationRules } from "@listed-types";
 import { useCreateIncomingMutation, useFormValidation } from "@listed-hooks";
 import { useQueryClient } from "@tanstack/react-query";
@@ -78,7 +78,15 @@ const NewIncoming = () => {
     event: DateTimePickerEvent,
     date?: Date | undefined
   ) => {
-    const selectedDate = date;
+    if (date === undefined) return;
+    const selectedDate = localeStringToDate(
+      date.toLocaleString('en-US', {
+        timeZone: 'Asia/Singapore',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        timeZoneName: 'short',
+      }))
     setShowDatePicker(false);
     if (event.type === "dismissed") return;
     setExpirationDate(selectedDate!);

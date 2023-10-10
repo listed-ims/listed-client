@@ -15,3 +15,14 @@ export const dateToMonthDDYYYY = (date: Date) => {
 export const dateToReadableTime = (date: Date) => {
   return date.toLocaleTimeString().replace(/:\d{1,2}\s/, "");
 };
+
+export const localeStringToDate = (dateString: string) => {
+  const regexPattern = /(\d{2})\/(\d{2})\/(\d{4}).*/;
+  const formattedDate = dateString.replace(
+    regexPattern,
+    (_, month, day, year) => {
+      return `${year}-${month}-${day}`;
+    }
+  );
+  return new Date(formattedDate);
+};
