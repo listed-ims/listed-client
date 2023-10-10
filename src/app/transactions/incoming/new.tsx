@@ -156,7 +156,12 @@ const NewIncoming = () => {
             <HStack space="2">
               <Pressable style={{ flex: 1 }}
                 onPress={() => {
-                  router.push(Routes.SELECT_PRODUCT)
+                  router.push({
+                    pathname: Routes.SELECT_PRODUCT,
+                    params: {
+                      route: Routes.NEW_INCOMING,
+                    },
+                  })
                 }}>
                 <TextField
                   isReadOnly

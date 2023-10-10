@@ -30,3 +30,10 @@ export interface OutgoingResponse {
     transactionDate: Date;
     referenceNumber: string;
 }
+
+export interface TransactionFilter {
+  categories?: OutgoingCategory[];
+  performers?: number[];
+  product?: number;
+  date?: Date; 
+}

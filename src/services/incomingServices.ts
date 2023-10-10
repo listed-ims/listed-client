@@ -26,25 +26,26 @@ export const getIncomingService = async (transactionId: number) => {
 
 export const getIncomingListService = async (
   storeId: number,
-  userIds?: number[],
+  userIds?: string,
   productId?: number,
-  date?: Date | null,
+  date?: string,
   pageNumber?: number,
-  pageSize?: number) =>{
-    try {
-      const response = await axiosInstance.get(`incoming`,{
-        params:{
-          storeId: storeId,
-          userIds: userIds,
-          productId: productId,
-          startDate: date,
-          endDate: date,
-          pageNumber: pageNumber,
-          pageSize: pageSize
-        }
-      });
-      return response.data as IncomingResponse[];
-    } catch (error) {
-      throw error;
-    }
-}
+  pageSize?: number
+) => {
+  try {
+    const response = await axiosInstance.get(`incoming`, {
+      params: {
+        storeId: storeId,
+        userIds: userIds,
+        productId: productId,
+        startDate: date,
+        endDate: date,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+      },
+    });
+    return response.data as IncomingResponse[];
+  } catch (error) {
+    throw error;
+  }
+};
