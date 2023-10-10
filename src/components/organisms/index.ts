@@ -16,3 +16,4 @@ export { default as RemoveCollaboratorModal } from "./RemoveCollaboratorModal";
 export { default as CameraPreviewMask } from "./CameraPreviewMask";
 export { default as NoStoreFound } from "./NoStoreFound";
 export { default as NoProductsFound } from "./NoProductsFound";
+export { default as TransactionFilterModal } from "./TransactionFilterModal";

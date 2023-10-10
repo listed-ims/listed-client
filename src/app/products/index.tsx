@@ -24,16 +24,17 @@ import {
   HeaderSearchIcon,
   StocksIcon,
 } from "@listed-components/atoms";
-import { ProductFilter, Routes } from "@listed-constants";
+import { GET_PRODUCT, ProductFilter, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetProductList, useGetStoreDetails } from "src/hooks/queries";
+import { ProductResponse } from "@listed-types";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Products = () => {
   const [filter, setFilter] = useState<"all" | "low stock" | "no stock">("all");
-
   const { userDetails } = useAuth();
-
   const { colors } = useTheme();
+  const queryClient = useQueryClient();
 
   const {
     data: productList,
@@ -59,6 +60,11 @@ const Products = () => {
     isFetching: storeFetching,
   } = useGetStoreDetails(userDetails?.currentStoreId);
 
+  const handleSelectItem = (item: ProductResponse) => {
+    queryClient.setQueryData([GET_PRODUCT, item.id], item);
+    router.push(`${Routes.PRODUCTS}/${item.id}}`);
+  }
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen
@@ -70,8 +76,13 @@ const Products = () => {
               <Pressable
                 padding="1"
                 borderRadius="full"
-                _pressed={{ background: 'muted.300' }}
-                onPress={() => router.push(Routes.BARCODE)}>
+                _pressed={{ background: 'muted.100' }}
+                onPress={() => router.push({
+                  pathname: Routes.BARCODE,
+                  params: {
+                    nextRoute: Routes.PRODUCTS,
+                  },
+                })}>
                 <HeaderScanIcon />
               </Pressable>
             </HStack>
@@ -114,9 +125,7 @@ const Products = () => {
             renderItem={({ item }) => (
               <ProductListItem
                 product={item}
-                onPress={() => {
-                  router.push(`${Routes.PRODUCTS}/${item.id}}`);
-                }}
+                onPress={() => handleSelectItem(item)}
               />
             )}
           />

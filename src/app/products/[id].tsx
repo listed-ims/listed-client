@@ -3,7 +3,7 @@ import { DeleteProductModal, ScreenContainer, renderUnauthorizedModal } from '@l
 import { Column, Heading, Text } from 'native-base'
 import { Button, CubeIcon } from '@listed-components/atoms'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
-import { GET_PRODUCTS, Routes } from '@listed-constants'
+import { GET_PRODUCT, GET_PRODUCTS, Routes } from '@listed-constants'
 import { stackHeaderStyles } from '@listed-styles'
 import { ScrollView } from 'react-native'
 import { useDeleteProductMutation, useGetProductDetails } from '@listed-hooks'
@@ -14,7 +14,7 @@ import { hasPermission } from '@listed-utils'
 import { useAuth } from '@listed-contexts'
 
 
-const ProductDetails = ({ }) => {
+const ProductDetails = () => {
   const { userMembership } = useAuth();
   const { id } = useLocalSearchParams();
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
@@ -80,6 +80,7 @@ const ProductDetails = ({ }) => {
           <Column marginTop="8" marginBottom="6" space="4" >
             <Button
               onPress={() => {
+                queryClient.setQueryData([GET_PRODUCT, productDetails?.id], productDetails)
                 router.push(`${Routes.EDIT_PRODUCT}?productId=${productDetails?.id}`)
               }}>
               EDIT

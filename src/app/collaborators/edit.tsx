@@ -2,7 +2,7 @@ import { Button } from "@listed-components/atoms"
 import { FormControl, Toast } from "@listed-components/molecules"
 import { Permissions, ScreenContainer } from "@listed-components/organisms"
 import { GET_COLLABORATOR, GET_COLLABORATORS } from "@listed-constants"
-import { useFormValidation, useGetCollaboratorDetails, useUpdateUserMembershipStatusMutation, useUpdateUserPermissionMutation } from "@listed-hooks"
+import { useFormValidation, useGetCollaboratorDetails, useUpdateUserMembershipMutation } from "@listed-hooks"
 import { stackHeaderStyles } from "@listed-styles"
 import { MembershipStatus, UserPermission, ValidationRules } from "@listed-types"
 import { useQueryClient } from "@tanstack/react-query"
@@ -42,8 +42,9 @@ const CollaboratorEdit = () => {
 
   const {
     mutate: updateCollaborator,
-  } = useUpdateUserPermissionMutation({
+  } = useUpdateUserMembershipMutation({
     onSuccess: (data) => {
+      console.log("updated", data)
       queryClient.invalidateQueries([GET_COLLABORATORS]);
       queryClient.setQueriesData([GET_COLLABORATOR, data.id], data);
       toast.show({
@@ -56,9 +57,10 @@ const CollaboratorEdit = () => {
   })
 
   const {
-    mutate: updateCollaboratorStatus
-  } = useUpdateUserMembershipStatusMutation({
+    mutate: updateCollaboratorStatus,
+  } = useUpdateUserMembershipMutation({
     onSuccess: (data) => {
+      console.log("updated", data)
       queryClient.invalidateQueries([GET_COLLABORATORS]);
       queryClient.setQueriesData([GET_COLLABORATOR, data.id], data);
       toast.show({
@@ -75,6 +77,7 @@ const CollaboratorEdit = () => {
       updateCollaborator([
         Number(id),
         formData.permissions,
+        undefined
       ])
     }
   }
@@ -83,8 +86,9 @@ const CollaboratorEdit = () => {
     if (validate()) {
       updateCollaboratorStatus([
         Number(id),
+        formData.permissions,
         MembershipStatus.PENDING
-      ])
+      ]);
     }
   }
 
@@ -136,7 +140,7 @@ const CollaboratorEdit = () => {
               errorMessage={errors.permissions}
               isInvalid={!!errors.permissions}
             />}
-            <Permissions selectedPermissions={
+            <Permissions permissions={
               new Set([...collaboratorDetails?.permissions!])
             }
               marginLeft="4"
