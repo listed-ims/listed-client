@@ -23,7 +23,6 @@ const BottomSheet: FC<BottomSheetProps> = ({ open, children, ...props }) => {
       ref={bottomSheetRef}
       enablePanDownToClose
       enableDynamicSizing
-      maxDynamicContentSize={Dimensions.get('window').height * 0.5}
       backdropComponent={(props) => <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1}/>}
     >
       <BottomSheetScrollView>

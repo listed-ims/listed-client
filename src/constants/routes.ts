@@ -6,7 +6,6 @@ export enum Routes {
   NEW_STORE = "/stores/new",
   PRODUCTS = "/products",
   NEW_INCOMING = "/transactions/incoming/new",
-  SELECT_PRODUCT = "/transactions/incoming/select-product",
   EDIT_PRODUCT = "/products/edit",
   NEW_PRODUCT = "/products/new",
   INCOMING_RECEIPT = "/transactions/incoming/receipt",
@@ -20,5 +19,5 @@ export enum Routes {
   TRANSACTIONS = "/transactions",
   INCOMING = "/transactions/incoming",
   OUTGOING = "/transactions/outgoing",
-  TRANSACTIONS_SELECT_PRODUCT = "/transactions/select-product",
+  SELECT_PRODUCT = "/transactions/select-product",
 }

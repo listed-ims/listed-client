@@ -11,6 +11,7 @@ import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 
 const SelectProduct = () => {
+  const { route } = useLocalSearchParams<{route: Routes}>();
   const { userDetails } = useAuth();
 
   const {
@@ -54,7 +55,7 @@ const SelectProduct = () => {
             product={item}
             onPress={() => {
               router.push({
-                pathname: Routes.TRANSACTIONS,
+                pathname: route === Routes.NEW_INCOMING ? Routes.NEW_INCOMING : Routes.TRANSACTIONS,
                 params: {
                   productId: item.id,
                   product: `${item.name}${

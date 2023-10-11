@@ -271,7 +271,14 @@ const TransactionFilterModal = ({
           <Row space="2">
             <Pressable
               style={{ flex: 1 }}
-              onPress={() => router.push(Routes.TRANSACTIONS_SELECT_PRODUCT)}
+              onPress={() => {
+                router.push({
+                  pathname: Routes.SELECT_PRODUCT,
+                  params: {
+                    route: Routes.TRANSACTIONS,
+                  },
+                });
+              }}
             >
               <TextField
                 isReadOnly
