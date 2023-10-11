@@ -5,7 +5,7 @@ import { KeyboardAwareScroll, ScreenContainer } from '@listed-components/organis
 import { FormControl, TextField } from '@listed-components/molecules'
 import { Routes } from '@listed-constants'
 import { Button, ListedIcon } from '@listed-components/atoms'
-import { useFormValidation, useUserRegistrationMutation } from '@listed-hooks'
+import { useDebounce, useFormValidation, useUserRegistrationMutation, useValidateUsername } from '@listed-hooks'
 import { RegistrationCredentials, ValidationRules } from '@listed-types'
 import { useAuth } from '@listed-contexts'
 
@@ -45,7 +45,7 @@ const Registration = () => {
   );
 
   const handleRegister = () => {
-    if (validate()) {
+    if (validate() && usernameIsValid?.valid) {
       registrationService({
         name: formData.name,
         username: formData.username,
@@ -53,6 +53,14 @@ const Registration = () => {
       } as RegistrationCredentials);
     }
   };
+
+  const debouncedUsername = useDebounce(formData.username, 300)
+
+  const {
+    data: usernameIsValid,
+    isLoading: usernameIsLoading,
+    isError: usernameIsError
+  } = useValidateUsername(debouncedUsername || "")
 
   const { mutate: registrationService, isError, isLoading, } = useUserRegistrationMutation({
     onSuccess: (data) => {
@@ -106,8 +114,12 @@ const Registration = () => {
             </FormControl>
             <FormControl
               label="Username"
-              errorMessage={errors.username}
-              isInvalid={!!errors.username}
+              errorMessage={errors.username ||
+                (!usernameIsLoading && !usernameIsValid?.valid
+                  ? "Username already exists."
+                  : undefined)
+              }
+              isInvalid={!!errors.username || !usernameIsLoading && !usernameIsValid?.valid}
             >
               <TextField
                 onChangeText={(value) => handleInputChange(value, "username")}
