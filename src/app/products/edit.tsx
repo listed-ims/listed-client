@@ -2,28 +2,26 @@ import { FormControl, TextField, Toast } from '@listed-components/molecules'
 import ScreenContainer from '@listed-components/organisms/ScreenContainer'
 import { Box, Column, Row, Text, useTheme, useToast } from 'native-base'
 import React, { useEffect } from 'react'
-import { Stack, router, useLocalSearchParams, useNavigation } from 'expo-router'
+import { Stack, router, useLocalSearchParams} from 'expo-router'
 import { Button, ScanIcon } from "@listed-components/atoms";
 import { stackHeaderStyles } from '@listed-styles'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useDebounce, useFormValidation, useGetProductDetails, useUpdateProductMutation, useValidateBarcode, } from '@listed-hooks'
 import { useQueryClient } from '@tanstack/react-query'
 import { ValidationRules, UpdateRequest, UserPermission, } from '@listed-types'
 import { GET_PRODUCT, GET_PRODUCTS, Routes } from '@listed-constants'
 import { useAuth } from '@listed-contexts'
-import { renderUnauthorizedModal } from '@listed-components/organisms'
+import { KeyboardAwareScroll, renderUnauthorizedModal } from '@listed-components/organisms'
 import { hasPermission } from '@listed-utils'
 
 const EditProduct = () => {
   const { productId, barcode } = useLocalSearchParams<{ productId: string, barcode: string }>();
   const queryClient = useQueryClient();
-  const navigation = useNavigation();
   const { userDetails, userMembership } = useAuth();
   const toast = useToast();
   const { colors } = useTheme();
 
   const handleCancel = () => {
-    navigation.goBack();
+    router.back();
   }
 
   const {
@@ -76,7 +74,7 @@ const EditProduct = () => {
     onSuccess: (data) => {
       queryClient.setQueryData([GET_PRODUCT, data.id], data);
       queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS] });
-      router.push(`${Routes.PRODUCTS}/${productDetails?.id}`);
+      router.back();
       toast.show({
         render: () => {
           return <Toast message='Product details updated.' />
@@ -102,8 +100,8 @@ const EditProduct = () => {
   );
 
   const handleSave = () => {
-
-    if (validate() && (formData.barcode === initialFormData.barcode || barcodeValidation?.valid !== false)) {
+    if(JSON.stringify(initialFormData) === JSON.stringify(formData)) router.back();
+    else if (validate() && (formData.barcode === initialFormData.barcode || barcodeValidation?.valid !== false)) {
       updateProduct({
         productId: productDetails?.id,
         productRequest: {
@@ -131,9 +129,15 @@ const EditProduct = () => {
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Edit Product")} />
       {handleAuthorization()}
-      <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScroll
+        elementOnTopOfKeyboard={
+          <Box background=" white" paddingTop="4" paddingBottom="6">
+            <Row space="4" >
+              <Button flex="1" onPress={handleSave}>SAVE</Button>
+              <Button flex="1" variant="outline" onPress={handleCancel}>CANCEL</Button>
+            </Row>
+          </Box>}
+      >
         <Column>
           <Row paddingY="6">
             <Text fontSize="18px" fontWeight="600">Edit Product Details</Text>
@@ -217,13 +221,8 @@ const EditProduct = () => {
               endDataLabel={productDetails?.unit} />
           </FormControl>
         </Column>
-      </KeyboardAwareScrollView>
-      <Box background=" white" paddingTop="4" paddingBottom="6">
-        <Row space="4" >
-          <Button flex="1" onPress={handleSave}>SAVE</Button>
-          <Button flex="1" variant="outline" onPress={handleCancel}>CANCEL</Button>
-        </Row>
-      </Box>
+      </KeyboardAwareScroll>
+
 
     </ScreenContainer>
   )
