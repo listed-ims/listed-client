@@ -12,7 +12,6 @@ import { useAuth } from "@listed-contexts";
 
 const SelectProduct = () => {
   const { route } = useLocalSearchParams<{route: Routes}>();
-
   const { userDetails } = useAuth();
 
   const {

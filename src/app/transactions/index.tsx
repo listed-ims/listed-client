@@ -4,6 +4,7 @@ import { TransactionListItem } from "@listed-components/molecules";
 import {
   ScreenContainer,
   TransactionFilterModal,
+  renderUnauthorizedModal,
 } from "@listed-components/organisms";
 import { useAuth } from "@listed-contexts";
 import {
@@ -11,8 +12,12 @@ import {
   useGetOutgoingTransactions,
 } from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
-import { TransactionFilter } from "@listed-types";
-import { dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
+import { TransactionFilter, UserPermission } from "@listed-types";
+import {
+  dateToMonthDDYYYY,
+  dateToReadableTime,
+  hasPermission,
+} from "@listed-utils";
 import { Stack, router } from "expo-router";
 import {
   Box,
@@ -37,7 +42,7 @@ const transactions = () => {
   );
   const { colors } = useTheme();
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
-  const { userDetails } = useAuth();
+  const { userDetails, userMembership } = useAuth();
   const [incomingFilter, setIncomingFilter] = useState(noFilter);
   const [outgoingFilter, setOutgoingFilter] = useState(noFilter);
 
@@ -81,9 +86,19 @@ const transactions = () => {
     setIsBottomSheetVisible(false);
   };
 
+  const handleAuthorization = () => {
+    return renderUnauthorizedModal(
+      !hasPermission(
+        userMembership?.permissions!,
+        UserPermission.GET_TRANSACTIONS_LIST
+      )
+    );
+  };
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Transactions")} />
+      {handleAuthorization()}
       <Row paddingY="4" display="flex" alignItems="center">
         <Text fontWeight="bold" fontSize="lg">
           Transactions
