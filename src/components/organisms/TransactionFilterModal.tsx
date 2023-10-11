@@ -128,9 +128,8 @@ const TransactionFilterModal = ({
           alignSelf="stretch"
           alignItems="center"
         >
-          <Text fontSize="md" fontWeight="bold">{`Filter ${
-            transaction === "incoming" ? "Incoming" : "Outgoing"
-          }`}</Text>
+          <Text fontSize="md" fontWeight="bold">{`Filter ${transaction === "incoming" ? "Incoming" : "Outgoing"
+            }`}</Text>
           <HStack space="2">
             <Button size="sm" borderRadius="full" onPress={handleOnApply}>
               Apply
@@ -169,18 +168,18 @@ const TransactionFilterModal = ({
                   onPress={() => {
                     transactionFilter.categories?.includes(category)
                       ? setTransactionFilter({
-                          ...transactionFilter,
-                          categories: transactionFilter.categories.filter(
-                            (c) => c !== category
-                          ),
-                        })
+                        ...transactionFilter,
+                        categories: transactionFilter.categories.filter(
+                          (c) => c !== category
+                        ),
+                      })
                       : setTransactionFilter({
-                          ...transactionFilter,
-                          categories: [
-                            ...transactionFilter.categories!,
-                            category,
-                          ],
-                        });
+                        ...transactionFilter,
+                        categories: [
+                          ...transactionFilter.categories!,
+                          category,
+                        ],
+                      });
                   }}
                 />
               ))}
@@ -250,18 +249,18 @@ const TransactionFilterModal = ({
                   onPress={() => {
                     transactionFilter.performers?.includes(collaborator.user.id)
                       ? setTransactionFilter({
-                          ...transactionFilter,
-                          performers: transactionFilter.performers.filter(
-                            (id) => id !== collaborator.user.id
-                          ),
-                        })
+                        ...transactionFilter,
+                        performers: transactionFilter.performers.filter(
+                          (id) => id !== collaborator.user.id
+                        ),
+                      })
                       : setTransactionFilter({
-                          ...transactionFilter,
-                          performers: [
-                            ...transactionFilter.performers!,
-                            collaborator.user.id,
-                          ],
-                        });
+                        ...transactionFilter,
+                        performers: [
+                          ...transactionFilter.performers!,
+                          collaborator.user.id,
+                        ],
+                      });
                   }}
                 />
               ))}
@@ -310,7 +309,14 @@ const TransactionFilterModal = ({
                 }
               />
             </Pressable>
-            <Button fontSize="sm" startIcon={<ScanIcon color={colors.white} />}>
+            <Button fontSize="sm"
+              onPress={() => router.push({
+                pathname: Routes.BARCODE,
+                params: {
+                  nextRoute: Routes.TRANSACTIONS,
+                },
+              })}
+              startIcon={<ScanIcon color={colors.white} />}>
               Scan
             </Button>
           </Row>
