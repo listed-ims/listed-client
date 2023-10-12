@@ -164,6 +164,7 @@ const NewIncoming = () => {
                   })
                 }}>
                 <TextField
+                  pointerEvents="none"
                   isReadOnly
                   flex="1"
                   placeholder="Select a product"
@@ -208,14 +209,17 @@ const NewIncoming = () => {
             }}
               style={{ flex: 1 }}>
               <TextField
+                pointerEvents="box-none"
                 isReadOnly
-                flex="1"
                 placeholder="Select expiration date"
                 value={expirationDisplay}
                 rightElement={expirationDisplay !== "" ?
                   <IconButton variant="subtle" marginRight="2"
                     icon={<CloseIcon />}
-                    onPress={() => setExpirationDisplay("")}
+                    onPress={() => {
+                      setExpirationDisplay("")
+                    }
+                  }
                   /> : undefined}
               />
             </Pressable>
