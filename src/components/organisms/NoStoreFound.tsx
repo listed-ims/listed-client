@@ -3,7 +3,11 @@ import { Routes } from "@listed-constants";
 import { router } from "expo-router";
 import { Text, Column, VStack, useTheme } from "native-base";
 
-const NoStoreFound = () => {
+interface NoStoreFoundProps {
+  filter?: "all" | "open" | "closed";
+}
+
+const NoStoreFound = ({ filter = "all" }: NoStoreFoundProps) => {
   const { colors } = useTheme();
 
   return (
@@ -15,21 +19,33 @@ const NoStoreFound = () => {
             No store found
           </Text>
           <Column>
-            <Text textAlign="center">You don’t have any store yet.</Text>
-            <Text textAlign="center">Create one or wait for an invite.</Text>
+            {filter === "all" ? (
+              <>
+                <Text textAlign="center">You don't have any store yet.</Text>
+                <Text textAlign="center">
+                  Create one or wait for an invite.
+                </Text>
+              </>
+            ) : (
+              <Text textAlign="center">{`You don't have any ${
+                filter === "open" ? "OPEN" : "CLOSED"
+              } store.`}</Text>
+            )}
           </Column>
         </Column>
-        <Button
-          size="sm"
-          px="4"
-          startIcon={<AddIcon color={colors.white} />}
-          borderRadius="full"
-          onPress={() => {
-            router.push(Routes.NEW_STORE);
-          }}
-        >
-          Add Store
-        </Button>
+        {filter === "all" && (
+          <Button
+            size="sm"
+            px="4"
+            startIcon={<AddIcon color={colors.white} />}
+            borderRadius="full"
+            onPress={() => {
+              router.push(Routes.NEW_STORE);
+            }}
+          >
+            Add Store
+          </Button>
+        )}
       </Column>
     </VStack>
   );
