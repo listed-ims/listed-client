@@ -26,11 +26,11 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { StoreDetailsIcon } from "@listed-components/atoms";
 import { stackHeaderStyles } from "@listed-styles";
-import { 
-  MembershipStatus, 
-  UserPermission, 
-  UserRequest, 
-  UserResponse 
+import {
+  MembershipStatus,
+  UserPermission,
+  UserRequest,
+  UserResponse,
 } from "@listed-types";
 import { StoreInvite } from "@listed-components/molecules";
 import { ownerOrCollaborator } from "@listed-utils";
@@ -48,9 +48,7 @@ const StoreDetails = () => {
     isFetching: storeFetching,
   } = useGetStoreDetails(parseInt(id as string));
 
-  const {
-    data: storeMembership,
-  } = useGetUserMembership(
+  const { data: storeMembership } = useGetUserMembership(
     parseInt(id as string),
     userDetails?.id!
   );
@@ -82,6 +80,8 @@ const StoreDetails = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [GET_STORES] });
       queryClient.setQueryData([GET_STORE, data.id], data);
+      if (data.id === userDetails?.currentStoreId)
+        queryClient.invalidateQueries([GET_USER]);
       setShowCloseStoreModal(false);
     },
     onError: (error) => {
@@ -106,8 +106,8 @@ const StoreDetails = () => {
         currentStoreId: data.currentStoreId,
       } as UserResponse);
       queryClient.invalidateQueries({
-        queryKey: [GET_MEMBERSHIP]
-      })
+        queryKey: [GET_MEMBERSHIP],
+      });
       queryClient.invalidateQueries({
         queryKey: [GET_STORE, data.currentStoreId],
       });
@@ -120,17 +120,14 @@ const StoreDetails = () => {
     },
   });
 
-  const {
-    data: userMembership,
-    isSuccess: userMembershipSuccess,
-  } = useGetUserMembership(newCurrentStore?.currentStoreId!, userDetails?.id!);
+  const { data: userMembership, isSuccess: userMembershipSuccess } =
+    useGetUserMembership(newCurrentStore?.currentStoreId!, userDetails?.id!);
 
   useEffect(() => {
     if (userMembershipSuccess) {
-      setUserMembership(userMembership)
+      setUserMembership(userMembership);
     }
-  }, [userMembership])
-
+  }, [userMembership]);
 
   return (
     <ScreenContainer withHeader>
@@ -141,7 +138,8 @@ const StoreDetails = () => {
             <StoreDetailsIcon />
             <Heading size="md">{storeDetails?.name}</Heading>
             {storeDetails?.id === userDetails?.currentStoreId &&
-              storeMembership?.membershipStatus !== MembershipStatus.PENDING && (
+              storeMembership?.membershipStatus !==
+                MembershipStatus.PENDING && (
                 <Badge colorScheme="success" variant="solid">
                   CURRENT STORE
                 </Badge>
@@ -170,9 +168,13 @@ const StoreDetails = () => {
                 storeDetails?.status === StoreStatus.OPEN && (
                   <MakeCurrentStoreCard onMakeCurrent={handleOnMakeCurrent} />
                 )}
-              {storeDetails?.status === StoreStatus.OPEN && (
-                <CloseStoreCard onClose={() => setShowCloseStoreModal(true)} />
-              )}
+              {storeDetails?.status === StoreStatus.OPEN &&
+                ownerOrCollaborator(storeMembership?.permissions || []) ===
+                  UserPermission.OWNER && (
+                  <CloseStoreCard
+                    onClose={() => setShowCloseStoreModal(true)}
+                  />
+                )}
             </>
           ) : (
             <StoreInvite
