@@ -211,6 +211,7 @@ const NewIncoming = () => {
               <TextField
                 pointerEvents="box-none"
                 isReadOnly
+                flex="1"
                 placeholder="Select expiration date"
                 value={expirationDisplay}
                 rightElement={expirationDisplay !== "" ?
