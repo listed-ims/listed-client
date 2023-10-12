@@ -192,6 +192,7 @@ const TransactionFilterModal = ({
             style={{ flex: 1 }}
           >
             <TextField
+              pointerEvents="box-none"
               value={transactionFilter.date ? dateToMMDDYY(date) : ""}
               isReadOnly
               flex="1"
@@ -280,6 +281,7 @@ const TransactionFilterModal = ({
               }}
             >
               <TextField
+                pointerEvents="box-none"
                 isReadOnly
                 flex="1"
                 placeholder="Select a product"
