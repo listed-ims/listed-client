@@ -128,8 +128,8 @@ const transactions = () => {
           variant={
             (transaction === "incoming" &&
               JSON.stringify(incomingFilter) === JSON.stringify(noFilter)) ||
-            (transaction === "outgoing" &&
-              JSON.stringify(outgoingFilter) === JSON.stringify(noFilter))
+              (transaction === "outgoing" &&
+                JSON.stringify(outgoingFilter) === JSON.stringify(noFilter))
               ? "outline"
               : "solid"
           }
@@ -143,9 +143,9 @@ const transactions = () => {
               color={
                 (transaction === "incoming" &&
                   JSON.stringify(incomingFilter) ===
-                    JSON.stringify(noFilter)) ||
-                (transaction === "outgoing" &&
-                  JSON.stringify(outgoingFilter) === JSON.stringify(noFilter))
+                  JSON.stringify(noFilter)) ||
+                  (transaction === "outgoing" &&
+                    JSON.stringify(outgoingFilter) === JSON.stringify(noFilter))
                   ? colors.primary[700]
                   : colors.white
               }

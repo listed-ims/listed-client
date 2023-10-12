@@ -98,6 +98,17 @@ const Barcode = () => {
           },
         });
         break;
+      case Routes.TRANSACTIONS:
+        router.push({
+          pathname: Routes.TRANSACTIONS,
+          params: {
+            productId: queryResult.data?.id,
+            product: `${queryResult.data?.name}${queryResult.data?.variant
+              ? ` - ${queryResult.data?.variant}`
+              : ""
+              }`,
+          },
+        })
       default:
         break;
     }
