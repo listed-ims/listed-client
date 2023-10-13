@@ -41,7 +41,7 @@ const Stores = () => {
           <Text fontSize="xl" fontWeight="semibold">
             Stores
           </Text>
-          {storeList && storeList.length > 0 ? (
+          {(storeList && storeList.length > 0) || filter !== "all" ? (
           <Button
             size="sm"
             px="4"
@@ -55,7 +55,7 @@ const Stores = () => {
           </Button>
           ) : undefined }
         </HStack>
-        {storeList && storeList.length > 0 ? (
+        {(storeList && storeList.length > 0) || filter !== "all" ? (
         <>
         <StoreListFilterGroup
           filter={filter}
@@ -63,6 +63,8 @@ const Stores = () => {
         />
         <Box flex={1}>
           <FlatList
+            contentContainerStyle={{ flexGrow: 1 }}
+            ListEmptyComponent={<NoStoreFound filter={filter}/>}
             data={storeList?.sort((a, b) => {
               if (a.id === userDetails?.currentStoreId) return -1;
               if (b.id === userDetails?.currentStoreId) return 1;
@@ -84,7 +86,7 @@ const Stores = () => {
         </Box>
         </>
         ) : (
-          <NoStoreFound/>
+          <NoStoreFound />
         )}
       </Column>
     </ScreenContainer>
