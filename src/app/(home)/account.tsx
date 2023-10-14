@@ -1,5 +1,5 @@
 import { AccountIcon, Button } from "@listed-components/atoms";
-import { ScreenContainer } from "@listed-components/organisms";
+import { LogoutModal, ScreenContainer } from "@listed-components/organisms";
 import { useAuth } from "@listed-contexts";
 import { useGetUserDetails } from "@listed-hooks";
 import {
@@ -13,12 +13,20 @@ import {
   View,
   useTheme,
 } from "native-base";
+import { useState } from "react";
 
 const Account = () => {
   const { logout } = useAuth();
   const { colors } = useTheme();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
   const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleConfirmLogout = () => {
     logout();
+    setShowLogoutModal(false);
   };
 
   const {
@@ -82,6 +90,15 @@ const Account = () => {
       <Button marginTop="6" variant="warnSubtle" onPress={handleLogout}>
         LOGOUT
       </Button>
+      <LogoutModal
+        isOpen={showLogoutModal}
+        onCancel={() => setShowLogoutModal(false)}
+        onConfirm={handleConfirmLogout}
+        modalContent={{
+          header: "Confirm Logout",
+          body: "You are about to logout of our system. Do you wish to proceed?",
+        }}
+      />
     </ScreenContainer>
   );
 };
