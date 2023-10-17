@@ -22,7 +22,7 @@ import { Stack, router, useLocalSearchParams } from "expo-router";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { GET_INCOMING, Routes } from "@listed-constants";
+import { GET_ANALYTICS_SUMMARY, GET_INCOMING, Routes } from "@listed-constants";
 import { stackHeaderStyles } from "@listed-styles";
 import { dateToMMDDYY, hasPermission, localeStringToDate } from "@listed-utils";
 import { IncomingRequest, UserPermission, ValidationRules } from "@listed-types";
@@ -118,6 +118,7 @@ const NewIncoming = () => {
         resetForm();
         setExpirationDisplay("");
         queryClient.setQueryData([GET_INCOMING, data.id], data);
+        queryClient.invalidateQueries({queryKey: [GET_ANALYTICS_SUMMARY]})
         router.push(`${Routes.INCOMING_RECEIPT}?transactionId=${data.id}`);
       }
     });
