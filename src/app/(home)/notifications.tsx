@@ -1,12 +1,141 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useState } from "react";
+import { Box, Column, FlatList, Text } from "native-base";
+import {
+  NotificationListItem,
+  NotificationsFilter,
+} from "@listed-components/molecules";
+import { Stack } from "expo-router";
+import { ScreenContainer } from "@listed-components/organisms";
 
 const Notification = () => {
-  return (
-    <View>
-      <Text>Notification</Text>
-    </View>
-  )
-}
+  const [filter, setFilter] = useState<"all" | "unread">("all");
+  const data = [
+    {
+      id: "1",
+      sender: "JohnDoe",
+      receiver: "JaneSmith",
+      store: "7/EVELEN",
+      product: "EXPO",
+      notificationType: "EXPIRATION",
+      expirationDate: "2023-11-15",
+      dateCreated: "Oct 1",
+      time: "10:00 AM",
+    },
+    {
+      id: "2",
+      sender: "JaneSmith",
+      receiver: "JohnDoe",
+      notificationType: "LOW_STOCK",
+      store: "Nustar",
+      product: "360 Coffee",
+      expirationDate: "2023-12-10",
+      dateCreated: "Yesterday",
+      time: "12:30 PM",
+      quantity: "10",
+    },
 
-export default Notification
+    {
+      id: "3",
+      sender: "Lebron",
+      receiver: "James",
+      notificationType: "STORE_INVITE",
+      store: "IPROMISE",
+      product: "Lobos Coffee",
+      expirationDate: "Yesterday",
+      dateCreated: "Oct 10",
+      time: "12:30 PM",
+    },
+
+    {
+      id: "4",
+      sender: "Lebron",
+      receiver: "James",
+      notificationType: "INVITE_REPLY",
+      store: "IPROMISE",
+      product: "Lobos Coffee",
+      expirationDate: "Yesterday",
+      dateCreated: "Oct 10",
+      time: "12:30 PM",
+    },
+
+    {
+      id: "5",
+      sender: "Stephen",
+      receiver: "Durant",
+      notificationType: "COLLABORATOR_REMOVAL",
+      store: "NBA",
+      product: "Lobos Coffee",
+      expirationDate: "Yesterday",
+      dateCreated: "Oct 10",
+      time: "12:30 PM",
+    },
+
+    {
+      id: "6",
+      sender: "Michael",
+      receiver: "Jordan",
+      notificationType: "STORE_INVITE",
+      store: "IPROMISE",
+      product: "Lobos Coffee",
+      expirationDate: "Yesterday",
+      dateCreated: "Oct 10",
+      time: "12:30 PM",
+    },
+
+    {
+      id: "7",
+      sender: "Lebron",
+      receiver: "James",
+      notificationType: "EXPIRATION",
+      store: "IPROMISE",
+      product: "Lobos Coffee",
+      expirationDate: "Yesterday",
+      dateCreated: "Oct 10",
+      time: "12:30 PM",
+    },
+  ];
+
+  return (
+    <ScreenContainer>
+      <Column flex="1">
+        <Box marginTop="15" marginBottom="6">
+          <Text fontSize="xl" fontWeight="semibold" marginBottom="4">
+            Notifications
+          </Text>
+          <NotificationsFilter
+            filter={filter}
+            handleSetFilter={(filter) => setFilter(filter)}
+          />
+        </Box>
+
+        <FlatList
+          marginBottom="2"
+          contentContainerStyle={{ flexGrow: 1 }}
+          data={data}
+          renderItem={({ item }) => (
+            <NotificationListItem
+              sender={item.sender}
+              receiver={item.receiver}
+              store={item.store}
+              product={item.product}
+              notificationType={
+                item.notificationType?.toUpperCase() as
+                  | "STORE_INVITE"
+                  | "COLLABORATOR_REMOVAL"
+                  | "LOW_STOCK"
+                  | "EXPIRATION"
+                  | "INVITE_REPLY"
+              }
+              expirationDate={item.expirationDate}
+              dateCreated={item.dateCreated}
+              time={item.time}
+              quantity={item.quantity ?? ""}
+            />
+          )}
+        />
+      </Column>
+    </ScreenContainer>
+  );
+};
+
+export default Notification;

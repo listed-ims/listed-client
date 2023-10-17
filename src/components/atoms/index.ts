@@ -66,3 +66,7 @@ export { default as MultiSelectButton } from "./MultiSelectButton";
 export { default as NotFound } from "./NotFound";
 export { default as NoStoreIcon } from "./NoStoreIcon";
 export { default as NoProductsIcon } from "./NoProductsIcon"
+export { default as CollaboratorRemovalIcon } from "./CollaboratorRemovalIcon";
+export { default as ExpirationIcon } from "./ExpirationIcon";
+export { default as LowStockIcon } from "./LowStockIcon";
+export { default as StoreInviteIcon } from "./StoreInviteIcon";
