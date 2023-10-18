@@ -114,12 +114,16 @@ const CollaboratorDetails = () => {
                     : "INVITE AGAIN"
                 }
               </Button>
-              {!isInactive &&
+              {(
+                !isInactive
+                && userMembership?.permissions.includes(UserPermission.DELETE_COLLABORATOR)
+              ) &&
                 <Button variant="warnOutline"
                   onPress={handleCancelRemove}
                 >
                   {isPending ? "CANCEL INVITE" : "REMOVE"}
-                </Button>}
+                </Button>
+              }
             </>
           }
         </Column>
@@ -129,7 +133,7 @@ const CollaboratorDetails = () => {
           onConfirm={handleUpdateStatus}
           onCancel={() => { setShowRemoveModal(false) }} />
       </ScrollView>
-    </ScreenContainer>
+    </ScreenContainer >
   )
 }
 
