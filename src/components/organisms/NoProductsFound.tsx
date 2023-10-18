@@ -3,7 +3,11 @@ import { Routes } from "@listed-constants";
 import { router } from "expo-router";
 import { Text, Column, useTheme } from "native-base";
 
-const NoProductsFound = () => {
+interface NoProductsFoundProps {
+  filter?: "all" | "low stock" | "no stock";
+}
+
+const NoProductsFound = ({ filter = "all" }: NoProductsFoundProps) => {
   const { colors } = useTheme();
 
   return (
@@ -19,19 +23,27 @@ const NoProductsFound = () => {
         <Text textAlign="center" fontSize="lg" fontWeight="semibold">
           No products
         </Text>
-        <Text textAlign="center">You don’t have any products added yet.</Text>
+        {filter === "all" ? (
+          <Text textAlign="center">You don't have any products added yet.</Text>
+        ) : (
+          <Text textAlign="center">{`You don't have any ${
+            filter === "low stock" ? "LOW STOCK" : "NO STOCK"
+          } products.`}</Text>
+        )}
       </Column>
-      <Button
-        size="sm"
-        px="4"
-        startIcon={<AddIcon color={colors.white} />}
-        borderRadius="full"
-        onPress={() => {
-          router.push(Routes.NEW_PRODUCT);
-        }}
-      >
-        Add Product
-      </Button>
+      {filter === "all" && (
+        <Button
+          size="sm"
+          px="4"
+          startIcon={<AddIcon color={colors.white} />}
+          borderRadius="full"
+          onPress={() => {
+            router.push(Routes.NEW_PRODUCT);
+          }}
+        >
+          Add Product
+        </Button>
+      )}
     </Column>
   );
 };
