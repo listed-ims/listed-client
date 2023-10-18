@@ -6,6 +6,7 @@ import {
 } from "@listed-components/molecules";
 import { Stack } from "expo-router";
 import { ScreenContainer } from "@listed-components/organisms";
+import { NotificationStatus, NotificationType } from "@listed-types";
 
 const Notification = () => {
   const [filter, setFilter] = useState<"all" | "unread">("all");
@@ -16,7 +17,8 @@ const Notification = () => {
       receiver: "JaneSmith",
       store: "7/EVELEN",
       product: "EXPO",
-      notificationType: "EXPIRATION",
+      notificationType: NotificationType.EXPIRATION,
+      notificationStatus: NotificationStatus.READ,
       expirationDate: "2023-11-15",
       dateCreated: "Oct 1",
       time: "10:00 AM",
@@ -25,7 +27,8 @@ const Notification = () => {
       id: "2",
       sender: "JaneSmith",
       receiver: "JohnDoe",
-      notificationType: "LOW_STOCK",
+      notificationType: NotificationType.LOW_STOCK,
+      notificationStatus: NotificationStatus.UNREAD,
       store: "Nustar",
       product: "360 Coffee",
       expirationDate: "2023-12-10",
@@ -38,7 +41,8 @@ const Notification = () => {
       id: "3",
       sender: "Lebron",
       receiver: "James",
-      notificationType: "STORE_INVITE",
+      notificationType: NotificationType.STORE_INVITE,
+      notificationStatus: NotificationStatus.UNREAD,
       store: "IPROMISE",
       product: "Lobos Coffee",
       expirationDate: "Yesterday",
@@ -50,7 +54,8 @@ const Notification = () => {
       id: "4",
       sender: "Lebron",
       receiver: "James",
-      notificationType: "INVITE_REPLY",
+      notificationType: NotificationType.INVITE_REPLY,
+      notificationStatus: NotificationStatus.READ,
       store: "IPROMISE",
       product: "Lobos Coffee",
       expirationDate: "Yesterday",
@@ -62,7 +67,8 @@ const Notification = () => {
       id: "5",
       sender: "Stephen",
       receiver: "Durant",
-      notificationType: "COLLABORATOR_REMOVAL",
+      notificationType: NotificationType.COLLABORATOR_REMOVAL,
+      notificationStatus: NotificationStatus.UNREAD,
       store: "NBA",
       product: "Lobos Coffee",
       expirationDate: "Yesterday",
@@ -74,7 +80,8 @@ const Notification = () => {
       id: "6",
       sender: "Michael",
       receiver: "Jordan",
-      notificationType: "STORE_INVITE",
+      notificationType: NotificationType.EXPIRATION,
+      notificationStatus: NotificationStatus.READ,
       store: "IPROMISE",
       product: "Lobos Coffee",
       expirationDate: "Yesterday",
@@ -86,7 +93,8 @@ const Notification = () => {
       id: "7",
       sender: "Lebron",
       receiver: "James",
-      notificationType: "EXPIRATION",
+      notificationType: NotificationType.STORE_INVITE,
+      notificationStatus: NotificationStatus.UNREAD,
       store: "IPROMISE",
       product: "Lobos Coffee",
       expirationDate: "Yesterday",
@@ -118,14 +126,8 @@ const Notification = () => {
               receiver={item.receiver}
               store={item.store}
               product={item.product}
-              notificationType={
-                item.notificationType?.toUpperCase() as
-                  | "STORE_INVITE"
-                  | "COLLABORATOR_REMOVAL"
-                  | "LOW_STOCK"
-                  | "EXPIRATION"
-                  | "INVITE_REPLY"
-              }
+              notificationType={item.notificationType}
+              notificationStatus={item.notificationStatus}
               expirationDate={item.expirationDate}
               dateCreated={item.dateCreated}
               time={item.time}

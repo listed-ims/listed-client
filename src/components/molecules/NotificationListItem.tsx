@@ -3,8 +3,9 @@ import {
   CollaboratorRemovalIcon,
   ExpirationIcon,
   LowStockIcon,
-  StoreInviteIcon,
+  SmallMail,
 } from "@listed-components/atoms";
+import { NotificationStatus, NotificationType } from "@listed-types";
 
 import {
   IPressableProps,
@@ -23,12 +24,8 @@ interface NotificationListItemProps extends IPressableProps {
   receiver: string;
   store: string;
   product: string;
-  notificationType:
-    | "STORE_INVITE"
-    | "COLLABORATOR_REMOVAL"
-    | "LOW_STOCK"
-    | "EXPIRATION"
-    | "INVITE_REPLY";
+  notificationType: NotificationType;
+  notificationStatus: NotificationStatus;
   expirationDate: string;
   dateCreated: string;
   time: string;
@@ -41,22 +38,16 @@ const NotificationListItem = ({
   store,
   product,
   notificationType,
+  notificationStatus,
   expirationDate,
   dateCreated,
   time,
   quantity,
   ...props
 }: NotificationListItemProps) => {
-  const getIconByNotificationType = (
-    type:
-      | "STORE_INVITE"
-      | "COLLABORATOR_REMOVAL"
-      | "LOW_STOCK"
-      | "EXPIRATION"
-      | "INVITE_REPLY"
-  ) => {
+  const getIconByNotificationType = (type: NotificationType) => {
     switch (type) {
-      case "EXPIRATION":
+      case NotificationType.EXPIRATION:
         return (
           <Center
             width="8"
@@ -68,7 +59,7 @@ const NotificationListItem = ({
           </Center>
         );
 
-      case "LOW_STOCK":
+      case NotificationType.LOW_STOCK:
         return (
           <Center
             width="8"
@@ -80,7 +71,7 @@ const NotificationListItem = ({
           </Center>
         );
 
-      case "COLLABORATOR_REMOVAL":
+      case NotificationType.COLLABORATOR_REMOVAL:
         return (
           <Center
             width="8"
@@ -92,7 +83,7 @@ const NotificationListItem = ({
           </Center>
         );
 
-      case "STORE_INVITE":
+      case NotificationType.STORE_INVITE:
         return (
           <Center
             width="8"
@@ -100,11 +91,11 @@ const NotificationListItem = ({
             backgroundColor="offWhite.700"
             borderRadius="full"
           >
-            <StoreInviteIcon />
+            <SmallMail />
           </Center>
         );
 
-        case "INVITE_REPLY":
+      case NotificationType.INVITE_REPLY:
         return (
           <Center
             width="8"
@@ -112,7 +103,7 @@ const NotificationListItem = ({
             backgroundColor="offWhite.700"
             borderRadius="full"
           >
-            <StoreInviteIcon />
+            <SmallMail />
           </Center>
         );
 
@@ -121,25 +112,44 @@ const NotificationListItem = ({
     }
   };
 
+  const backgroundColor =
+    notificationStatus === NotificationStatus.UNREAD
+      ? "offWhite.300"
+      : "muted.50";
+
   switch (notificationType) {
-    case "LOW_STOCK":
+    case NotificationType.LOW_STOCK:
       return (
         <Pressable
           {...props}
           _pressed={{ background: "muted.100" }}
           p="4"
           borderRadius="lg"
-          backgroundColor="muted.50"
+          backgroundColor={backgroundColor}
           my="1"
-          
         >
           <Row alignItems="center" justifyContent="space-between" space="2">
             {getIconByNotificationType(notificationType)}
             <Column alignItems="flex-start">
-              <Text fontSize="sm" fontWeight="semibold">
+              <Text
+                fontSize="sm"
+                fontWeight={
+                  notificationStatus === NotificationStatus.UNREAD
+                    ? "semibold"
+                    : "normal"
+                }
+              >
                 {product}
               </Text>
-              <Text fontSize="xs" fontWeight="medium" color="muted.500">
+              <Text
+                fontSize="xs"
+                color="muted.500"
+                fontWeight={
+                  notificationStatus === NotificationStatus.UNREAD
+                    ? "medium"
+                    : "normal"
+                }
+              >
                 Low Stocks: {quantity}
               </Text>
             </Column>
@@ -154,27 +164,50 @@ const NotificationListItem = ({
                 {time}
               </Text>
             </Column>
+            {notificationStatus === NotificationStatus.UNREAD && (
+              <Center
+                width="2"
+                height="2"
+                backgroundColor="primary.700"
+                borderRadius="full"
+              ></Center>
+            )}
           </Row>
         </Pressable>
       );
 
-    case "EXPIRATION":
+    case NotificationType.EXPIRATION:
       return (
         <Pressable
           {...props}
           _pressed={{ background: "muted.100" }}
           p="4"
           borderRadius="lg"
-          backgroundColor="offWhite.200"
+          backgroundColor={backgroundColor}
           my="1"
         >
           <Row alignItems="center" justifyContent="space-between" space="2">
             {getIconByNotificationType(notificationType)}
             <Column alignItems="flex-start">
-              <Text fontSize="sm" fontWeight="semibold">
+              <Text
+                fontSize="sm"
+                fontWeight={
+                  notificationStatus === NotificationStatus.UNREAD
+                    ? "semibold"
+                    : "normal"
+                }
+              >
                 {product}
               </Text>
-              <Text fontSize="xs" fontWeight="medium" color="muted.500">
+              <Text
+                fontSize="xs"
+                color="muted.500"
+                fontWeight={
+                  notificationStatus === NotificationStatus.UNREAD
+                    ? "medium"
+                    : "normal"
+                }
+              >
                 Expires on {expirationDate}
               </Text>
             </Column>
@@ -189,32 +222,51 @@ const NotificationListItem = ({
                 {time}
               </Text>
             </Column>
-        
-            <Center width="2" height="2" backgroundColor="primary.700" borderRadius="full">
-    
-          </Center>
-            
+
+            {notificationStatus === NotificationStatus.UNREAD && (
+              <Center
+                width="2"
+                height="2"
+                backgroundColor="primary.700"
+                borderRadius="full"
+              ></Center>
+            )}
           </Row>
         </Pressable>
       );
 
-    case "COLLABORATOR_REMOVAL":
+    case NotificationType.COLLABORATOR_REMOVAL:
       return (
         <Pressable
           {...props}
           _pressed={{ background: "muted.100" }}
           p="4"
           borderRadius="lg"
-          backgroundColor="offWhite.200"
+          backgroundColor={backgroundColor}
           my="1"
         >
           <Row alignItems="center" justifyContent="space-between" space="2">
             {getIconByNotificationType(notificationType)}
             <Column flex="4" alignItems="flex-start">
-              <Text fontSize="sm" fontWeight="semibold">
+              <Text
+                fontSize="sm"
+                fontWeight={
+                  notificationStatus === NotificationStatus.UNREAD
+                    ? "semibold"
+                    : "normal"
+                }
+              >
                 Removed from {store}
               </Text>
-              <Text fontSize="xs" fontWeight="medium" color="muted.500">
+              <Text
+                fontSize="xs"
+                color="muted.500"
+                fontWeight={
+                  notificationStatus === NotificationStatus.UNREAD
+                    ? "medium"
+                    : "normal"
+                }
+              >
                 {sender} removed you as a collaborator.
               </Text>
             </Column>
@@ -227,33 +279,56 @@ const NotificationListItem = ({
                 {time}
               </Text>
             </Column>
-            <Center width="2" height="2" backgroundColor="primary.700" borderRadius="full">
-    
-            </Center>
+            {notificationStatus === NotificationStatus.UNREAD && (
+              <Center
+                width="2"
+                height="2"
+                backgroundColor="primary.700"
+                borderRadius="full"
+              ></Center>
+            )}
           </Row>
         </Pressable>
       );
 
-    case "STORE_INVITE":
+    case NotificationType.STORE_INVITE:
       return (
         <Pressable
           {...props}
           _pressed={{ background: "muted.100" }}
           p="4"
           borderRadius="lg"
-          backgroundColor="offWhite.200"
+          backgroundColor={backgroundColor}
           my="1"
-      
         >
-      
           <Column>
-            <Row alignItems="center" justifyContent="space-between" space="2"  pointerEvents="box-none">
+            <Row
+              alignItems="center"
+              justifyContent="space-between"
+              space="2"
+              pointerEvents="box-none"
+            >
               {getIconByNotificationType(notificationType)}
               <Column flex="4" alignItems="flex-start">
-                <Text fontSize="sm" fontWeight="semibold">
+                <Text
+                  fontSize="sm"
+                  fontWeight={
+                    notificationStatus === NotificationStatus.UNREAD
+                      ? "semibold"
+                      : "normal"
+                  }
+                >
                   Join {store}
                 </Text>
-                <Text fontSize="xs" fontWeight="medium" color="muted.500">
+                <Text
+                  fontSize="xs"
+                  color="muted.500"
+                  fontWeight={
+                    notificationStatus === NotificationStatus.UNREAD
+                      ? "medium"
+                      : "normal"
+                  }
+                >
                   {sender} sent you an invite.
                 </Text>
               </Column>
@@ -266,9 +341,14 @@ const NotificationListItem = ({
                   {time}
                 </Text>
               </Column>
-              <Center width="2" height="2" backgroundColor="primary.700" borderRadius="full">
-    
-              </Center>
+              {notificationStatus === NotificationStatus.UNREAD && (
+                <Center
+                  width="2"
+                  height="2"
+                  backgroundColor="primary.700"
+                  borderRadius="full"
+                ></Center>
+              )}
             </Row>
 
             <Column>
@@ -282,31 +362,43 @@ const NotificationListItem = ({
                 </Button>
               </Row>
             </Column>
-            
           </Column>
-        
-        
         </Pressable>
       );
 
-    case "INVITE_REPLY":
+    case NotificationType.INVITE_REPLY:
       return (
         <Pressable
           {...props}
           _pressed={{ background: "muted.100" }}
           p="4"
           borderRadius="lg"
-          backgroundColor="muted.50"
+          backgroundColor={backgroundColor}
           my="1"
         >
           <Column>
             <Row alignItems="center" justifyContent="space-between" space="2">
               {getIconByNotificationType(notificationType)}
               <Column flex="4" alignItems="flex-start">
-                <Text fontSize="sm" fontWeight="semibold">
+                <Text
+                  fontSize="sm"
+                  fontWeight={
+                    notificationStatus === NotificationStatus.UNREAD
+                      ? "semibold"
+                      : "normal"
+                  }
+                >
                   New Collaborator.
                 </Text>
-                <Text fontSize="xs" fontWeight="medium" color="muted.500">
+                <Text
+                  fontSize="xs"
+                  color="muted.500"
+                  fontWeight={
+                    notificationStatus === NotificationStatus.UNREAD
+                      ? "medium"
+                      : "normal"
+                  }
+                >
                   {receiver} accepted your invite.
                 </Text>
               </Column>
@@ -326,6 +418,14 @@ const NotificationListItem = ({
                   {time}
                 </Text>
               </Column>
+              {notificationStatus === NotificationStatus.UNREAD && (
+                <Center
+                  width="2"
+                  height="2"
+                  backgroundColor="primary.700"
+                  borderRadius="full"
+                ></Center>
+              )}
             </Row>
           </Column>
         </Pressable>
