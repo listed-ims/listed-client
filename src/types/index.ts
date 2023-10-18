@@ -7,3 +7,4 @@ export * from "./incoming";
 export * from "./collaborator";
 export * from "./outgoing";
 export * from "./analytics";
+export * from "./notification";
