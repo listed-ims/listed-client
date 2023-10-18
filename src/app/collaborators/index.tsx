@@ -21,7 +21,8 @@ const Collaborators = () => {
   const { userDetails, userMembership } = useAuth();
 
   let filters: MembershipStatus[] = ["ACTIVE", "INACTIVE"] as MembershipStatus[]
-  if (userMembership?.permissions.includes(UserPermission.OWNER)) {
+  if (userMembership?.permissions.includes(UserPermission.OWNER)
+    || userMembership?.permissions.includes(UserPermission.ADD_COLLABORATOR)) {
     filters = ["ACTIVE", "INACTIVE", "PENDING"] as MembershipStatus[]
   }
 

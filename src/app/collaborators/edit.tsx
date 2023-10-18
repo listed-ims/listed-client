@@ -44,7 +44,6 @@ const CollaboratorEdit = () => {
     mutate: updateCollaborator,
   } = useUpdateUserMembershipMutation({
     onSuccess: (data) => {
-      console.log("updated", data)
       queryClient.invalidateQueries([GET_COLLABORATORS]);
       queryClient.setQueriesData([GET_COLLABORATOR, data.id], data);
       toast.show({
@@ -60,7 +59,6 @@ const CollaboratorEdit = () => {
     mutate: updateCollaboratorStatus,
   } = useUpdateUserMembershipMutation({
     onSuccess: (data) => {
-      console.log("updated", data)
       queryClient.invalidateQueries([GET_COLLABORATORS]);
       queryClient.setQueriesData([GET_COLLABORATOR, data.id], data);
       toast.show({

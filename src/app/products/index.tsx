@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Stack, router } from "expo-router";
 import { stackHeaderStyles } from "@listed-styles";
 import { NoProductsFound, ScreenContainer } from "@listed-components/organisms";
@@ -35,6 +35,7 @@ const Products = () => {
   const { userDetails } = useAuth();
   const { colors } = useTheme();
   const queryClient = useQueryClient();
+  const [noProducts, setNotProducts] = useState(true);
 
   const {
     data: productList,
@@ -47,8 +48,8 @@ const Products = () => {
     filter === "all"
       ? undefined
       : filter === "low stock"
-        ? ProductFilter.LOW_STOCK
-        : ProductFilter.NO_STOCK,
+      ? ProductFilter.LOW_STOCK
+      : ProductFilter.NO_STOCK,
     undefined,
     1,
     100
@@ -63,7 +64,14 @@ const Products = () => {
   const handleSelectItem = (item: ProductResponse) => {
     queryClient.setQueryData([GET_PRODUCT, item.id], item);
     router.push(`${Routes.PRODUCTS}/${item.id}}`);
-  }
+  };
+
+  useEffect(() => {
+    if (filter === "all" && productList?.length! === 0) 
+      setNotProducts(true);
+    else if (filter === "all" && productList?.length! > 0)
+      setNotProducts(false);
+  }, [filter]);
 
   return (
     <ScreenContainer withHeader>
@@ -76,13 +84,16 @@ const Products = () => {
               <Pressable
                 padding="1"
                 borderRadius="full"
-                _pressed={{ background: 'muted.100' }}
-                onPress={() => router.push({
-                  pathname: Routes.BARCODE,
-                  params: {
-                    nextRoute: Routes.PRODUCTS,
-                  },
-                })}>
+                _pressed={{ background: "muted.100" }}
+                onPress={() =>
+                  router.push({
+                    pathname: Routes.BARCODE,
+                    params: {
+                      nextRoute: Routes.PRODUCTS,
+                    },
+                  })
+                }
+              >
                 <HeaderScanIcon />
               </Pressable>
             </HStack>
@@ -97,7 +108,9 @@ const Products = () => {
         <Box flex={1}>
           <FlatList
             contentContainerStyle={{ flexGrow: 1 }}
-            ListEmptyComponent={<NoProductsFound />}
+            ListEmptyComponent={
+              <NoProductsFound filter={noProducts ? "all" : filter} />
+            }
             ListHeaderComponent={() => (
               <HStack
                 bg="muted.100"
@@ -105,7 +118,7 @@ const Products = () => {
                 borderRadius="lg"
                 alignSelf="flex-start"
                 space="5"
-                mb="4"
+                mb={productList?.length! > 0 ? "4" : "0"}
               >
                 <VStack justifyContent="space-between" space="1">
                   <Text fontSize="2xs" fontWeight="medium" color="muted.600">
@@ -130,7 +143,7 @@ const Products = () => {
             )}
           />
         </Box>
-        {productList && productList.length > 0 ? (
+        {productList?.length! > 0 || (filter !== "all" && !noProducts) ? (
           <Button
             alignSelf="flex-end"
             size="sm"

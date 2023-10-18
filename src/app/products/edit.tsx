@@ -8,7 +8,7 @@ import { stackHeaderStyles } from '@listed-styles'
 import { useDebounce, useFormValidation, useGetProductDetails, useUpdateProductMutation, useValidateBarcode, } from '@listed-hooks'
 import { useQueryClient } from '@tanstack/react-query'
 import { ValidationRules, UpdateRequest, UserPermission, } from '@listed-types'
-import { GET_PRODUCT, GET_PRODUCTS, Routes } from '@listed-constants'
+import { GET_ANALYTICS_SUMMARY, GET_PRODUCT, GET_PRODUCTS, Routes } from '@listed-constants'
 import { useAuth } from '@listed-contexts'
 import { KeyboardAwareScroll, renderUnauthorizedModal } from '@listed-components/organisms'
 import { hasPermission } from '@listed-utils'
@@ -74,6 +74,7 @@ const EditProduct = () => {
     onSuccess: (data) => {
       queryClient.setQueryData([GET_PRODUCT, data.id], data);
       queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS] });
+      queryClient.invalidateQueries({queryKey: [GET_ANALYTICS_SUMMARY]})
       router.back();
       toast.show({
         render: () => {
