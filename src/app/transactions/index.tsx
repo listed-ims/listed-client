@@ -2,6 +2,7 @@ import { Button, OptionsIcon } from "@listed-components/atoms";
 import { Routes } from "@listed-constants";
 import { TransactionListItem } from "@listed-components/molecules";
 import {
+  NoTransactions,
   ScreenContainer,
   TransactionFilterModal,
   renderUnauthorizedModal,
@@ -45,6 +46,7 @@ const transactions = () => {
   const { userDetails, userMembership } = useAuth();
   const [incomingFilter, setIncomingFilter] = useState(noFilter);
   const [outgoingFilter, setOutgoingFilter] = useState(noFilter);
+  const [filtered, setFiltered] = useState(false);
 
   const {
     data: incomingTransactions,
@@ -76,6 +78,10 @@ const transactions = () => {
   );
 
   const handleOnApplyFilter = (filter: TransactionFilter) => {
+    JSON.stringify(filter) !== JSON.stringify(noFilter)
+    ? setFiltered(true)
+    : setFiltered(false);
+
     if (transaction === "incoming") {
       setIncomingFilter(filter);
       setOutgoingFilter(noFilter);
@@ -83,6 +89,7 @@ const transactions = () => {
       setOutgoingFilter(filter);
       setIncomingFilter(noFilter);
     }
+    
     setIsBottomSheetVisible(false);
   };
 
@@ -94,6 +101,8 @@ const transactions = () => {
       )
     );
   };
+
+  
 
   return (
     <ScreenContainer withHeader>
@@ -124,14 +133,14 @@ const transactions = () => {
             OUTGOING
           </Button>
         </Row>
+        { (filtered || 
+          (transaction === "incoming" && incomingTransactions?.pages[0].length! > 0) ||
+          (transaction === "outgoing" && outgoingTransactions?.pages[0].length! > 0)) &&
         <Button
           variant={
-            (transaction === "incoming" &&
-              JSON.stringify(incomingFilter) === JSON.stringify(noFilter)) ||
-              (transaction === "outgoing" &&
-                JSON.stringify(outgoingFilter) === JSON.stringify(noFilter))
-              ? "outline"
-              : "solid"
+              filtered
+              ? "solid"
+              : "outline"
           }
           alignSelf="flex-start"
           px="5"
@@ -141,24 +150,22 @@ const transactions = () => {
           startIcon={
             <OptionsIcon
               color={
-                (transaction === "incoming" &&
-                  JSON.stringify(incomingFilter) ===
-                  JSON.stringify(noFilter)) ||
-                  (transaction === "outgoing" &&
-                    JSON.stringify(outgoingFilter) === JSON.stringify(noFilter))
-                  ? colors.primary[700]
-                  : colors.white
+                filtered
+                  ?  colors.white
+                  : colors.primary[700]
               }
             />
           }
         >
           Filter
         </Button>
+        }
       </Column>
-
       <Box flex={1} paddingBottom="4">
-        {transaction === "incoming" ? (
+        {transaction === "incoming" && (incomingTransactions?.pages[0].length! > 0 || filtered) ? (
           <FlatList
+            contentContainerStyle={{flexGrow:1}}
+            ListEmptyComponent={<NoTransactions filtered= {true}/>}
             ItemSeparatorComponent={() => <Divider />}
             data={incomingTransactions?.pages.flatMap((page) => page)}
             renderItem={({ item }) => (
@@ -185,8 +192,10 @@ const transactions = () => {
                 incomingTransactionsFetchNextPage();
             }}
           />
-        ) : (
+        ) :  transaction === "outgoing" && (outgoingTransactions?.pages[0].length! > 0 || filtered) ? (
           <FlatList
+            contentContainerStyle={{flexGrow:1}}
+            ListEmptyComponent={<NoTransactions filtered={true}/>}
             ItemSeparatorComponent={() => <Divider />}
             data={outgoingTransactions?.pages.flatMap((page) => page)}
             renderItem={({ item }) => (
@@ -213,7 +222,8 @@ const transactions = () => {
                 outgoingTransactionsFetchNextPage();
             }}
           />
-        )}
+        ): <NoTransactions/>
+        }   
       </Box>
       <TransactionFilterModal
         filter={transaction === "incoming" ? incomingFilter : outgoingFilter}
