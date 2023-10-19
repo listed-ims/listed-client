@@ -7,7 +7,7 @@ import { stackHeaderStyles } from "@listed-styles"
 import { MembershipStatus, ModalContent, UserPermission } from "@listed-types"
 import { hasPermission, ownerOrCollaborator, } from "@listed-utils"
 import { useQueryClient } from "@tanstack/react-query"
-import { Stack, router, useLocalSearchParams } from "expo-router"
+import { Redirect, Stack, router, useLocalSearchParams } from "expo-router"
 import { Badge, Center, Column, Heading, ScrollView, Text, useToast } from "native-base"
 import { useState } from "react"
 
@@ -64,6 +64,9 @@ const CollaboratorDetails = () => {
     })
     setShowRemoveModal(true);
   }
+
+  if(collaboratorDetails === undefined)
+    return <Redirect href={""} />
 
   return (
     <ScreenContainer withHeader>

@@ -24,7 +24,7 @@ import {
   useTheme,
 } from "native-base";
 import { stackHeaderStyles } from "@listed-styles";
-import { GET_OUTGOING_TRANSACTIONS, OutgoingCategory, Routes, GET_PRODUCT, GET_ANALYTICS_SUMMARY } from "@listed-constants";
+import { GET_OUTGOING_TRANSACTIONS, OutgoingCategory, Routes, GET_PRODUCT, GET_ANALYTICS_SUMMARY, GET_NOTIFICATIONS } from "@listed-constants";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { getProductService } from "@listed-services";
 import {
@@ -162,6 +162,7 @@ const NewOutgoing = () => {
       resetForm();
       queryClient.invalidateQueries({queryKey:[GET_OUTGOING_TRANSACTIONS]})
       queryClient.invalidateQueries({queryKey: [GET_ANALYTICS_SUMMARY]})
+      queryClient.invalidateQueries({queryKey: [GET_NOTIFICATIONS]})
       router.push(`${Routes.OUTGOING_RECEIPT}?transactionId=${data.id}`);
     },
     onError: (error) => {

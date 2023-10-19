@@ -5,15 +5,18 @@ import {
   LowStockIcon,
   SmallMail,
 } from "@listed-components/atoms";
+import { GET_NOTIFICATIONS, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
+import { useUpdateNotificationStatusMutation } from "@listed-hooks";
 import {
+  MembershipStatus,
   NotificationResponse,
   NotificationStatus,
   NotificationType,
-  UserPermission,
 } from "@listed-types";
-import { dateToMonthDDYYYY, dateToReadableTime } from "@listed-utils";
-
+import { dateToDay, dateToMMDDYY, dateToReadableTime } from "@listed-utils";
+import { useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
 import {
   IPressableProps,
   Text,
@@ -24,7 +27,6 @@ import {
   Divider,
   Center,
 } from "native-base";
-
 
 interface NotificationListItemProps extends IPressableProps {
   notificationDetails: NotificationResponse;
@@ -101,313 +103,171 @@ const NotificationListItem = ({
     }
   };
 
+  const { userDetails } = useAuth();
+  const queryClient = useQueryClient();
+
   const {
     product,
     quantity,
     store,
     expirationDate,
-    sender,
     recipient,
     invitee,
     status,
-  } = JSON.parse(notificationDetails.metaData) 
-    
+    membershipId,
+  } = JSON.parse(notificationDetails.metaData, (_key, value) => {
+    try {
+      return JSON.parse(value);
+    } catch (e) {
+      return value;
+    }
+  });
 
-  const backgroundColor =
-    notificationDetails.status === NotificationStatus.UNREAD
-      ? "offWhite.300"
-      : "muted.50";
+  const {
+    mutate: updateNotification,
+    isError: updateNotificationError,
+    isLoading: updateNotificationLoading,
+  } = useUpdateNotificationStatusMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: [GET_NOTIFICATIONS]})
+    },
+    onError: (error) => {
+      console.log("Error updating notification status.");
+      console.error({ ...error });
+    },
+  });
 
-  const { userDetails, userMembership } = useAuth();
+  const handleOnPress = () => {
+    if(notificationDetails.status === NotificationStatus.UNREAD)
+      updateNotification(notificationDetails.id);
 
-  switch (notificationDetails.type) {
-    case NotificationType.LOW_STOCK:
-      return (
-        <Pressable
-          {...props}
-          _pressed={{ background: "muted.100" }}
-          p="4"
-          borderRadius="lg"
-          backgroundColor={backgroundColor}
-          my="1"
-        >
-          <Row alignItems="center" justifyContent="space-between" space="2">
-            {getIconByNotificationType(notificationDetails.type)}
-            <Column alignItems="flex-start">
-              <Text
-                fontSize="sm"
-                fontWeight={
-                  notificationDetails.status === NotificationStatus.UNREAD
-                    ? "semibold"
-                    : "normal"
-                }
-              >
-                {JSON.parse(product!).name}
-              </Text>
-              <Text
-                fontSize="xs"
-                color="muted.500"
-                fontWeight={
-                  notificationDetails.status === NotificationStatus.UNREAD
-                    ? "medium"
-                    : "normal"
-                }
-              >
-                Low Stocks: {quantity}
-              </Text>
-            </Column>
-            <Column flex="2" alignItems="flex-end">
-              <Badge colorScheme="green" variant="solid" alignItems="flex-end">
-                {JSON.parse(store!).name}
-              </Badge>
-              <Text fontSize="xs" fontWeight="normal" color="muted.500">
-                {notificationDetails?.dateCreated && (
-                  <Text fontSize="xs">
-                    {dateToMonthDDYYYY(
-                      new Date(notificationDetails.dateCreated.toString()!)
-                    )}
-                  </Text>
-                )}
-              </Text>
-              <Text fontSize="xs" fontWeight="normal" color="muted.500">
-                {notificationDetails?.dateCreated &&
-                  dateToReadableTime(
-                    new Date(notificationDetails.dateCreated.toString()!)
-                  )}
-              </Text>
-            </Column>
-            {notificationDetails.status === NotificationStatus.UNREAD && (
-              <Center
-                width="2"
-                height="2"
-                backgroundColor="primary.700"
-                borderRadius="full"
-              ></Center>
-            )}
-          </Row>
-        </Pressable>
-      );
+      if (notificationDetails.type === NotificationType.LOW_STOCK){
+        router.push(`${Routes.PRODUCTS}/${product.id}}`);
+      } else if (notificationDetails.type === NotificationType.STORE_INVITE){
+        if (Number(invitee.id) === userDetails?.id)
+          router.push(`${Routes.STORES}/${store.id}}`);
+        else
+          router.push(`${Routes.COLLABORATORS}/${membershipId}}`);
+      } else if (notificationDetails.type === NotificationType.INVITE_REPLY){
+        if (status)
+          router.push(`${Routes.STORES}/${store.id}}`);
+        else
+          router.push(`${Routes.COLLABORATORS}/${membershipId}}`);
+      }
+  }
 
-    case NotificationType.EXPIRATION:
-      return (
-        <Pressable
-          {...props}
-          _pressed={{ background: "muted.100" }}
-          p="4"
-          borderRadius="lg"
-          backgroundColor={backgroundColor}
-          my="1"
-        >
-          <Row alignItems="center" justifyContent="space-between" space="2">
-            {getIconByNotificationType(notificationDetails.type)}
-            <Column alignItems="flex-start">
-              <Text
-                fontSize="sm"
-                fontWeight={
-                  notificationDetails.status === NotificationStatus.UNREAD
-                    ? "semibold"
-                    : "normal"
-                }
-              >
-                {product?.name}
-              </Text>
-              <Text
-                fontSize="xs"
-                color="muted.500"
-                fontWeight={
-                  notificationDetails.status === NotificationStatus.UNREAD
-                    ? "medium"
-                    : "normal"
-                }
-              >
-                Expires on {expirationDate && dateToMonthDDYYYY(expirationDate)}
-              </Text>
-            </Column>
-            <Column flex="2" alignItems="flex-end">
-              <Badge colorScheme="green" variant="solid" alignItems="flex-end">
-                {store?.name}
-              </Badge>
-              <Text fontSize="xs" fontWeight="normal" color="muted.500">
-                {notificationDetails?.dateCreated && (
-                  <Text fontSize="xs">
-                    {dateToMonthDDYYYY(
-                      new Date(notificationDetails.dateCreated.toString()!)
-                    )}
-                  </Text>
-                )}
-              </Text>
-              <Text fontSize="xs" fontWeight="normal" color="muted.500">
-                {notificationDetails?.dateCreated &&
-                  dateToReadableTime(
-                    new Date(notificationDetails.dateCreated.toString()!)
-                  )}
-              </Text>
-            </Column>
-
-            {notificationDetails.status === NotificationStatus.UNREAD && (
-              <Center
-                width="2"
-                height="2"
-                backgroundColor="primary.700"
-                borderRadius="full"
-              ></Center>
-            )}
-          </Row>
-        </Pressable>
-      );
-
-    case NotificationType.COLLABORATOR_REMOVAL:
-      return (
-        <Pressable
-          {...props}
-          _pressed={{ background: "muted.100" }}
-          p="4"
-          borderRadius="lg"
-          backgroundColor={backgroundColor}
-          my="1"
-        >
-          <Row alignItems="center" justifyContent="space-between" space="2">
-            {getIconByNotificationType(notificationDetails.type)}
-            <Column flex="4" alignItems="flex-start">
-              <Text
-                fontSize="sm"
-                fontWeight={
-                  notificationDetails.status === NotificationStatus.UNREAD
-                    ? "semibold"
-                    : "normal"
-                }
-              >
-                Removed from {JSON.parse(store!).name}
-              </Text>
-              <Text
-                fontSize="xs"
-                color="muted.500"
-                fontWeight={
-                  notificationDetails.status === NotificationStatus.UNREAD
-                    ? "medium"
-                    : "normal"
-                }
-              >
-                {`${notificationDetails.sender.name} removed ${
-                  Number(JSON.parse(recipient).id) === userDetails?.id
-                    ? "you as a collaborator."
-                    : JSON.parse(recipient!).name + " from your store."
-                }`}
-              </Text>
-            </Column>
-
-            <Column flex="2" alignItems="flex-end">
-            <Badge colorScheme="green" variant="solid" alignItems="flex-end">
-                {store?.name}
-              </Badge>
-              <Text fontSize="xs" fontWeight="normal" color="muted.500">
-                {notificationDetails?.dateCreated && (
-                  <Text fontSize="xs">
-                    {dateToMonthDDYYYY(
-                      new Date(notificationDetails.dateCreated.toString()!)
-                    )}
-                  </Text>
-                )}
-              </Text>
-              <Text fontSize="xs" fontWeight="normal" color="muted.500">
-                {notificationDetails?.dateCreated &&
-                  dateToReadableTime(
-                    new Date(notificationDetails.dateCreated.toString()!)
-                  )}
-              </Text>
-            </Column>
-            {notificationDetails.status === NotificationStatus.UNREAD && (
-              <Center
-                width="2"
-                height="2"
-                backgroundColor="primary.700"
-                borderRadius="full"
-              ></Center>
-            )}
-          </Row>
-        </Pressable>
-      );
-
-    case NotificationType.STORE_INVITE:
-      return (
-        <Pressable
-          {...props}
-          _pressed={{ background: "muted.100" }}
-          p="4"
-          borderRadius="lg"
-          backgroundColor={backgroundColor}
-          my="1"
-        >
-          <Column>
-            <Row
-              alignItems="center"
-              justifyContent="space-between"
-              space="2"
-              pointerEvents="box-none"
+  return (
+    <Pressable
+      {...props}
+      _pressed={{
+        background:
+          notificationDetails.status === NotificationStatus.UNREAD
+            ? "offWhite.500"
+            : "muted.100",
+      }}
+      p="4"
+      borderRadius="lg"
+      background={
+        notificationDetails.status === NotificationStatus.UNREAD
+          ? "offWhite.300"
+          : "muted.50"
+      }
+      my="1"
+      onPress={handleOnPress}
+    >
+      <Column>
+        <Row alignItems="center" justifyContent="space-between" space="2">
+          {getIconByNotificationType(notificationDetails.type)}
+          <Column flex="4" alignItems="flex-start">
+            <Text
+              fontSize="sm"
+              fontWeight={
+                notificationDetails.status === NotificationStatus.UNREAD
+                  ? "semibold"
+                  : "normal"
+              }
             >
-              {getIconByNotificationType(notificationDetails.type)}
-              <Column flex="4" alignItems="flex-start">
-                <Text
-                  fontSize="sm"
-                  fontWeight={
-                    notificationDetails.status === NotificationStatus.UNREAD
-                      ? "semibold"
-                      : "normal"
-                  }
-                >
-                  {`${userMembership?.permissions.
-                    includes(UserPermission.OWNER) ? "New invite to ":"Join "} ${JSON.parse(store!).name}` }
-                  
-                   
-                </Text>
-                <Text
-                  fontSize="xs"
-                  color="muted.500"
-                  fontWeight={
-                    notificationDetails.status === NotificationStatus.UNREAD
-                      ? "medium"
-                      : "normal"
-                  }
-                >
-                  {`${notificationDetails.sender.name} sent ${
-                    userDetails?.id !== Number(JSON.parse(invitee)?.id)?
-                  
-                    JSON.parse(invitee!).name: "you"} an invite.`}
-
-                </Text>
-              </Column>
-                    
-              <Column flex="2" alignItems="flex-end">
-              <Badge colorScheme="green" variant="solid" alignItems="flex-end">
-                {JSON.parse(store!).name}
-              </Badge>
-                <Text fontSize="xs" fontWeight="normal" color="muted.500">
-                  {notificationDetails?.dateCreated && (
-                    <Text fontSize="xs">
-                      {dateToMonthDDYYYY(
-                        new Date(notificationDetails.dateCreated.toString()!)
-                      )}
-                    </Text>
-                  )}
-                </Text>
-                <Text fontSize="xs" fontWeight="normal" color="muted.500">
-                  {notificationDetails?.dateCreated &&
-                    dateToReadableTime(
-                      new Date(notificationDetails.dateCreated.toString()!)
-                    )}
-                </Text>
-              </Column>
-              {notificationDetails.status === NotificationStatus.UNREAD && (
-                <Center
-                  width="2"
-                  height="2"
-                  backgroundColor="primary.700"
-                  borderRadius="full"
-                ></Center>
-              )}
-            </Row>
-
-            {!userMembership?.permissions.includes(UserPermission.OWNER) && (
+              {notificationDetails.type === NotificationType.LOW_STOCK
+                ? product.name
+                : notificationDetails.type === NotificationType.EXPIRATION
+                ? `${quantity} ${product.unit} - ${product.name}`
+                : notificationDetails.type ===
+                  NotificationType.COLLABORATOR_REMOVAL
+                ? "Collaborator Removed"
+                : notificationDetails.type === NotificationType.STORE_INVITE
+                ? "New Invite"
+                : notificationDetails.type === NotificationType.INVITE_REPLY
+                ? status === MembershipStatus.ACTIVE
+                  ? "New Collaborator"
+                  : "Invite Declined"
+                : null}
+            </Text>
+            <Text
+              fontSize="xs"
+              color="muted.500"
+              fontWeight={
+                notificationDetails.status === NotificationStatus.UNREAD
+                  ? "medium"
+                  : "normal"
+              }
+            >
+              {notificationDetails.type === NotificationType.LOW_STOCK
+                ? `Low Stocks: ${quantity}`
+                : notificationDetails.type === NotificationType.EXPIRATION
+                ? `Expires on ${dateToMMDDYY(
+                    new Date(expirationDate.toString()!)
+                  )}`
+                : notificationDetails.type ===
+                  NotificationType.COLLABORATOR_REMOVAL
+                ? `${notificationDetails.sender.name} removed ${
+                    Number(recipient.id) === userDetails?.id
+                      ? "you as a collaborator."
+                      : recipient.name + " from your store."
+                  }`
+                : notificationDetails.type === NotificationType.STORE_INVITE
+                ? `${notificationDetails.sender.name} sent ${
+                    Number(invitee.id) === userDetails?.id
+                      ? "you"
+                      : invitee.name
+                  } an invite.`
+                : notificationDetails.type === NotificationType.INVITE_REPLY
+                ? `${invitee.name} ${
+                    status === MembershipStatus.ACTIVE ? "accepted" : "declined"
+                  } ${
+                    Number(notificationDetails.sender.id) === userDetails?.id
+                      ? "your"
+                      : notificationDetails.sender.name
+                  } invite.`
+                : null}
+            </Text>
+          </Column>
+          <Column flex="2" alignItems="flex-end">
+            <Badge colorScheme="green" variant="solid" alignItems="flex-end">
+              {store.name}
+            </Badge>
+            <Text fontSize="xs" fontWeight="normal" color="muted.500">
+              {notificationDetails?.dateCreated && (
+                dateToDay(
+                  new Date(notificationDetails.dateCreated.toString()!)
+              ))}
+            </Text>
+            <Text fontSize="xs" fontWeight="normal" color="muted.500">
+              {notificationDetails?.dateCreated &&
+                dateToReadableTime(
+                  new Date(notificationDetails.dateCreated.toString()!)
+                )}
+            </Text>
+          </Column>
+          {notificationDetails.status === NotificationStatus.UNREAD && (
+            <Center
+              width="2"
+              height="2"
+              backgroundColor="primary.700"
+              borderRadius="full"
+            />
+          )}
+        </Row>
+          {Number(invitee?.id) === userDetails?.id && status === MembershipStatus.PENDING && (
               <Column>
                 <Row paddingY="3">
                   <Divider />
@@ -420,81 +280,10 @@ const NotificationListItem = ({
                 </Row>
               </Column>
             )}
-          </Column>
-        </Pressable>
-      );
+      </Column>
+    </Pressable>
+  );
 
-    case NotificationType.INVITE_REPLY:
-      return (
-        <Pressable
-          {...props}
-          _pressed={{ background: "muted.100" }}
-          p="4"
-          borderRadius="lg"
-          backgroundColor={backgroundColor}
-          my="1"
-        >
-          <Column>
-            <Row alignItems="center" justifyContent="space-between" space="2">
-              {getIconByNotificationType(notificationDetails.type)}
-              <Column flex="4" alignItems="flex-start">
-                <Text
-                  fontSize="sm"
-                  fontWeight={
-                    notificationDetails.status === NotificationStatus.UNREAD
-                      ? "semibold"
-                      : "normal"
-                  }
-                >
-                  New Collaborator.
-                </Text>
-                <Text
-                  fontSize="xs"
-                  color="muted.500"
-                  fontWeight={
-                    notificationDetails.status === NotificationStatus.UNREAD
-                      ? "medium"
-                      : "normal"
-                  }
-                >
-                  {JSON.parse(invitee).name} accepted your invite.
-                </Text>
-              </Column>
-
-              <Column flex="2" alignItems="flex-end">
-              <Badge colorScheme="green" variant="solid" alignItems="flex-end">
-                {JSON.parse(store!).name}
-              </Badge>
-                <Text fontSize="xs" fontWeight="normal" color="muted.500">
-                  {notificationDetails?.dateCreated && (
-                    <Text fontSize="xs">
-                      {dateToMonthDDYYYY(
-                        new Date(notificationDetails.dateCreated.toString()!)
-                      )}
-                    </Text>
-                  )}
-                </Text>
-                <Text fontSize="xs" fontWeight="normal" color="muted.500">
-                  {notificationDetails?.dateCreated &&
-                    dateToReadableTime(
-                      new Date(notificationDetails.dateCreated.toString()!)
-                    )}
-                </Text>
-              </Column>
-              {notificationDetails.status === NotificationStatus.UNREAD && (
-                <Center
-                  width="2"
-                  height="2"
-                  backgroundColor="primary.700"
-                  borderRadius="full"
-                ></Center>
-              )}
-            </Row>
-            
-          </Column>
-        </Pressable>
-      );
-  }
 };
 
 export default NotificationListItem;

@@ -16,20 +16,8 @@ export enum NotificationStatus {
   READ = "READ",
 }
 
-export interface MetaData {
-  product?: ProductResponse;
-  quantity?: number;
-  store?: StoreResponse;
-  expirationDate?: Date;
-  sender?: UserResponse;
-  recipient?: UserResponse;
-  invitee?: UserResponse;
-  status?: MembershipStatus;
-}
-
 export interface NotificationResponse {
   id: number;
-  receiver: UserResponse;
   sender: UserResponse;
   metaData: string;
   status: NotificationStatus;

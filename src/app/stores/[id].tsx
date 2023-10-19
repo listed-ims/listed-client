@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Redirect, Stack, useLocalSearchParams } from "expo-router";
 import { Badge, Column, Heading, VStack, Text, ScrollView } from "native-base";
 import {
   StoreSummaryCard,
@@ -128,6 +128,9 @@ const StoreDetails = () => {
       setUserMembership(userMembership);
     }
   }, [userMembership]);
+
+  if(storeDetails === undefined)
+    return <Redirect href={""} />
 
   return (
     <ScreenContainer withHeader>

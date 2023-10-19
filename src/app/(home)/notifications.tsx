@@ -41,10 +41,8 @@ const Notification = () => {
           marginBottom="2"
           contentContainerStyle={{ flexGrow: 1 }}
           data={notificationList}
-         
           renderItem={({ item }) => (
-            <NotificationListItem notificationDetails={item}/>
-              
+            <NotificationListItem notificationDetails={item} />
           )}
         />
       </Column>

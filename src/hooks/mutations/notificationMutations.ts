@@ -8,11 +8,11 @@ export const useUpdateNotificationStatusMutation = (
     mutationOptions: MutationOptions<
       NotificationResponse,
       AxiosError<{ message: string }>,
-      [number, NotificationStatus]
+      number
     >
   ) => {
     return useMutation(
-      ([id]) => updateNotificationStatusService(id),
+      (id) => updateNotificationStatusService(id),
       mutationOptions
     );
   };
