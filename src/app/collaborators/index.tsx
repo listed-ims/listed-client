@@ -1,6 +1,10 @@
 import { AddIcon, Button } from "@listed-components/atoms"
 import { CollaboratorListItem, CollaboratorsFilter } from "@listed-components/molecules"
-import { ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms"
+import {
+  EmptyCollaboratorList,
+  ScreenContainer,
+  renderUnauthorizedModal
+} from "@listed-components/organisms"
 import { GET_COLLABORATOR, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
 import { useGetCollaborators } from "@listed-hooks"
@@ -63,7 +67,13 @@ const Collaborators = () => {
           filters={filters}
           handleSetFilter={(filter) => { setCurrentFilter(filter) }} />
         <FlatList
-          data={setCollaboratorsCurrentUserFirst(collaboratorsList, userDetails?.id!, filters[2] ? undefined : MembershipStatus.PENDING)}
+          contentContainerStyle={{ flexGrow: 1 }}
+          data={setCollaboratorsCurrentUserFirst(
+            collaboratorsList,
+            userDetails?.id!, filters[2]
+            ? undefined
+            : MembershipStatus.PENDING
+          )}
           renderItem={({ item, index }) => (
             <CollaboratorListItem
               onPress={() => {
@@ -77,6 +87,7 @@ const Collaborators = () => {
               userRole={item.permissions.includes(UserPermission.OWNER) ? "owner" : "collaborator"}
             />
           )}
+          ListEmptyComponent={<EmptyCollaboratorList filter={currentFilter} />}
         />
         <Button
           alignSelf="flex-end"
