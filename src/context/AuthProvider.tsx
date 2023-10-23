@@ -108,11 +108,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     clearToken();
+    setUserDetails(undefined);
+    setUserMembership(undefined);
     setIsLoggedIn(false);
-  }
-
-  const setUser = (user: UserResponse) => {
-    setUserDetails(user);
   }
 
   useProtectedRoute(isLoggedIn);
