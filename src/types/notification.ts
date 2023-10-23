@@ -16,10 +16,21 @@ export enum NotificationStatus {
   READ = "READ",
 }
 
+export interface NotificationMetaData {
+  product: ProductResponse;
+  quantity: number;
+  store: StoreResponse;
+  expirationDate: Date;
+  recipient: UserResponse;
+  invitee: UserResponse;
+  status: MembershipStatus;
+  membershipId: number;
+}
+
 export interface NotificationResponse {
   id: number;
   sender: UserResponse;
-  metaData: string;
+  metaData: NotificationMetaData;
   status: NotificationStatus;
   type: NotificationType;
   dateCreated: Date;

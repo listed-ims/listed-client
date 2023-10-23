@@ -1,5 +1,19 @@
-import { NotificationResponse, NotificationStatus } from "@listed-types";
+import {
+  NotificationResponse,
+  NotificationStatus,
+  NotificationMetaData,
+} from "@listed-types";
 import { axiosInstance } from "./axios";
+
+const parseNotificationMetaData = (metaDataString: string) => {
+  try {
+    return JSON.parse(metaDataString, (_key, value) =>
+      typeof value === "string" ? JSON.parse(value) : value
+    );
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getNotificationsService = async (
   status?: NotificationStatus,
@@ -15,17 +29,31 @@ export const getNotificationsService = async (
       },
     });
 
-    return response.data as NotificationResponse[];
+    const notifications = response.data as NotificationResponse[];
+
+    notifications.forEach((notification) => {
+      notification.metaData = parseNotificationMetaData(
+        String(notification.metaData)
+      ) as NotificationMetaData;
+    });
+
+    return notifications;
   } catch (error) {
     throw error;
   }
 };
 
 export const updateNotificationStatusService = async (id: number) => {
-    try {
-      const response = await axiosInstance.put(`notifications/${id}`);
-      return response.data as NotificationResponse;
-    } catch (error) {
-      throw error;
-    }
-  };
+  try {
+    const response = await axiosInstance.put(`notifications/${id}`);
+    const notification = response.data as NotificationResponse;
+
+    notification.metaData = parseNotificationMetaData(
+      String(notification.metaData)
+    ) as NotificationMetaData;
+    
+    return notification;
+  } catch (error) {
+    throw error;
+  }
+};
