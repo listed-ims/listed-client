@@ -115,19 +115,28 @@ const Permissions = ({ handleSelectPermission, permissions, ...props }: Permissi
         return newSet
       })
     } else if (isSelected && !value) {
+
+      const categorySelected = new Set<UserPermission>();
+      const allSelected = new Set<UserPermission>();
       category.forEach((permission) => {
-        if (category.includes(permission)) {
-          setSelected((prev) => {
-            return new Set([...prev, permission])
-          })
-          setSelectedPermissions((prev) => {
-            return new Set([...prev, permission])
-          })
-        } else {
-          setSelectedPermissions((prev) => {
-            return new Set([...prev, permission])
+        if (permissionDependencies[permission]) {
+          permissionDependencies[permission].forEach((permission) => {
+            if (category.includes(permission)) {
+              categorySelected.add(permission);
+              allSelected.add(permission);
+            } else {
+              allSelected.add(permission);
+            }
           })
         }
+        categorySelected.add(permission);
+        allSelected.add(permission);
+      })
+      setSelected((prev) => {
+        return new Set([...prev, ...categorySelected])
+      })
+      setSelectedPermissions((prev) => {
+        return new Set([...prev, ...allSelected])
       })
     }
   };
