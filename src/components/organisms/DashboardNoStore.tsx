@@ -32,6 +32,7 @@ const DashboardNoStore = () => {
   };
 
   const handleDecline = () => {
+    setShowDeclineInviteModal(false);
     if (userMembership) {
       updateMembership([userMembership?.id, MembershipStatus.DECLINED]);
     }
