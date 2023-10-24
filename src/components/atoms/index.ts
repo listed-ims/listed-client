@@ -4,7 +4,6 @@ export { default as CollaboratorIcon } from "./CollaboratorIcon";
 export { default as DataSummaryIcon } from "./DataSummaryIcon";
 export { default as HomeIcon } from "./HomeIcon";
 export { default as IncomingIcon } from "./IncomingIcon";
-export { default as InventoryIcon } from "./InventoryIcon";
 export { default as NotificationsIcon } from "./NotificationsIcon";
 export { default as OutgoingIcon } from "./OutgoingIcon";
 export { default as ProductIcon } from "./ProductIcon";
@@ -71,3 +70,4 @@ export { default as BoardIcon } from "./BoardIcon"
 export { default as CollaboratorRemovalIcon } from "./CollaboratorRemovalIcon";
 export { default as ExpirationIcon } from "./ExpirationIcon";
 export { default as LowStockIcon } from "./LowStockIcon";
+export { default as AnalyticsIcon } from "./AnalyticsIcon"

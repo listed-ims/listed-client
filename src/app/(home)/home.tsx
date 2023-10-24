@@ -100,7 +100,7 @@ const Home = () => {
               Inventory Management
             </Text>
             <Row width="full" space="3">
-              <MainButtons flex="1" type="inventory" />
+              <MainButtons flex="1" type="analytics" />
               <MainButtons
                 flex="1"
                 type="products"
