@@ -127,7 +127,7 @@ const CollaboratorDetails = () => {
                   {(
                     !isInactive
                     && userMembership?.permissions.includes(UserPermission.DELETE_COLLABORATOR)
-                  ) &&
+                    || userMembership?.permissions.includes(UserPermission.OWNER) ) &&
                     <Button variant="warnOutline"
                       onPress={handleCancelRemove}
                     >
