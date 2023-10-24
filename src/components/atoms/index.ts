@@ -73,3 +73,5 @@ export { default as LowStockIcon } from "./LowStockIcon";
 export { default as AnalyticsIcon } from "./AnalyticsIcon"
 export { default as LargeNotFound } from "./LargeNotFound";
 export { default as AlertFilledSmall } from "./AlertFilledSmall";
+export { default as SearchNotFound } from "./SearchNotFound";
+

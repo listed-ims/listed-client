@@ -70,12 +70,22 @@ const SelectProduct = () => {
     });
   };
 
+  const handleSearch = () => {
+    router.push({
+      pathname: Routes.SEARCH_PRODUCT,
+      params: {
+        nextRoute: Routes.NEW_OUTGOING,
+        ids: ids ? ids : "",
+      },
+    });
+  }
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen
         options={{
           header: () => {
-            return <HeaderSearchField />;
+            return <HeaderSearchField onPress={handleSearch} />;
           },
         }}
       />

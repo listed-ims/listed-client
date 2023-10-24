@@ -157,7 +157,6 @@ const NotificationListItem = ({
         } else if (metaData.status === MembershipStatus.DECLINED) {
           // TODO: route to a separate screen for declined invite deets
           console.log("declined invite")
-          router.push(Routes.DECLINED_INVITE_NOTIFICATION)
         }
         break;
 

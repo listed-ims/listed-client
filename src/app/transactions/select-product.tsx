@@ -11,7 +11,7 @@ import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 
 const SelectProduct = () => {
-  const { route } = useLocalSearchParams<{route: Routes}>();
+  const { route } = useLocalSearchParams<{ route: Routes }>();
   const { userDetails } = useAuth();
 
   const {
@@ -28,12 +28,21 @@ const SelectProduct = () => {
     100
   );
 
+  const handleSearch = () => {
+    router.push({
+      pathname: Routes.SEARCH_PRODUCT,
+      params: {
+        nextRoute: route,
+      },
+    });
+  }
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen
         options={{
           header: () => {
-            return <HeaderSearchField />;
+            return <HeaderSearchField onPress={handleSearch} />;
           },
         }}
       />
@@ -58,9 +67,8 @@ const SelectProduct = () => {
                 pathname: route === Routes.NEW_INCOMING ? Routes.NEW_INCOMING : Routes.TRANSACTIONS,
                 params: {
                   productId: item.id,
-                  product: `${item.name}${
-                    item.variant ? ` - ${item.variant}` : ""
-                  }`,
+                  product: `${item.name}${item.variant ? ` - ${item.variant}` : ""
+                    }`,
                 },
               });
             }}

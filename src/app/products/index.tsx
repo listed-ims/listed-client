@@ -48,8 +48,8 @@ const Products = () => {
     filter === "all"
       ? undefined
       : filter === "low stock"
-      ? ProductFilter.LOW_STOCK
-      : ProductFilter.NO_STOCK,
+        ? ProductFilter.LOW_STOCK
+        : ProductFilter.NO_STOCK,
     undefined,
     1,
     100
@@ -67,7 +67,7 @@ const Products = () => {
   };
 
   useEffect(() => {
-    if (filter === "all" && productList?.length! === 0) 
+    if (filter === "all" && productList?.length! === 0)
       setNotProducts(true);
     else if (filter === "all" && productList?.length! > 0)
       setNotProducts(false);
@@ -80,7 +80,20 @@ const Products = () => {
           ...stackHeaderStyles("Products"),
           headerRight: () => (
             <HStack space="4" alignItems="center">
-              <HeaderSearchIcon />
+              <Pressable
+                padding="1"
+                borderRadius="full"
+                _pressed={{ background: "muted.100" }}
+                onPress={() =>
+                  router.push({
+                    pathname: Routes.SEARCH_PRODUCT,
+                    params: {
+                      nextRoute: Routes.PRODUCTS,
+                    },
+                  })
+                }>
+                <HeaderSearchIcon />
+              </Pressable>
               <Pressable
                 padding="1"
                 borderRadius="full"
