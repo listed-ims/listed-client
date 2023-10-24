@@ -4,9 +4,12 @@ import { router } from 'expo-router'
 import { Row, useTheme, Button, Text } from 'native-base'
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Routes } from '@listed-constants';
 
-const HeaderSearchField = () => {
+interface HeaderSearchFieldProps {
+  onPress?: () => void
+}
+
+const HeaderSearchField = ({ onPress }: HeaderSearchFieldProps) => {
   const headerHeight = useHeaderHeight();
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
@@ -28,7 +31,7 @@ const HeaderSearchField = () => {
         backgroundColor="muted.100"
         flex="1"
         justifyContent="start"
-        onPress={() => { router.push(Routes.SEARCH_PRODUCTS) }}
+        onPress={onPress}
       >
         <Row space="2">
           <HeaderSearchIcon color={colors.muted[500]} />
