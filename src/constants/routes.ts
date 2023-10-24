@@ -20,4 +20,6 @@ export enum Routes {
   INCOMING = "/transactions/incoming",
   OUTGOING = "/transactions/outgoing",
   SELECT_PRODUCT = "/transactions/select-product",
+  PRODUCT_NOT_FOUND = "/products/not-found",
+  COLLABORATOR_NOT_FOUND = "/collaborators/not-found",
 }
