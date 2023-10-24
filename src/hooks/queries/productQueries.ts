@@ -53,7 +53,7 @@ export const useValidateBarcode = (storeId: number, barcode: string) => {
 const fiveMinutes = 1000 * 60 * 5;
 
 export const useGetProductDetails = (productId: number) => {
-  return useQuery(
+  return useQuery<ProductResponse, AxiosError<{ message: string }>>(
     [GET_PRODUCT, productId],
     () => getProductService(productId),
     {

@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import { Box, Column, FlatList, Text } from "native-base";
-import {
-  NotificationListItem,
-  NotificationsFilter,
-} from "@listed-components/molecules";
-import { ScreenContainer } from "@listed-components/organisms";
+import { NotificationsFilter } from "@listed-components/molecules";
+import { NotificationListItem, ScreenContainer } from "@listed-components/organisms";
 import { NotificationStatus } from "@listed-types";
 import { useGetNotifications } from "@listed-hooks";
 
 const Notification = () => {
   const [filter, setFilter] = useState<"all" | "unread">("all");
-  
+
   const {
     data: notificationList,
     isError: notificationListError,
@@ -19,10 +16,9 @@ const Notification = () => {
     filter === "all"
       ? undefined
       : NotificationStatus.UNREAD,
-      1,
+    1,
     100
   );
-
 
   return (
     <ScreenContainer>

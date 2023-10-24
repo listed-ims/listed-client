@@ -1,7 +1,9 @@
 import { AccountIcon, Button } from "@listed-components/atoms";
 import { LogoutModal, ScreenContainer } from "@listed-components/organisms";
+import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetUserDetails } from "@listed-hooks";
+import { router } from "expo-router";
 import {
   Box,
   Center,
@@ -25,6 +27,7 @@ const Account = () => {
   };
 
   const handleConfirmLogout = () => {
+    router.replace(Routes.LOGIN);
     logout();
     setShowLogoutModal(false);
   };

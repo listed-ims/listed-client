@@ -1,10 +1,13 @@
 import {
+  Button,
   CollaboratorRemovalIcon,
   ExpirationIcon,
   LowStockIcon,
   SmallMail,
 } from "@listed-components/atoms";
+import { GET_NOTIFICATIONS, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
+import { useUpdateNotificationStatusMutation } from "@listed-hooks";
 import {
   MembershipStatus,
   NotificationResponse,
@@ -13,6 +16,7 @@ import {
 } from "@listed-types";
 import { dateToDay, dateToMMDDYY, dateToReadableTime } from "@listed-utils";
 import { useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
 import {
   IPressableProps,
   Text,
@@ -21,6 +25,7 @@ import {
   Column,
   Row,
   Center,
+  Divider,
 } from "native-base";
 
 const getIconByNotificationType = (type: NotificationType) => {
@@ -101,6 +106,38 @@ const NotificationListItem = ({
   const { userDetails } = useAuth();
   const queryClient = useQueryClient();
 
+  const {
+    mutate: updateNotification,
+    isError: updateNotificationError,
+    isLoading: updateNotificationLoading,
+  } = useUpdateNotificationStatusMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [GET_NOTIFICATIONS] })
+    },
+    onError: (error) => {
+      console.log("Error updating notification status.");
+      console.error({ ...error });
+    },
+  });
+
+  const handleOnPress = () => {
+    if (status === NotificationStatus.UNREAD)
+      updateNotification(id);
+    if (type === NotificationType.LOW_STOCK) {
+      router.push(`${Routes.PRODUCTS}/${metaData.product.id}}`);
+    } else if (type === NotificationType.STORE_INVITE) {
+      if (Number(metaData.invitee.id) === userDetails?.id)
+        router.push(`${Routes.STORES}/${metaData.store.id}}`);
+      else
+        router.push(`${Routes.COLLABORATORS}/${metaData.membershipId}}`);
+    } else if (type === NotificationType.INVITE_REPLY) {
+      if (status)
+        router.push(`${Routes.STORES}/${metaData.store.id}}`);
+      else
+        router.push(`${Routes.COLLABORATORS}/${metaData.membershipId}}`);
+    }
+  }
+
   return (
     <Pressable
       {...props}
@@ -114,96 +151,95 @@ const NotificationListItem = ({
         status === NotificationStatus.UNREAD ? "offWhite.300" : "muted.50"
       }
       my="1"
-      // onPress={handleOnPress}
+    // onPress={handleOnPress}
     >
-      <Column>
-        <Row alignItems="center" justifyContent="space-between" space="2">
-          {getIconByNotificationType(type)}
-          <Column flex="4" alignItems="flex-start">
-            <Text
-              numberOfLines={1}
-              fontSize="sm"
-              fontWeight={
-                status === NotificationStatus.UNREAD ? "semibold" : "normal"
-              }
-            >
-              {type === NotificationType.LOW_STOCK
-                ? metaData.product.name
-                : type === NotificationType.EXPIRATION
+      <Row alignItems="center" justifyContent="space-between" space="2">
+        {getIconByNotificationType(type)}
+        <Column flex="4" alignItems="flex-start">
+          <Text
+            numberOfLines={1}
+            fontSize="sm"
+            fontWeight={
+              status === NotificationStatus.UNREAD ? "semibold" : "normal"
+            }
+          >
+            {type === NotificationType.LOW_STOCK
+              ? metaData.product.name
+              : type === NotificationType.EXPIRATION
                 ? `${metaData.quantity} ${metaData.product.unit} - ${metaData.product.name}`
-                : type === NotificationType.COLLABORATOR_REMOVAL
-                ? "Collaborator Removed"
-                : type === NotificationType.STORE_INVITE
-                ? "New Invite"
-                : type === NotificationType.INVITE_REPLY
-                ? metaData.status === MembershipStatus.ACTIVE
-                  ? "New Collaborator"
-                  : "Invite Declined"
-                : null}
-            </Text>
-            <Text
-              fontSize="xs"
-              color="muted.500"
-              fontWeight={
-                status === NotificationStatus.UNREAD ? "medium" : "normal"
-              }
-            >
-              {type === NotificationType.LOW_STOCK
-                ? `Low Stocks: ${metaData.quantity}`
-                : type === NotificationType.EXPIRATION
+                : type ===
+                  NotificationType.COLLABORATOR_REMOVAL
+                  ? "Collaborator Removed"
+                  : type === NotificationType.STORE_INVITE
+                    ? "New Invite"
+                    : type === NotificationType.INVITE_REPLY
+                      ? metaData.status === MembershipStatus.ACTIVE
+                        ? "New Collaborator"
+                        : "Invite Declined"
+                      : null}
+          </Text>
+          <Text
+            fontSize="xs"
+            color="muted.500"
+            fontWeight={
+              status === NotificationStatus.UNREAD ? "medium" : "normal"
+            }
+          >
+            {type === NotificationType.LOW_STOCK
+              ? `Low Stocks: ${metaData.quantity}`
+              : type === NotificationType.EXPIRATION
                 ? `Expires on ${dateToMMDDYY(
-                    new Date(metaData.expirationDate.toString()!)
-                  )}`
-                : type === NotificationType.COLLABORATOR_REMOVAL
-                ? `${sender.name} removed ${
-                    Number(metaData.recipient.id) === userDetails?.id
-                      ? "you as a collaborator."
-                      : metaData.recipient.name + " from your store."
+                  new Date(metaData.expirationDate.toString()!)
+                )}`
+                : type ===
+                  NotificationType.COLLABORATOR_REMOVAL
+                  ? `${sender.name} removed ${Number(metaData.recipient.id) === userDetails?.id
+                    ? "you as a collaborator."
+                    : metaData.recipient.name + " from your store."
                   }`
-                : type === NotificationType.STORE_INVITE
-                ? `${sender.name} sent ${
-                    Number(metaData.invitee.id) === userDetails?.id
+                  : type === NotificationType.STORE_INVITE
+                    ? `${sender.name} sent ${Number(metaData.invitee.id) === userDetails?.id
                       ? "you"
                       : metaData.invitee.name
-                  } an invite.`
-                : type === NotificationType.INVITE_REPLY
-                ? `${metaData.invitee.name} ${
-                    metaData.status === MembershipStatus.ACTIVE
-                      ? "accepted"
-                      : "declined"
-                  } ${
-                    Number(sender.id) === userDetails?.id ? "your" : sender.name
-                  } invite.`
-                : null}
-            </Text>
-          </Column>
-          <Column flex="2" alignItems="flex-end">
-            <Badge
-              colorScheme="green"
-              variant="solid"
-              alignItems="flex-end"
-              _text={{ numberOfLines: 1 }}
-            >
-              {metaData.store.name}
-            </Badge>
-            <Text fontSize="xs" fontWeight="normal" color="muted.500">
-              {dateCreated && dateToDay(new Date(dateCreated.toString()!))}
-            </Text>
-            <Text fontSize="xs" fontWeight="normal" color="muted.500">
-              {dateCreated &&
-                dateToReadableTime(new Date(dateCreated.toString()!))}
-            </Text>
-          </Column>
-          {status === NotificationStatus.UNREAD && (
-            <Center
-              width="2"
-              height="2"
-              backgroundColor="primary.700"
-              borderRadius="full"
-            />
-          )}
-        </Row>
-      </Column>
+                    } an invite.`
+                    : type === NotificationType.INVITE_REPLY
+                      ? `${metaData.invitee.name} ${metaData.status === MembershipStatus.ACTIVE ? "accepted" : "declined"
+                      } ${Number(sender.id) === userDetails?.id
+                        ? "your"
+                        : sender.name
+                      } invite.`
+                      : null}
+          </Text>
+        </Column>
+        <Column flex="2" alignItems="flex-end">
+          <Badge
+            colorScheme="green"
+            variant="solid"
+            alignItems="flex-end"
+            _text={{ numberOfLines: 1 }}
+          >
+            {metaData.store.name}
+          </Badge>
+          <Text fontSize="xs" fontWeight="normal" color="muted.500">
+            {dateCreated && (
+              dateToDay(
+                new Date(dateCreated.toString()!)
+              ))}
+          </Text>
+          <Text fontSize="xs" fontWeight="normal" color="muted.500">
+            {dateCreated &&
+              dateToReadableTime(new Date(dateCreated.toString()!))}
+          </Text>
+        </Column>
+        {status === NotificationStatus.UNREAD && (
+          <Center
+            width="2"
+            height="2"
+            backgroundColor="primary.700"
+            borderRadius="full"
+          />
+        )}
+      </Row>
     </Pressable>
   );
 };
