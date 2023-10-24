@@ -9,6 +9,7 @@ import {
 } from "@listed-services";
 import { MembershipResponse, MembershipStatus } from "@listed-types";
 import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 const fiveMinutes = 1000 * 60 * 5;
 export const useGetCollaborators = (
@@ -29,7 +30,7 @@ export const useGetCollaborators = (
 };
 
 export const useGetUserMembership = (storeId: number, userId: number) => {
-  return useQuery<MembershipResponse>(
+  return useQuery<MembershipResponse, AxiosError<{ message: string }>>(
     [GET_MEMBERSHIP, { storeId, userId }],
     () =>
       getCollaboratorsService(
@@ -49,7 +50,7 @@ export const useGetUserMembership = (storeId: number, userId: number) => {
 };
 
 export const useGetCollaboratorDetails = (id: number) => {
-  return useQuery<MembershipResponse>(
+  return useQuery<MembershipResponse, AxiosError<{ message: string }>>(
     [GET_COLLABORATOR, id],
     () => getCollaboratorDetailsService(id),
     {

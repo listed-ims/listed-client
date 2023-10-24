@@ -6,3 +6,4 @@ export * from "./incomingServices";
 export * from "./collaboratorServices";
 export * from "./outgoingServices";
 export * from "./analyticsServices";
+export * from "./notificationServices";

@@ -7,9 +7,9 @@ import { stackHeaderStyles } from "@listed-styles"
 import { MembershipStatus, ModalContent, UserPermission } from "@listed-types"
 import { hasPermission, ownerOrCollaborator, } from "@listed-utils"
 import { useQueryClient } from "@tanstack/react-query"
-import { Stack, router, useLocalSearchParams } from "expo-router"
+import { Redirect, Stack, router, useLocalSearchParams } from "expo-router"
 import { Badge, Center, Column, Heading, ScrollView, Text, useToast } from "native-base"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 const CollaboratorDetails = () => {
@@ -24,6 +24,7 @@ const CollaboratorDetails = () => {
     data: collaboratorDetails,
     isError: collaboratorDetailsError,
     isFetching: collaboratorDetailsFetching,
+    error: collaboratorDetailsErrorDetails,
   } = useGetCollaboratorDetails(Number(id))
 
   const isInactive = collaboratorDetails?.membershipStatus === MembershipStatus.INACTIVE;
@@ -65,74 +66,84 @@ const CollaboratorDetails = () => {
     setShowRemoveModal(true);
   }
 
+  useEffect(() => {
+    if (collaboratorDetailsErrorDetails?.response?.status === 404) {
+      router.replace(Routes.COLLABORATOR_NOT_FOUND);
+    }
+  }, [collaboratorDetailsErrorDetails])
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Collaborator Details")} />
       {handleAuthorization()}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Column space="1" alignItems="center"
-          marginBottom="4"
-          marginTop="6"
-        >
-          <Center
-            width="12"
-            height="12"
-            backgroundColor="primary.700"
-            borderRadius="full">
-            <PeopleIcon />
-          </Center>
-          <Heading fontSize="md">{collaboratorDetails?.user.name}</Heading>
-          <Text>{collaboratorDetails?.user.username}</Text>
-          <Badge variant="outline" colorScheme="success">
-            {ownerOrCollaborator(collaboratorDetails?.permissions!)}
-          </Badge>
-          <Badge variant="solid"
-            colorScheme={`${isPending
-              ? "warning"
-              : isInactive
-                ? "error"
-                : "info"}`}>
-            {collaboratorDetails?.membershipStatus}
-          </Badge>
-        </Column>
-        <PermissionDetails
-          permissions={collaboratorDetails?.permissions!} />
-        <Column width="full"
-          space="4"
-          marginY="6">
-          {
-            ownerOrCollaborator(collaboratorDetails?.permissions!) === "COLLABORATOR"
-            &&
-            <>
-              <Button
-                onPress={() =>
-                  router.push(`${Routes.EDIT_COLLABORATOR}?id=${id}`)
-                }>
-                {
-                  !isInactive
-                    ? "EDIT PERMISSIONS"
-                    : "INVITE AGAIN"
-                }
-              </Button>
-              {(
-                !isInactive
-                && userMembership?.permissions.includes(UserPermission.DELETE_COLLABORATOR)
-              ) &&
-                <Button variant="warnOutline"
-                  onPress={handleCancelRemove}
-                >
-                  {isPending ? "CANCEL INVITE" : "REMOVE"}
-                </Button>
+      {
+        collaboratorDetailsFetching || !collaboratorDetails
+          ? <Text>Loading...</Text>
+          : <ScrollView showsVerticalScrollIndicator={false}>
+            <Column space="1" alignItems="center"
+              marginBottom="4"
+              marginTop="6"
+            >
+              <Center
+                width="12"
+                height="12"
+                backgroundColor="primary.700"
+                borderRadius="full">
+                <PeopleIcon />
+              </Center>
+              <Heading fontSize="md">{collaboratorDetails?.user.name}</Heading>
+              <Text>{collaboratorDetails?.user.username}</Text>
+              <Badge variant="outline" colorScheme="success">
+                {ownerOrCollaborator(collaboratorDetails?.permissions!)}
+              </Badge>
+              <Badge variant="solid"
+                colorScheme={`${isPending
+                  ? "warning"
+                  : isInactive
+                    ? "error"
+                    : "info"}`}>
+                {collaboratorDetails?.membershipStatus}
+              </Badge>
+            </Column>
+            <PermissionDetails
+              permissions={collaboratorDetails?.permissions!} />
+            <Column width="full"
+              space="4"
+              marginY="6">
+              {
+                ownerOrCollaborator(collaboratorDetails?.permissions!) === "COLLABORATOR"
+                &&
+                <>
+                  <Button
+                    onPress={() =>
+                      router.push(`${Routes.EDIT_COLLABORATOR}?id=${id}`)
+                    }>
+                    {
+                      !isInactive
+                        ? "EDIT PERMISSIONS"
+                        : "INVITE AGAIN"
+                    }
+                  </Button>
+                  {(
+                    !isInactive
+                    && userMembership?.permissions.includes(UserPermission.DELETE_COLLABORATOR)
+                  ) &&
+                    <Button variant="warnOutline"
+                      onPress={handleCancelRemove}
+                    >
+                      {isPending ? "CANCEL INVITE" : "REMOVE"}
+                    </Button>
+                  }
+                </>
               }
-            </>
-          }
-        </Column>
-        <RemoveCollaboratorModal
-          modalContent={modalContent}
-          isOpen={showRemoveModal}
-          onConfirm={handleUpdateStatus}
-          onCancel={() => { setShowRemoveModal(false) }} />
-      </ScrollView>
+            </Column>
+            <RemoveCollaboratorModal
+              modalContent={modalContent}
+              isOpen={showRemoveModal}
+              onConfirm={handleUpdateStatus}
+              onCancel={() => { setShowRemoveModal(false) }} />
+          </ScrollView>
+      }
     </ScreenContainer >
   )
 }

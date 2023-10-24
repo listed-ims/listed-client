@@ -13,6 +13,7 @@ import { getItemAsync } from 'expo-secure-store';
 import { AUTH_TOKEN_KEY, Routes } from '@listed-constants';
 import { useTokenValidationMutation } from '@listed-hooks';
 import { MembershipResponse, UserResponse } from '@listed-types';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface AuthContextProps {
   isLoggedIn: boolean;
@@ -47,6 +48,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [userMembership, setUserMembership] = useState<MembershipResponse | null | undefined>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isNavigationReady, setNavigationReady] = useState(false);
+  const queryClient = useQueryClient();
 
   const useProtectedRoute = (isLoggedIn: boolean) => {
     const segments = useSegments();
@@ -108,6 +110,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     clearToken();
+    queryClient.clear();
     setUserDetails(undefined);
     setUserMembership(undefined);
     setIsLoggedIn(false);

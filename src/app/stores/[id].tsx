@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Badge, Column, Heading, VStack, Text, ScrollView } from "native-base";
 import {
   StoreSummaryCard,
@@ -21,6 +21,7 @@ import {
   GET_STORE,
   GET_STORES,
   GET_USER,
+  Routes,
   StoreStatus,
 } from "@listed-constants";
 import { useQueryClient } from "@tanstack/react-query";
@@ -48,7 +49,11 @@ const StoreDetails = () => {
     isFetching: storeFetching,
   } = useGetStoreDetails(parseInt(id as string));
 
-  const { data: storeMembership } = useGetUserMembership(
+  const {
+    data: storeMembership,
+    isFetching: storeMembershipFetching,
+    error: storeMembershipErrorDetails,
+  } = useGetUserMembership(
     parseInt(id as string),
     userDetails?.id!
   );
@@ -129,61 +134,71 @@ const StoreDetails = () => {
     }
   }, [userMembership]);
 
+
+  useEffect(() => {
+    if (storeMembershipErrorDetails?.response?.status === 404) {
+      router.replace(Routes.COLLABORATOR_NOT_FOUND)
+    }
+  }, [storeMembershipErrorDetails])
+
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Store Details")} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Column space="4" height="full" py="6">
-          <VStack space="1" alignItems="center">
-            <StoreDetailsIcon />
-            <Heading size="md">{storeDetails?.name}</Heading>
-            {storeDetails?.id === userDetails?.currentStoreId &&
-              storeMembership?.membershipStatus !==
+      {storeMembershipFetching || storeFetching
+        ? <Text>Loading... </Text>
+        : <ScrollView showsVerticalScrollIndicator={false}>
+          <Column space="4" height="full" py="6">
+            <VStack space="1" alignItems="center">
+              <StoreDetailsIcon />
+              <Heading size="md">{storeDetails?.name}</Heading>
+              {storeDetails?.id === userDetails?.currentStoreId &&
+                storeMembership?.membershipStatus !==
                 MembershipStatus.PENDING && (
-                <Badge colorScheme="success" variant="solid">
-                  CURRENT STORE
-                </Badge>
-              )}
-            {storeMembership?.membershipStatus !== MembershipStatus.PENDING && (
-              <Text fontSize="xs" fontWeight="medium" color="darkText">
-                {`${userDetails?.name}, you are ${
-                  ownerOrCollaborator(storeMembership?.permissions || []) ===
-                  UserPermission.OWNER
+                  <Badge colorScheme="success" variant="solid">
+                    CURRENT STORE
+                  </Badge>
+                )}
+              {storeMembership?.membershipStatus !== MembershipStatus.PENDING && (
+                <Text fontSize="xs" fontWeight="medium" color="darkText">
+                  {`${userDetails?.name}, you are ${ownerOrCollaborator(storeMembership?.permissions || []) ===
+                    UserPermission.OWNER
                     ? "the owner"
                     : "a collaborator"
-                }!`}
-              </Text>
-            )}
-          </VStack>
-          {storeMembership?.membershipStatus !== MembershipStatus.PENDING ? (
-            <>
-              <StoreSummaryCard
-                owner={storeDetails?.owner.name}
-                status={storeDetails?.status}
-                totalProducts={storeDetails?.totalProducts}
-                totalPriceValue={storeDetails?.totalPriceValue}
-                isInvite={false}
-              />
-              {storeDetails?.id !== userDetails?.currentStoreId &&
-                storeDetails?.status === StoreStatus.OPEN && (
-                  <MakeCurrentStoreCard onMakeCurrent={handleOnMakeCurrent} />
-                )}
-              {storeDetails?.status === StoreStatus.OPEN &&
-                ownerOrCollaborator(storeMembership?.permissions || []) ===
+                    }!`}
+                </Text>
+              )}
+            </VStack>
+            {storeMembership?.membershipStatus !== MembershipStatus.PENDING ? (
+              <>
+                <StoreSummaryCard
+                  owner={storeDetails?.owner.name}
+                  status={storeDetails?.status}
+                  totalProducts={storeDetails?.totalProducts}
+                  totalPriceValue={storeDetails?.totalPriceValue}
+                  isInvite={false}
+                />
+                {storeDetails?.id !== userDetails?.currentStoreId &&
+                  storeDetails?.status === StoreStatus.OPEN && (
+                    <MakeCurrentStoreCard onMakeCurrent={handleOnMakeCurrent} />
+                  )}
+                {storeDetails?.status === StoreStatus.OPEN &&
+                  ownerOrCollaborator(storeMembership?.permissions || []) ===
                   UserPermission.OWNER && (
-                  <CloseStoreCard
-                    onClose={() => setShowCloseStoreModal(true)}
-                  />
-                )}
-            </>
-          ) : (
-            <StoreInvite
-              storeDetails={storeDetails!}
-              storeMembership={storeMembership!}
-            />
-          )}
-        </Column>
-      </ScrollView>
+                    <CloseStoreCard
+                      onClose={() => setShowCloseStoreModal(true)}
+                    />
+                  )}
+              </>
+            ) : (
+              <StoreInvite
+                storeDetails={storeDetails!}
+                storeMembership={storeMembership!}
+              />
+            )}
+          </Column>
+        </ScrollView>
+      }
       <CurrentStoreModal
         name={storeDetails?.name}
         onClose={() => setShowCurrentStoreModal(false)}
