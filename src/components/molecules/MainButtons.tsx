@@ -1,24 +1,24 @@
-import React, { ReactNode, useCallback, useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { Center, IPressableProps, Pressable, Text } from 'native-base'
 import { LayoutChangeEvent } from 'react-native';
 import { toTitleCase } from '@listed-utils';
 import {
   CollaboratorIcon,
-  InventoryIcon,
+  AnalyticsIcon,
   ProductIcon,
   TransactionIcon
 } from '@listed-components/atoms';
 
 
 interface MainButtonsProps extends IPressableProps {
-  type: "inventory" | "products" | "collaborators" | "transactions" | string
+  type: "analytics" | "products" | "collaborators" | "transactions" | string
 }
 
 const MainButtons = ({ type, ...props }: MainButtonsProps) => {
   const [dimension, setDimension] = useState(0);
 
   const icon: Record<MainButtonsProps["type"], ReactNode> = {
-    inventory: <InventoryIcon />,
+    analytics: <AnalyticsIcon />,
     products: <ProductIcon />,
     collaborators: <CollaboratorIcon />,
     transactions: <TransactionIcon />,

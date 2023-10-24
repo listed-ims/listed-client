@@ -1,5 +1,4 @@
 import {
-  Button,
   DataSummaryIcon,
   StoreNameIcon,
 } from "@listed-components/atoms";
@@ -21,7 +20,8 @@ const SummaryCard = ({
     <Column
       alignItems="center"
       space="4"
-      padding="4"
+      px="4"
+      py="6"
       borderRadius="lg"
       background="primary.700"
     >
@@ -62,9 +62,6 @@ const SummaryCard = ({
         </Column>
         <DataSummaryIcon />
       </Row>
-      <Button variant="white" width="full">
-        View Full Analytics
-      </Button>
     </Column>
   );
 };
