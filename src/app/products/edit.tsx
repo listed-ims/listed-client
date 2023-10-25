@@ -2,7 +2,7 @@ import { FormControl, TextField, Toast } from '@listed-components/molecules'
 import ScreenContainer from '@listed-components/organisms/ScreenContainer'
 import { Box, Column, Row, Text, useTheme, useToast } from 'native-base'
 import React, { useEffect } from 'react'
-import { Stack, router, useLocalSearchParams} from 'expo-router'
+import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { Button, ScanIcon } from "@listed-components/atoms";
 import { stackHeaderStyles } from '@listed-styles'
 import { useDebounce, useFormValidation, useGetProductDetails, useUpdateProductMutation, useValidateBarcode, } from '@listed-hooks'
@@ -74,7 +74,7 @@ const EditProduct = () => {
     onSuccess: (data) => {
       queryClient.setQueryData([GET_PRODUCT, data.id], data);
       queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS] });
-      queryClient.invalidateQueries({queryKey: [GET_ANALYTICS_SUMMARY]})
+      queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_SUMMARY] })
       router.back();
       toast.show({
         render: () => {
@@ -101,7 +101,7 @@ const EditProduct = () => {
   );
 
   const handleSave = () => {
-    if(JSON.stringify(initialFormData) === JSON.stringify(formData)) router.back();
+    if (JSON.stringify(initialFormData) === JSON.stringify(formData)) router.back();
     else if (validate() && (formData.barcode === initialFormData.barcode || barcodeValidation?.valid !== false)) {
       updateProduct({
         productId: productDetails?.id,
@@ -120,7 +120,7 @@ const EditProduct = () => {
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
       !hasPermission(
-        userMembership?.permissions!,
+        userMembership!,
         UserPermission.UPDATE_PRODUCT
       )
     )

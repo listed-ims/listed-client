@@ -51,7 +51,7 @@ const ProductDetails = () => {
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
       !hasPermission(
-        userMembership?.permissions!,
+        userMembership!,
         UserPermission.VIEW_PRODUCT_DETAILS
       )
     )

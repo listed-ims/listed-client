@@ -6,10 +6,10 @@ import { useGetOutgoingDetails } from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
 import { UserPermission } from "@listed-types";
 import { dateToMonthDDYYYY, dateToReadableTime, hasPermission, toTitleCase } from "@listed-utils";
-import { Stack, useLocalSearchParams} from "expo-router";
-import { Column,ScrollView,Text } from "native-base";
+import { Stack, useLocalSearchParams } from "expo-router";
+import { Column, ScrollView, Text } from "native-base";
 
-const transactiondetails = () =>{
+const transactiondetails = () => {
 
   const { id } = useLocalSearchParams();
   const { userMembership } = useAuth();
@@ -27,7 +27,7 @@ const transactiondetails = () =>{
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
       !hasPermission(
-        userMembership?.permissions!,
+        userMembership!,
         UserPermission.GET_OUTGOING_DETAILS
       )
     );
@@ -36,24 +36,24 @@ const transactiondetails = () =>{
   const userPermission = userMembership?.permissions || [];
 
 
-  return(
+  return (
     <ScreenContainer withHeader>
-    <Stack.Screen options={stackHeaderStyles("Transaction Details")} />
-    {handleAuthorization()}
+      <Stack.Screen options={stackHeaderStyles("Transaction Details")} />
+      {handleAuthorization()}
       <ScrollView showsVerticalScrollIndicator={false}>
-      <Column space ="1" paddingTop="6" alignItems="center" justifyContent="center" display="flex">
-      <OutgoingReceiptIcon/>
-        <Text fontSize="md" fontWeight="bold" paddingTop="1">Outgoing - {toTitleCase(String(transactionDetails?.category))} </Text>
-        <Text fontSize="xs" fontWeight="medium">
-          {dateToMonthDDYYYY(transactionDate) +
-                " - " +
-           dateToReadableTime(transactionDate)}
-           </Text>
-      </Column>
-      <OutgoingReceiptDetails outgoingDetails={transactionDetails!} userPermissions={userPermission!}/>
-     
+        <Column space="1" paddingTop="6" alignItems="center" justifyContent="center" display="flex">
+          <OutgoingReceiptIcon />
+          <Text fontSize="md" fontWeight="bold" paddingTop="1">Outgoing - {toTitleCase(String(transactionDetails?.category))} </Text>
+          <Text fontSize="xs" fontWeight="medium">
+            {dateToMonthDDYYYY(transactionDate) +
+              " - " +
+              dateToReadableTime(transactionDate)}
+          </Text>
+        </Column>
+        <OutgoingReceiptDetails outgoingDetails={transactionDetails!} userPermissions={userPermission!} />
+
       </ScrollView>
-      </ScreenContainer>
+    </ScreenContainer>
   )
 }
 export default transactiondetails 

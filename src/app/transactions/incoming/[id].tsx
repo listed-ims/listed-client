@@ -6,15 +6,15 @@ import { useGetIncomingDetails } from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
 import { UserPermission } from "@listed-types";
 import { dateToMonthDDYYYY, dateToReadableTime, hasPermission } from "@listed-utils";
-import { Stack, useLocalSearchParams} from "expo-router";
-import { Column,ScrollView,Text } from "native-base";
+import { Stack, useLocalSearchParams } from "expo-router";
+import { Column, ScrollView, Text } from "native-base";
 
 
-const  transactiondetails= () => {
-  
+const transactiondetails = () => {
+
   const { id } = useLocalSearchParams();
   const { userMembership } = useAuth();
- 
+
   const {
     data: transactionDetails,
     isError: transactionError,
@@ -28,7 +28,7 @@ const  transactiondetails= () => {
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
       !hasPermission(
-        userMembership?.permissions!,
+        userMembership!,
         UserPermission.GET_INCOMING_DETAILS
       )
     )
@@ -39,21 +39,21 @@ const  transactiondetails= () => {
 
   return (
     <ScreenContainer withHeader>
-    <Stack.Screen options={stackHeaderStyles("Transaction Details")} />
-    {handleAuthorization()}
+      <Stack.Screen options={stackHeaderStyles("Transaction Details")} />
+      {handleAuthorization()}
       <ScrollView showsVerticalScrollIndicator={false}>
-      <Column space ="1" paddingTop="6" alignItems="center" justifyContent="center" display="flex">
-        <IncomingReceiptIcon/>
-        <Text fontSize="md" fontWeight="bold" paddingTop="1">Incoming</Text>
-        <Text fontSize="xs" fontWeight="medium">
-           {dateToMonthDDYYYY(transactionDate) +
-                " - " +
-           dateToReadableTime(transactionDate)}
-           </Text>
-      </Column>
-      <IncomingReceiptDetails incomingDetails={transactionDetails!} userPermissions={userPermissions!}/>     
+        <Column space="1" paddingTop="6" alignItems="center" justifyContent="center" display="flex">
+          <IncomingReceiptIcon />
+          <Text fontSize="md" fontWeight="bold" paddingTop="1">Incoming</Text>
+          <Text fontSize="xs" fontWeight="medium">
+            {dateToMonthDDYYYY(transactionDate) +
+              " - " +
+              dateToReadableTime(transactionDate)}
+          </Text>
+        </Column>
+        <IncomingReceiptDetails incomingDetails={transactionDetails!} userPermissions={userPermissions!} />
       </ScrollView>
-      </ScreenContainer>
+    </ScreenContainer>
   );
 }
 export default transactiondetails;

@@ -79,8 +79,8 @@ const transactions = () => {
 
   const handleOnApplyFilter = (filter: TransactionFilter) => {
     JSON.stringify(filter) !== JSON.stringify(noFilter)
-    ? setFiltered(true)
-    : setFiltered(false);
+      ? setFiltered(true)
+      : setFiltered(false);
 
     if (transaction === "incoming") {
       setIncomingFilter(filter);
@@ -89,20 +89,20 @@ const transactions = () => {
       setOutgoingFilter(filter);
       setIncomingFilter(noFilter);
     }
-    
+
     setIsBottomSheetVisible(false);
   };
 
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
       !hasPermission(
-        userMembership?.permissions!,
+        userMembership!,
         UserPermission.GET_TRANSACTIONS_LIST
       )
     );
   };
 
-  
+
 
   return (
     <ScreenContainer withHeader>
@@ -133,39 +133,39 @@ const transactions = () => {
             OUTGOING
           </Button>
         </Row>
-        { (filtered || 
+        {(filtered ||
           (transaction === "incoming" && incomingTransactions?.pages[0].length! > 0) ||
           (transaction === "outgoing" && outgoingTransactions?.pages[0].length! > 0)) &&
-        <Button
-          variant={
+          <Button
+            variant={
               filtered
-              ? "solid"
-              : "outline"
-          }
-          alignSelf="flex-start"
-          px="5"
-          size="sm"
-          borderRadius="full"
-          onPress={() => setIsBottomSheetVisible(true)}
-          startIcon={
-            <OptionsIcon
-              color={
-                filtered
-                  ?  colors.white
-                  : colors.primary[700]
-              }
-            />
-          }
-        >
-          Filter
-        </Button>
+                ? "solid"
+                : "outline"
+            }
+            alignSelf="flex-start"
+            px="5"
+            size="sm"
+            borderRadius="full"
+            onPress={() => setIsBottomSheetVisible(true)}
+            startIcon={
+              <OptionsIcon
+                color={
+                  filtered
+                    ? colors.white
+                    : colors.primary[700]
+                }
+              />
+            }
+          >
+            Filter
+          </Button>
         }
       </Column>
       <Box flex={1} paddingBottom="4">
         {transaction === "incoming" && (incomingTransactions?.pages[0].length! > 0 || filtered) ? (
           <FlatList
-            contentContainerStyle={{flexGrow:1}}
-            ListEmptyComponent={<NoTransactions filtered= {true}/>}
+            contentContainerStyle={{ flexGrow: 1 }}
+            ListEmptyComponent={<NoTransactions filtered={true} />}
             ItemSeparatorComponent={() => <Divider />}
             data={incomingTransactions?.pages.flatMap((page) => page)}
             renderItem={({ item }) => (
@@ -192,10 +192,10 @@ const transactions = () => {
                 incomingTransactionsFetchNextPage();
             }}
           />
-        ) :  transaction === "outgoing" && (outgoingTransactions?.pages[0].length! > 0 || filtered) ? (
+        ) : transaction === "outgoing" && (outgoingTransactions?.pages[0].length! > 0 || filtered) ? (
           <FlatList
-            contentContainerStyle={{flexGrow:1}}
-            ListEmptyComponent={<NoTransactions filtered={true}/>}
+            contentContainerStyle={{ flexGrow: 1 }}
+            ListEmptyComponent={<NoTransactions filtered={true} />}
             ItemSeparatorComponent={() => <Divider />}
             data={outgoingTransactions?.pages.flatMap((page) => page)}
             renderItem={({ item }) => (
@@ -222,8 +222,8 @@ const transactions = () => {
                 outgoingTransactionsFetchNextPage();
             }}
           />
-        ): <NoTransactions/>
-        }   
+        ) : <NoTransactions />
+        }
       </Box>
       <TransactionFilterModal
         filter={transaction === "incoming" ? incomingFilter : outgoingFilter}

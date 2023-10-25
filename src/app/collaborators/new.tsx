@@ -74,7 +74,7 @@ const AddCollaborator = () => {
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
       !hasPermission(
-        userMembership?.permissions!,
+        userMembership!,
         UserPermission.ADD_COLLABORATOR
       )
     )

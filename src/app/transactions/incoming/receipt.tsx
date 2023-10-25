@@ -38,7 +38,7 @@ const IncomingReceipt = () => {
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
       !hasPermission(
-        userMembership?.permissions!,
+        userMembership!,
         UserPermission.GET_INCOMING_DETAILS
       )
     )
@@ -70,7 +70,7 @@ const IncomingReceipt = () => {
           </VStack>
         </Box>
 
-        <IncomingReceiptDetails incomingDetails={transactionDetails!} userPermissions={userPermissions!}  />
+        <IncomingReceiptDetails incomingDetails={transactionDetails!} userPermissions={userPermissions!} />
 
         <HStack paddingTop="4" alignItems="center">
           <Spacer>

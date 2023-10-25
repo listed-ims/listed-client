@@ -118,7 +118,7 @@ const NewIncoming = () => {
         resetForm();
         setExpirationDisplay("");
         queryClient.setQueryData([GET_INCOMING, data.id], data);
-        queryClient.invalidateQueries({queryKey: [GET_ANALYTICS_SUMMARY]})
+        queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_SUMMARY] })
         router.push(`${Routes.INCOMING_RECEIPT}?transactionId=${data.id}`);
       }
     });
@@ -126,7 +126,7 @@ const NewIncoming = () => {
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
       !hasPermission(
-        userMembership?.permissions!,
+        userMembership!,
         UserPermission.ADD_INCOMING
       )
     )
@@ -221,7 +221,7 @@ const NewIncoming = () => {
                     onPress={() => {
                       setExpirationDisplay("")
                     }
-                  }
+                    }
                   /> : undefined}
               />
             </Pressable>

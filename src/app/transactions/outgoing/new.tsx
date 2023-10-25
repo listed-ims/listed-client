@@ -160,9 +160,9 @@ const NewOutgoing = () => {
     onSuccess: (data) => {
       router.setParams({ ids: "" });
       resetForm();
-      queryClient.invalidateQueries({queryKey:[GET_OUTGOING_TRANSACTIONS]})
-      queryClient.invalidateQueries({queryKey: [GET_ANALYTICS_SUMMARY]})
-      queryClient.invalidateQueries({queryKey: [GET_NOTIFICATIONS]})
+      queryClient.invalidateQueries({ queryKey: [GET_OUTGOING_TRANSACTIONS] })
+      queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_SUMMARY] })
+      queryClient.invalidateQueries({ queryKey: [GET_NOTIFICATIONS] })
       router.push(`${Routes.OUTGOING_RECEIPT}?transactionId=${data.id}`);
     },
     onError: (error) => {
@@ -173,7 +173,7 @@ const NewOutgoing = () => {
   const handleAuthorization = (permission?: UserPermission) => {
     return renderUnauthorizedModal(
       !hasPermission(
-        userMembership?.permissions!,
+        userMembership!,
         permission || UserPermission.ADD_OUTGOING_SOLD
       )
     )

@@ -1,13 +1,21 @@
 import { PermissionCategory } from "@listed-constants";
-import { UserPermission, UserPermissionMap } from "@listed-types";
+import {
+  MembershipResponse,
+  MembershipStatus,
+  UserPermission,
+  UserPermissionMap,
+} from "@listed-types";
 
 export const hasPermission = (
-  userPermissions: UserPermission[],
+  userMembership: MembershipResponse,
   screenPermission: UserPermission
 ) => {
-  if (!userPermissions) return;
-  if (userPermissions.includes(UserPermission.OWNER)) return true;
-  return userPermissions.includes(screenPermission);
+  if (!userMembership) return;
+  if (userMembership.permissions.includes(UserPermission.OWNER)) return true;
+  return (
+    userMembership.permissions.includes(screenPermission) &&
+    userMembership.membershipStatus !== MembershipStatus.INACTIVE
+  );
 };
 
 export const ownerOrCollaborator = (userPermissions: UserPermission[]) => {

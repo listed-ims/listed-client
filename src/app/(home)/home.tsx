@@ -64,7 +64,7 @@ const Home = () => {
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
       {userDetails?.currentStoreId === null ||
-      userMembership?.membershipStatus === MembershipStatus.PENDING ? (
+        userMembership?.membershipStatus === MembershipStatus.PENDING ? (
         <DashboardNoStore />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>

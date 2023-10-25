@@ -46,7 +46,7 @@ const OutgoingReceipt = () => {
   const handleAuthorization = () => {
     return renderUnauthorizedModal(
       !hasPermission(
-        userMembership?.permissions!,
+        userMembership!,
         UserPermission.GET_OUTGOING_DETAILS
       )
     );
