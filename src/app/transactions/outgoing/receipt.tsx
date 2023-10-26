@@ -6,7 +6,6 @@ import {
 import { OutgoingReceiptDetails } from "@listed-components/molecules";
 import {
   ScreenContainer,
-  renderUnauthorizedModal,
 } from "@listed-components/organisms";
 import { useAuth } from "@listed-contexts";
 import { Routes } from "@listed-constants";

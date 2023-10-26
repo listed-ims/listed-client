@@ -9,7 +9,6 @@ import {
   KeyboardAwareScroll,
   ScreenContainer,
   OutProductItem,
-  renderUnauthorizedModal,
   OutgoingNoProducts,
 } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";

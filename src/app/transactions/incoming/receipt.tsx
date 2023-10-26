@@ -4,7 +4,7 @@ import {
   ListedIcon,
 } from "@listed-components/atoms";
 import { IncomingReceiptDetails } from "@listed-components/molecules";
-import { ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms";
+import { ScreenContainer } from "@listed-components/organisms";
 import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetIncomingDetails } from "@listed-hooks";

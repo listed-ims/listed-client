@@ -5,7 +5,6 @@ import {
   NoTransactions,
   ScreenContainer,
   TransactionFilterModal,
-  renderUnauthorizedModal,
 } from "@listed-components/organisms";
 import { useAuth } from "@listed-contexts";
 import {
