@@ -1,7 +1,7 @@
 import { Button } from "@listed-components/atoms"
 import { FormControl, Toast } from "@listed-components/molecules"
-import { Permissions, ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms"
-import { GET_COLLABORATOR, GET_COLLABORATORS } from "@listed-constants"
+import { Permissions, ScreenContainer } from "@listed-components/organisms"
+import { GET_COLLABORATOR, GET_COLLABORATORS, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
 import { useFormValidation, useGetCollaboratorDetails, useUpdateUserMembershipMutation } from "@listed-hooks"
 import { stackHeaderStyles } from "@listed-styles"
@@ -10,12 +10,21 @@ import { hasPermission } from "@listed-utils"
 import { useQueryClient } from "@tanstack/react-query"
 import { Stack, router, useLocalSearchParams } from "expo-router"
 import { Box, Column, HStack, Row, ScrollView, Text, View, useToast } from "native-base"
+import { useEffect } from "react"
 
 const CollaboratorEdit = () => {
   const { id } = useLocalSearchParams();
   const toast = useToast();
   const queryClient = useQueryClient();
   const { userMembership } = useAuth();
+
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.UPDATE_COLLABORATOR
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
 
   const {
     data: collaboratorDetails,
@@ -97,14 +106,6 @@ const CollaboratorEdit = () => {
     handleInputChange([...permissions], "permissions")
   }
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership?.permissions!,
-        UserPermission.UPDATE_COLLABORATOR
-      ))
-  }
-
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles(
@@ -112,7 +113,6 @@ const CollaboratorEdit = () => {
           ? "Invite Again"
           : "Edit Collaborator"}`
       )} />
-      {handleAuthorization()}
       <ScrollView>
         <HStack py="4">
           <Text fontSize="lg" fontWeight="semibold">

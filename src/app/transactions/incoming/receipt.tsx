@@ -4,7 +4,7 @@ import {
   ListedIcon,
 } from "@listed-components/atoms";
 import { IncomingReceiptDetails } from "@listed-components/molecules";
-import { ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms";
+import { ScreenContainer } from "@listed-components/organisms";
 import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetIncomingDetails } from "@listed-hooks";
@@ -21,10 +21,20 @@ import {
   Text,
   VStack,
 } from "native-base";
+import { useEffect } from "react";
 
 const IncomingReceipt = () => {
   const { transactionId } = useLocalSearchParams();
   const { userMembership } = useAuth();
+
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.GET_INCOMING_DETAILS
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
+
   const {
     data: transactionDetails,
     isError: transactionError,
@@ -35,21 +45,11 @@ const IncomingReceipt = () => {
     transactionDetails?.transactionDate.toString()!
   );
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership?.permissions!,
-        UserPermission.GET_INCOMING_DETAILS
-      )
-    )
-  }
-
   const userPermissions = userMembership?.permissions || [];
 
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      {handleAuthorization()}
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box paddingTop="8" paddingBottom="6">
           <Text fontSize="sm" fontWeight="medium" textAlign="center">
@@ -70,7 +70,7 @@ const IncomingReceipt = () => {
           </VStack>
         </Box>
 
-        <IncomingReceiptDetails incomingDetails={transactionDetails!} userPermissions={userPermissions!}  />
+        <IncomingReceiptDetails incomingDetails={transactionDetails!} userPermissions={userPermissions!} />
 
         <HStack paddingTop="4" alignItems="center">
           <Spacer>

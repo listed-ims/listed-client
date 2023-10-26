@@ -60,11 +60,18 @@ const Home = () => {
     }
   }, [userDetails, userMembership]);
 
+  useEffect(() => {
+    if (userMembershipSuccess) {
+      if (userMembership?.membershipStatus === MembershipStatus.INACTIVE)
+        router.replace(Routes.UNAUTHORIZED_INACTIVE)
+    }
+  }, [userMembership])
+
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
       {userDetails?.currentStoreId === null ||
-      userMembership?.membershipStatus === MembershipStatus.PENDING ? (
+        userMembership?.membershipStatus === MembershipStatus.PENDING ? (
         <DashboardNoStore />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>

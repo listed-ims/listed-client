@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { DeleteProductModal, ScreenContainer, renderUnauthorizedModal } from '@listed-components/organisms'
+import { DeleteProductModal, ScreenContainer } from '@listed-components/organisms'
 import { Column, Heading, Text } from 'native-base'
 import { Button, CubeIcon } from '@listed-components/atoms'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
@@ -19,6 +19,14 @@ const ProductDetails = () => {
   const { id } = useLocalSearchParams();
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.VIEW_PRODUCT_DETAILS
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
 
   const {
     data: productDetails,
@@ -48,15 +56,6 @@ const ProductDetails = () => {
     deleteProduct(productDetails?.id!)
   };
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership?.permissions!,
-        UserPermission.VIEW_PRODUCT_DETAILS
-      )
-    )
-  }
-
   useEffect(() => {
     if (productDetailsErrorDetails?.response?.status === 404) {
       router.replace(Routes.PRODUCT_NOT_FOUND);
@@ -66,7 +65,6 @@ const ProductDetails = () => {
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Product Details")} />
-      {handleAuthorization()}
       {
         productDetailsFetching
           ? <Text>Loading... </Text>

@@ -5,7 +5,6 @@ import {
   NoTransactions,
   ScreenContainer,
   TransactionFilterModal,
-  renderUnauthorizedModal,
 } from "@listed-components/organisms";
 import { useAuth } from "@listed-contexts";
 import {
@@ -29,7 +28,7 @@ import {
   Text,
   useTheme,
 } from "native-base";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const transactions = () => {
   const noFilter = {
@@ -47,6 +46,11 @@ const transactions = () => {
   const [incomingFilter, setIncomingFilter] = useState(noFilter);
   const [outgoingFilter, setOutgoingFilter] = useState(noFilter);
   const [filtered, setFiltered] = useState(false);
+
+  useEffect(() => {
+    if (!hasPermission(userMembership!, UserPermission.GET_TRANSACTIONS_LIST))
+      router.replace(Routes.UNAUTHORIZED);
+  }, [userMembership])
 
   const {
     data: incomingTransactions,
@@ -79,8 +83,8 @@ const transactions = () => {
 
   const handleOnApplyFilter = (filter: TransactionFilter) => {
     JSON.stringify(filter) !== JSON.stringify(noFilter)
-    ? setFiltered(true)
-    : setFiltered(false);
+      ? setFiltered(true)
+      : setFiltered(false);
 
     if (transaction === "incoming") {
       setIncomingFilter(filter);
@@ -89,25 +93,14 @@ const transactions = () => {
       setOutgoingFilter(filter);
       setIncomingFilter(noFilter);
     }
-    
+
     setIsBottomSheetVisible(false);
   };
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership?.permissions!,
-        UserPermission.GET_TRANSACTIONS_LIST
-      )
-    );
-  };
-
-  
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Transactions")} />
-      {handleAuthorization()}
       <Row paddingY="4" display="flex" alignItems="center">
         <Text fontWeight="bold" fontSize="lg">
           Transactions
@@ -133,39 +126,39 @@ const transactions = () => {
             OUTGOING
           </Button>
         </Row>
-        { (filtered || 
+        {(filtered ||
           (transaction === "incoming" && incomingTransactions?.pages[0].length! > 0) ||
           (transaction === "outgoing" && outgoingTransactions?.pages[0].length! > 0)) &&
-        <Button
-          variant={
+          <Button
+            variant={
               filtered
-              ? "solid"
-              : "outline"
-          }
-          alignSelf="flex-start"
-          px="5"
-          size="sm"
-          borderRadius="full"
-          onPress={() => setIsBottomSheetVisible(true)}
-          startIcon={
-            <OptionsIcon
-              color={
-                filtered
-                  ?  colors.white
-                  : colors.primary[700]
-              }
-            />
-          }
-        >
-          Filter
-        </Button>
+                ? "solid"
+                : "outline"
+            }
+            alignSelf="flex-start"
+            px="5"
+            size="sm"
+            borderRadius="full"
+            onPress={() => setIsBottomSheetVisible(true)}
+            startIcon={
+              <OptionsIcon
+                color={
+                  filtered
+                    ? colors.white
+                    : colors.primary[700]
+                }
+              />
+            }
+          >
+            Filter
+          </Button>
         }
       </Column>
       <Box flex={1} paddingBottom="4">
         {transaction === "incoming" && (incomingTransactions?.pages[0].length! > 0 || filtered) ? (
           <FlatList
-            contentContainerStyle={{flexGrow:1}}
-            ListEmptyComponent={<NoTransactions filtered= {true}/>}
+            contentContainerStyle={{ flexGrow: 1 }}
+            ListEmptyComponent={<NoTransactions filtered={true} />}
             ItemSeparatorComponent={() => <Divider />}
             data={incomingTransactions?.pages.flatMap((page) => page)}
             renderItem={({ item }) => (
@@ -192,10 +185,10 @@ const transactions = () => {
                 incomingTransactionsFetchNextPage();
             }}
           />
-        ) :  transaction === "outgoing" && (outgoingTransactions?.pages[0].length! > 0 || filtered) ? (
+        ) : transaction === "outgoing" && (outgoingTransactions?.pages[0].length! > 0 || filtered) ? (
           <FlatList
-            contentContainerStyle={{flexGrow:1}}
-            ListEmptyComponent={<NoTransactions filtered={true}/>}
+            contentContainerStyle={{ flexGrow: 1 }}
+            ListEmptyComponent={<NoTransactions filtered={true} />}
             ItemSeparatorComponent={() => <Divider />}
             data={outgoingTransactions?.pages.flatMap((page) => page)}
             renderItem={({ item }) => (
@@ -222,8 +215,8 @@ const transactions = () => {
                 outgoingTransactionsFetchNextPage();
             }}
           />
-        ): <NoTransactions/>
-        }   
+        ) : <NoTransactions />
+        }
       </Box>
       <TransactionFilterModal
         filter={transaction === "incoming" ? incomingFilter : outgoingFilter}

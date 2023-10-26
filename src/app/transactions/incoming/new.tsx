@@ -17,7 +17,7 @@ import {
   SearchIcon
 } from "@listed-components/atoms";
 import { FormControl, TextArea, TextField } from "@listed-components/molecules";
-import { KeyboardAwareScroll, ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms";
+import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import RNDateTimePicker, {
   DateTimePickerEvent,
@@ -40,6 +40,15 @@ const NewIncoming = () => {
   const queryClient = useQueryClient();
   const tomorrow = new Date();
   tomorrow.setDate(new Date().getDate() + 1);
+
+  useEffect(() => {
+    if (hasPermission(
+      userMembership!,
+      UserPermission.ADD_INCOMING
+    )) {
+      router.replace(Routes.UNAUTHORIZED)
+    }
+  }, [userMembership])
 
   const initialFormData = {
     product: "",
@@ -118,24 +127,15 @@ const NewIncoming = () => {
         resetForm();
         setExpirationDisplay("");
         queryClient.setQueryData([GET_INCOMING, data.id], data);
-        queryClient.invalidateQueries({queryKey: [GET_ANALYTICS_SUMMARY]})
+        queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_SUMMARY] })
         router.push(`${Routes.INCOMING_RECEIPT}?transactionId=${data.id}`);
       }
     });
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership?.permissions!,
-        UserPermission.ADD_INCOMING
-      )
-    )
-  }
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Incoming")} />
-      {handleAuthorization()}
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
           <Button size="lg"
@@ -221,7 +221,7 @@ const NewIncoming = () => {
                     onPress={() => {
                       setExpirationDisplay("")
                     }
-                  }
+                    }
                   /> : undefined}
               />
             </Pressable>

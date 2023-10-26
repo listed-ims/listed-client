@@ -9,7 +9,6 @@ import {
   KeyboardAwareScroll,
   ScreenContainer,
   OutProductItem,
-  renderUnauthorizedModal,
   OutgoingNoProducts,
 } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -43,6 +42,14 @@ const NewOutgoing = () => {
   const { colors } = useTheme();
   const { userMembership } = useAuth()
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.ADD_OUTGOING_SOLD
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
 
   const products = useQueries({
     queries: (ids?.toString().split(",") || []).map((id) => {
@@ -160,9 +167,9 @@ const NewOutgoing = () => {
     onSuccess: (data) => {
       router.setParams({ ids: "" });
       resetForm();
-      queryClient.invalidateQueries({queryKey:[GET_OUTGOING_TRANSACTIONS]})
-      queryClient.invalidateQueries({queryKey: [GET_ANALYTICS_SUMMARY]})
-      queryClient.invalidateQueries({queryKey: [GET_NOTIFICATIONS]})
+      queryClient.invalidateQueries({ queryKey: [GET_OUTGOING_TRANSACTIONS] })
+      queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_SUMMARY] })
+      queryClient.invalidateQueries({ queryKey: [GET_NOTIFICATIONS] })
       router.push(`${Routes.OUTGOING_RECEIPT}?transactionId=${data.id}`);
     },
     onError: (error) => {
@@ -170,19 +177,17 @@ const NewOutgoing = () => {
     },
   });
 
-  const handleAuthorization = (permission?: UserPermission) => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership?.permissions!,
-        permission || UserPermission.ADD_OUTGOING_SOLD
-      )
-    )
+  const handleAuthorization = (permission: UserPermission) => {
+    if (!hasPermission(
+      userMembership!,
+      permission!
+    ))
+      router.replace(Routes.UNAUTHORIZED)
   }
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Outgoing")} />
-      {handleAuthorization()}
       <KeyboardAwareScroll
         elementOnTopOfKeyboard={
           formData.products.length !== 0 ? (

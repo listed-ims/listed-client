@@ -6,7 +6,6 @@ import {
 import { OutgoingReceiptDetails } from "@listed-components/molecules";
 import {
   ScreenContainer,
-  renderUnauthorizedModal,
 } from "@listed-components/organisms";
 import { useAuth } from "@listed-contexts";
 import { Routes } from "@listed-constants";
@@ -29,10 +28,20 @@ import {
   Text,
   VStack,
 } from "native-base";
+import { useEffect } from "react";
 
 const OutgoingReceipt = () => {
   const { transactionId } = useLocalSearchParams();
   const { userMembership } = useAuth();
+
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.GET_OUTGOING_DETAILS
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
+
   const {
     data: transactionDetails,
     isError: transactionError,
@@ -43,21 +52,11 @@ const OutgoingReceipt = () => {
     transactionDetails?.transactionDate.toString()!
   );
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership?.permissions!,
-        UserPermission.GET_OUTGOING_DETAILS
-      )
-    );
-  };
-
   const userPermission = userMembership?.permissions || [];
 
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      {handleAuthorization()}
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box pt="8" pb="6">
           <Text fontSize="sm" fontWeight="medium" textAlign="center">

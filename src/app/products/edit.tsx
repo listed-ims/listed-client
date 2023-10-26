@@ -2,7 +2,7 @@ import { FormControl, TextField, Toast } from '@listed-components/molecules'
 import ScreenContainer from '@listed-components/organisms/ScreenContainer'
 import { Box, Column, Row, Text, useTheme, useToast } from 'native-base'
 import React, { useEffect } from 'react'
-import { Stack, router, useLocalSearchParams} from 'expo-router'
+import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { Button, ScanIcon } from "@listed-components/atoms";
 import { stackHeaderStyles } from '@listed-styles'
 import { useDebounce, useFormValidation, useGetProductDetails, useUpdateProductMutation, useValidateBarcode, } from '@listed-hooks'
@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { ValidationRules, UpdateRequest, UserPermission, } from '@listed-types'
 import { GET_ANALYTICS_SUMMARY, GET_PRODUCT, GET_PRODUCTS, Routes } from '@listed-constants'
 import { useAuth } from '@listed-contexts'
-import { KeyboardAwareScroll, renderUnauthorizedModal } from '@listed-components/organisms'
+import { KeyboardAwareScroll } from '@listed-components/organisms'
 import { hasPermission } from '@listed-utils'
 
 const EditProduct = () => {
@@ -19,6 +19,14 @@ const EditProduct = () => {
   const { userDetails, userMembership } = useAuth();
   const toast = useToast();
   const { colors } = useTheme();
+
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.UPDATE_PRODUCT
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
 
   const handleCancel = () => {
     router.back();
@@ -74,7 +82,7 @@ const EditProduct = () => {
     onSuccess: (data) => {
       queryClient.setQueryData([GET_PRODUCT, data.id], data);
       queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS] });
-      queryClient.invalidateQueries({queryKey: [GET_ANALYTICS_SUMMARY]})
+      queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_SUMMARY] })
       router.back();
       toast.show({
         render: () => {
@@ -101,7 +109,7 @@ const EditProduct = () => {
   );
 
   const handleSave = () => {
-    if(JSON.stringify(initialFormData) === JSON.stringify(formData)) router.back();
+    if (JSON.stringify(initialFormData) === JSON.stringify(formData)) router.back();
     else if (validate() && (formData.barcode === initialFormData.barcode || barcodeValidation?.valid !== false)) {
       updateProduct({
         productId: productDetails?.id,
@@ -117,19 +125,10 @@ const EditProduct = () => {
     }
   };
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership?.permissions!,
-        UserPermission.UPDATE_PRODUCT
-      )
-    )
-  }
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Edit Product")} />
-      {handleAuthorization()}
       <KeyboardAwareScroll
         elementOnTopOfKeyboard={
           <Box background=" white" paddingTop="4" paddingBottom="6">

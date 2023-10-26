@@ -1,6 +1,6 @@
 import { Button } from "@listed-components/atoms"
 import { FormControl, TextField } from "@listed-components/molecules"
-import { KeyboardAwareScroll, Permissions, ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms"
+import { KeyboardAwareScroll, Permissions, ScreenContainer } from "@listed-components/organisms"
 import { GET_COLLABORATORS, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
 import { useCreateCollaboratorMutation, useDebounce, useFormValidation, useValidateUsername } from "@listed-hooks"
@@ -10,11 +10,20 @@ import { hasPermission } from "@listed-utils"
 import { useQueryClient } from "@tanstack/react-query"
 import { Stack, router } from "expo-router"
 import { Box, Column, HStack, Text, View } from "native-base"
+import { useEffect } from "react"
 
 
 const AddCollaborator = () => {
   const { userDetails, userMembership } = useAuth()
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.ADD_COLLABORATOR
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
 
   const initialFormData = {
     username: "",
@@ -71,19 +80,9 @@ const AddCollaborator = () => {
     }
   })
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership?.permissions!,
-        UserPermission.ADD_COLLABORATOR
-      )
-    )
-  }
-
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("New Collaborator")} />
-      {handleAuthorization()}
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
           <Button size="lg"
