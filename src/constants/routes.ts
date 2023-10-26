@@ -23,4 +23,6 @@ export enum Routes {
   PRODUCT_NOT_FOUND = "/products/not-found",
   COLLABORATOR_NOT_FOUND = "/collaborators/not-found",
   SEARCH_PRODUCT = "/search",
+  UNAUTHORIZED_INACTIVE = "/unauthorized/inactive",
+  UNAUTHORIZED = "/unauthorized",
 }

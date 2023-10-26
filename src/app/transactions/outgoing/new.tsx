@@ -44,6 +44,14 @@ const NewOutgoing = () => {
   const { userMembership } = useAuth()
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.ADD_OUTGOING_SOLD
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
+
   const products = useQueries({
     queries: (ids?.toString().split(",") || []).map((id) => {
       return {
@@ -170,19 +178,17 @@ const NewOutgoing = () => {
     },
   });
 
-  const handleAuthorization = (permission?: UserPermission) => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership!,
-        permission || UserPermission.ADD_OUTGOING_SOLD
-      )
-    )
+  const handleAuthorization = (permission: UserPermission) => {
+    if (!hasPermission(
+      userMembership!,
+      permission!
+    ))
+      router.replace(Routes.UNAUTHORIZED)
   }
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Outgoing")} />
-      {handleAuthorization()}
       <KeyboardAwareScroll
         elementOnTopOfKeyboard={
           formData.products.length !== 0 ? (

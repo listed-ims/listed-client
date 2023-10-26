@@ -21,10 +21,20 @@ import {
   Text,
   VStack,
 } from "native-base";
+import { useEffect } from "react";
 
 const IncomingReceipt = () => {
   const { transactionId } = useLocalSearchParams();
   const { userMembership } = useAuth();
+
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.GET_INCOMING_DETAILS
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
+
   const {
     data: transactionDetails,
     isError: transactionError,
@@ -35,21 +45,11 @@ const IncomingReceipt = () => {
     transactionDetails?.transactionDate.toString()!
   );
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership!,
-        UserPermission.GET_INCOMING_DETAILS
-      )
-    )
-  }
-
   const userPermissions = userMembership?.permissions || [];
 
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      {handleAuthorization()}
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box paddingTop="8" paddingBottom="6">
           <Text fontSize="sm" fontWeight="medium" textAlign="center">

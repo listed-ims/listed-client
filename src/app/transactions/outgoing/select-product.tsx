@@ -16,7 +16,6 @@ import { ProductResponse } from "@listed-types";
 const SelectProduct = () => {
   const { ids } = useLocalSearchParams();
   const queryClient = useQueryClient();
-
   const { userDetails } = useAuth();
 
   const {

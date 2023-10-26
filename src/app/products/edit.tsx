@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { ValidationRules, UpdateRequest, UserPermission, } from '@listed-types'
 import { GET_ANALYTICS_SUMMARY, GET_PRODUCT, GET_PRODUCTS, Routes } from '@listed-constants'
 import { useAuth } from '@listed-contexts'
-import { KeyboardAwareScroll, renderUnauthorizedModal } from '@listed-components/organisms'
+import { KeyboardAwareScroll } from '@listed-components/organisms'
 import { hasPermission } from '@listed-utils'
 
 const EditProduct = () => {
@@ -19,6 +19,14 @@ const EditProduct = () => {
   const { userDetails, userMembership } = useAuth();
   const toast = useToast();
   const { colors } = useTheme();
+
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.UPDATE_PRODUCT
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
 
   const handleCancel = () => {
     router.back();
@@ -117,19 +125,10 @@ const EditProduct = () => {
     }
   };
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership!,
-        UserPermission.UPDATE_PRODUCT
-      )
-    )
-  }
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Edit Product")} />
-      {handleAuthorization()}
       <KeyboardAwareScroll
         elementOnTopOfKeyboard={
           <Box background=" white" paddingTop="4" paddingBottom="6">

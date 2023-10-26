@@ -1,5 +1,5 @@
 import { Button, PeopleIcon } from "@listed-components/atoms"
-import { PermissionDetails, RemoveCollaboratorModal, ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms"
+import { PermissionDetails, RemoveCollaboratorModal, ScreenContainer } from "@listed-components/organisms"
 import { GET_COLLABORATOR, GET_COLLABORATORS, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
 import { useGetCollaboratorDetails, useUpdateUserMembershipStatusMutation } from "@listed-hooks"
@@ -7,7 +7,7 @@ import { stackHeaderStyles } from "@listed-styles"
 import { MembershipStatus, ModalContent, UserPermission } from "@listed-types"
 import { hasPermission, ownerOrCollaborator, } from "@listed-utils"
 import { useQueryClient } from "@tanstack/react-query"
-import { Redirect, Stack, router, useLocalSearchParams } from "expo-router"
+import { Stack, router, useLocalSearchParams } from "expo-router"
 import { Badge, Center, Column, Heading, ScrollView, Text, useToast } from "native-base"
 import { useEffect, useState } from "react"
 
@@ -15,14 +15,21 @@ import { useEffect, useState } from "react"
 const CollaboratorDetails = () => {
   const { userMembership } = useAuth();
   const { id } = useLocalSearchParams();
-  const toast = useToast();
   const queryClient = useQueryClient();
   const [showRemoveModal, setShowRemoveModal] = useState(false)
   const [modalContent, setModalContent] = useState<ModalContent>({} as ModalContent)
 
+
+  useEffect(() => {
+    if (!hasPermission(
+      userMembership!,
+      UserPermission.VIEW_COLLABORATOR_DETAILS
+    ))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
+
   const {
     data: collaboratorDetails,
-    isError: collaboratorDetailsError,
     isFetching: collaboratorDetailsFetching,
     error: collaboratorDetailsErrorDetails,
   } = useGetCollaboratorDetails(Number(id))
@@ -49,13 +56,6 @@ const CollaboratorDetails = () => {
     ])
   }
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership!,
-        UserPermission.VIEW_COLLABORATOR_DETAILS
-      ))
-  }
   const handleCancelRemove = () => {
     setModalContent({
       header: isPending ? "CANCEL INVITE" : "REMOVE COLLABORATOR",
@@ -75,7 +75,6 @@ const CollaboratorDetails = () => {
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Collaborator Details")} />
-      {handleAuthorization()}
       {
         collaboratorDetailsFetching || !collaboratorDetails
           ? <Text>Loading...</Text>
@@ -127,7 +126,7 @@ const CollaboratorDetails = () => {
                   {(
                     !isInactive
                     && userMembership?.permissions.includes(UserPermission.DELETE_COLLABORATOR)
-                    || userMembership?.permissions.includes(UserPermission.OWNER) ) &&
+                    || userMembership?.permissions.includes(UserPermission.OWNER)) &&
                     <Button variant="warnOutline"
                       onPress={handleCancelRemove}
                     >

@@ -2,8 +2,7 @@ import { AddIcon, Button } from "@listed-components/atoms"
 import { CollaboratorListItem, CollaboratorsFilter } from "@listed-components/molecules"
 import {
   EmptyCollaboratorList,
-  ScreenContainer,
-  renderUnauthorizedModal
+  ScreenContainer
 } from "@listed-components/organisms"
 import { GET_COLLABORATOR, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
@@ -14,14 +13,13 @@ import { hasPermission, setCollaboratorsCurrentUserFirst, } from "@listed-utils"
 import { useQueryClient } from "@tanstack/react-query"
 import { Stack, router } from "expo-router"
 import { Column, FlatList, useTheme } from "native-base"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 
 const Collaborators = () => {
   const { colors } = useTheme();
   const queryClient = useQueryClient();
   const [currentFilter, setCurrentFilter] = useState<"ALL" | Omit<MembershipStatus, "DECLINED">>("ALL");
-
   const { userDetails, userMembership } = useAuth();
 
   let filters: MembershipStatus[] = ["ACTIVE", "INACTIVE"] as MembershipStatus[]
@@ -29,6 +27,11 @@ const Collaborators = () => {
     || userMembership?.permissions.includes(UserPermission.ADD_COLLABORATOR)) {
     filters = ["ACTIVE", "INACTIVE", "PENDING"] as MembershipStatus[]
   }
+
+  useEffect(() => {
+    if (!hasPermission(userMembership!, UserPermission.VIEW_COLLABORATORS))
+      router.replace(Routes.UNAUTHORIZED)
+  }, [userMembership])
 
   const {
     data: collaboratorsList,
@@ -46,19 +49,9 @@ const Collaborators = () => {
           MembershipStatus.PENDING,
   )
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership!,
-        UserPermission.VIEW_COLLABORATORS
-      )
-    )
-  }
-
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Collaborators")} />
-      {handleAuthorization()}
       <Column height="full" space="4"
         paddingTop="4"
         paddingBottom="6"

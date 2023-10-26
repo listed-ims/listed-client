@@ -29,7 +29,7 @@ import {
   Text,
   useTheme,
 } from "native-base";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const transactions = () => {
   const noFilter = {
@@ -47,6 +47,11 @@ const transactions = () => {
   const [incomingFilter, setIncomingFilter] = useState(noFilter);
   const [outgoingFilter, setOutgoingFilter] = useState(noFilter);
   const [filtered, setFiltered] = useState(false);
+
+  useEffect(() => {
+    if (!hasPermission(userMembership!, UserPermission.GET_TRANSACTIONS_LIST))
+      router.replace(Routes.UNAUTHORIZED);
+  }, [userMembership])
 
   const {
     data: incomingTransactions,
@@ -93,21 +98,10 @@ const transactions = () => {
     setIsBottomSheetVisible(false);
   };
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership!,
-        UserPermission.GET_TRANSACTIONS_LIST
-      )
-    );
-  };
-
-
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Transactions")} />
-      {handleAuthorization()}
       <Row paddingY="4" display="flex" alignItems="center">
         <Text fontWeight="bold" fontSize="lg">
           Transactions

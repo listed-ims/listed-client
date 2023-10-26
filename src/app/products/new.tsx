@@ -3,7 +3,6 @@ import { FormControl, TextField } from "@listed-components/molecules";
 import {
   KeyboardAwareScroll,
   ScreenContainer,
-  renderUnauthorizedModal,
 } from "@listed-components/organisms";
 import { GET_PRODUCTS, ProductUnit, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
@@ -26,6 +25,11 @@ const NewProduct = () => {
   const { userDetails, userMembership } = useAuth();
   const { colors } = useTheme();
   const { barcode } = useLocalSearchParams<{ barcode: string }>();
+
+  useEffect(() => {
+    if (!hasPermission(userMembership!, UserPermission.ADD_PRODUCT))
+      router.replace(Routes.UNAUTHORIZED);
+  }, [userMembership]);
 
   const initialFormData = {
     "product name": "",
@@ -106,19 +110,10 @@ const NewProduct = () => {
     },
   });
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership!,
-        UserPermission.ADD_PRODUCT
-      )
-    )
-  }
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("New Product")} />
-      {handleAuthorization()}
       <KeyboardAwareScroll
         elementOnTopOfKeyboard={
           <Box pt="4" pb="6" background="white">

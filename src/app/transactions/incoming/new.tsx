@@ -17,7 +17,7 @@ import {
   SearchIcon
 } from "@listed-components/atoms";
 import { FormControl, TextArea, TextField } from "@listed-components/molecules";
-import { KeyboardAwareScroll, ScreenContainer, renderUnauthorizedModal } from "@listed-components/organisms";
+import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import RNDateTimePicker, {
   DateTimePickerEvent,
@@ -40,6 +40,15 @@ const NewIncoming = () => {
   const queryClient = useQueryClient();
   const tomorrow = new Date();
   tomorrow.setDate(new Date().getDate() + 1);
+
+  useEffect(() => {
+    if (hasPermission(
+      userMembership!,
+      UserPermission.ADD_INCOMING
+    )) {
+      router.replace(Routes.UNAUTHORIZED)
+    }
+  }, [userMembership])
 
   const initialFormData = {
     product: "",
@@ -123,19 +132,10 @@ const NewIncoming = () => {
       }
     });
 
-  const handleAuthorization = () => {
-    return renderUnauthorizedModal(
-      !hasPermission(
-        userMembership!,
-        UserPermission.ADD_INCOMING
-      )
-    )
-  }
 
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Incoming")} />
-      {handleAuthorization()}
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
           <Button size="lg"
