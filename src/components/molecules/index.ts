@@ -31,3 +31,4 @@ export { default as ExpirationNotification } from "./ExpirationNotification";
 export { default as InviteReplyNotification } from "./InviteReplyNotification";
 export { default as LowStockNotification } from "./LowStockNotification";
 export { default as StoreInviteNotification } from "./StoreInviteNotification";
+export { default as CollaboratorsListLoadingSkeleton } from "./CollaboratorsListLoadingSkeleton";
