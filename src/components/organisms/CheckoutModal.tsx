@@ -30,7 +30,7 @@ const CheckoutModal = ({
       <Modal.Footer>
         <Row width="full" justifyContent="center" space={4}>
           <Button flex="1" variant="subtle" onPress={onConfirm}>
-            CONFIRM
+            CHECKOUT
           </Button>
           <Button flex="1" variant="unstyled" onPress={onCancel}>
             CANCEL
