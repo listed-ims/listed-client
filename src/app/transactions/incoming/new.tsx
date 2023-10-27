@@ -42,7 +42,7 @@ const NewIncoming = () => {
   tomorrow.setDate(new Date().getDate() + 1);
 
   useEffect(() => {
-    if (hasPermission(
+    if (!hasPermission(
       userMembership!,
       UserPermission.ADD_INCOMING
     )) {
