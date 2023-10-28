@@ -224,7 +224,7 @@ const TransactionFilterModal = ({
             />
           )}
         </FormControl>
-        <FormControl display="flex" alignItems="flex-start" label="Performer">
+        <FormControl display="flex" alignItems="flex-start" label="Performed by">
           <Row
             flexWrap="wrap"
             space="2"
