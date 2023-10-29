@@ -57,7 +57,10 @@ const Unauthorized = () => {
           >
             <Button
               flex="1"
-              variant="warnSubtle" onPress={() => router.back()}>
+              variant="warnSubtle" onPress={() => {
+                if (router.canGoBack())
+                  router.back()
+              }}>
               OK
             </Button>
           </Row>
