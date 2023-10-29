@@ -22,7 +22,7 @@ import { Stack, router, useLocalSearchParams } from "expo-router";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { GET_ANALYTICS_SUMMARY, GET_INCOMING, GET_PRODUCT, Routes } from "@listed-constants";
+import { GET_ANALYTICS_SUMMARY, GET_INCOMING, Routes } from "@listed-constants";
 import { stackHeaderStyles } from "@listed-styles";
 import { dateToMMDDYY, hasPermission, localeStringToDate } from "@listed-utils";
 import { IncomingRequest, UserPermission, ValidationRules } from "@listed-types";
