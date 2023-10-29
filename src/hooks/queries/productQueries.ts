@@ -58,6 +58,7 @@ export const useGetProductDetails = (productId: number) => {
     () => getProductService(productId),
     {
       staleTime: fiveMinutes,
+      enabled: !!productId,
     }
   );
 };
