@@ -14,7 +14,10 @@ const EmptyCollaboratorList = ({ filter }: EmptyCollaboratorListProps) => {
       justifyContent="center">
       <ManIcon />
       <Text fontWeight="semibold" fontSize="lg">No collaborators.</Text>
-      <Text fontSize="xs">{`You don't have any ${filter} collaborators.`}</Text>
+      <Text fontSize="xs">{`You don't have any ${filter !== "ALL"
+        ? filter + " "
+        : ""
+        }collaborators.`}</Text>
     </Column>
   )
 }

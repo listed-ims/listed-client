@@ -1,5 +1,5 @@
 import { AddIcon, Button } from "@listed-components/atoms"
-import { CollaboratorListItem, CollaboratorsFilter } from "@listed-components/molecules"
+import { CollaboratorListItem, CollaboratorsFilter, CollaboratorsListLoadingSkeleton } from "@listed-components/molecules"
 import {
   EmptyCollaboratorList,
   ScreenContainer
@@ -8,12 +8,12 @@ import { GET_COLLABORATOR, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
 import { useGetCollaborators } from "@listed-hooks"
 import { stackHeaderStyles } from "@listed-styles"
-import { MembershipStatus, UserPermission } from "@listed-types"
+import { MembershipResponse, MembershipStatus, UserPermission } from "@listed-types"
 import { hasPermission, setCollaboratorsCurrentUserFirst, } from "@listed-utils"
 import { useQueryClient } from "@tanstack/react-query"
 import { Stack, router } from "expo-router"
 import { Column, FlatList, useTheme } from "native-base"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 
 
 const Collaborators = () => {
@@ -49,6 +49,33 @@ const Collaborators = () => {
           MembershipStatus.PENDING,
   )
 
+  const data = setCollaboratorsCurrentUserFirst(
+    collaboratorsList,
+    userDetails?.id!, filters[2]
+    ? undefined
+    : MembershipStatus.PENDING
+  )
+
+  const renderItem = useCallback((
+    { item, index }: { item: MembershipResponse, index: number }
+  ) => (
+    <CollaboratorListItem
+      onPress={() => {
+        queryClient.setQueryData([GET_COLLABORATOR, item.id], item);
+        router.push(`${Routes.COLLABORATORS}/${item.id}`)
+      }}
+      key={index}
+      name={item.user.name}
+      membershipStatus={item.membershipStatus}
+      isYou={item.user.id === userDetails?.id}
+      userRole={item.permissions.includes(UserPermission.OWNER) ? "owner" : "collaborator"}
+    />
+  ), [])
+
+  const emptyList = collaboratorsListFetching
+    ? <CollaboratorsListLoadingSkeleton />
+    : <EmptyCollaboratorList filter={currentFilter} />
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Collaborators")} />
@@ -61,26 +88,9 @@ const Collaborators = () => {
           handleSetFilter={(filter) => { setCurrentFilter(filter) }} />
         <FlatList
           contentContainerStyle={{ flexGrow: 1 }}
-          data={setCollaboratorsCurrentUserFirst(
-            collaboratorsList,
-            userDetails?.id!, filters[2]
-            ? undefined
-            : MembershipStatus.PENDING
-          )}
-          renderItem={({ item, index }) => (
-            <CollaboratorListItem
-              onPress={() => {
-                queryClient.setQueryData([GET_COLLABORATOR, item.id], item);
-                router.push(`${Routes.COLLABORATORS}/${item.id}`)
-              }}
-              key={index}
-              name={item.user.name}
-              membershipStatus={item.membershipStatus}
-              isYou={item.user.id === userDetails?.id}
-              userRole={item.permissions.includes(UserPermission.OWNER) ? "owner" : "collaborator"}
-            />
-          )}
-          ListEmptyComponent={<EmptyCollaboratorList filter={currentFilter} />}
+          data={data}
+          renderItem={renderItem}
+          ListEmptyComponent={emptyList}
         />
         <Button
           alignSelf="flex-end"
