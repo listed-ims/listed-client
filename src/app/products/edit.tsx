@@ -57,6 +57,9 @@ const EditProduct = () => {
     },
     threshold: {
       custom: (value: string) => {
+        if (value === null) {
+          return true;
+        }
         return value.length === 0 || parseFloat(value) >= 0.0;
       },
       customErrorMessage: "Low warning point should be a minimum of 0",

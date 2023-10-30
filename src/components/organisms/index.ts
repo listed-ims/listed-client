@@ -21,3 +21,4 @@ export { default as EmptyCollaboratorList } from "./EmptyCollaboratorList";
 export { default as NoTransactions } from "./NoTransactions";
 export { default as NotificationListItem } from "./NotificationListItem";
 export { default as ChangeStoreModal } from "./ChangeStoreModal";
+export { default as CheckoutModal } from "./CheckoutModal";
