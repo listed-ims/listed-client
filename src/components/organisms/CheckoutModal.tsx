@@ -1,4 +1,6 @@
 import { AlertFilledSmall, Button } from "@listed-components/atoms";
+import { ModalContent } from "@listed-types";
+import { toTitleCase } from "@listed-utils";
 import { Column, Modal, Row, Text } from "native-base";
 import { InterfaceModalProps } from "native-base/lib/typescript/components/composites/Modal/types";
 
@@ -18,7 +20,7 @@ const CheckoutModal = ({
         <Column alignItems="center" space={4}>
           <AlertFilledSmall />
           <Text fontSize="md" fontWeight="bold">
-            CONFIRM CHECKOUT
+            Confirm Checkout
           </Text>
         </Column>
       </Modal.Header>
