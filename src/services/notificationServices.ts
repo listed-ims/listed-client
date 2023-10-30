@@ -7,9 +7,11 @@ import { axiosInstance } from "./axios";
 
 const parseNotificationMetaData = (metaDataString: string) => {
   try {
-    return JSON.parse(metaDataString, (_key, value) =>
-      typeof value === "string" ? JSON.parse(value) : value
-    );
+    return JSON.parse(metaDataString, (key, value) => {
+      return typeof value === "string" && key !== "expirationDate"
+        ? JSON.parse(value)
+        : value;
+    });
   } catch (error) {
     throw error;
   }
@@ -51,7 +53,7 @@ export const updateNotificationStatusService = async (id: number) => {
     notification.metaData = parseNotificationMetaData(
       String(notification.metaData)
     ) as NotificationMetaData;
-    
+
     return notification;
   } catch (error) {
     throw error;
