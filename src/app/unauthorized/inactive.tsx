@@ -1,7 +1,7 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { Stack, router } from 'expo-router'
-import { Column, Divider, Row, Text, Pressable, useTheme, View } from 'native-base'
+import { Column, Divider, Row, Text, useTheme, View } from 'native-base'
 import { AlertFilled, Button, NoAccess } from '@listed-components/atoms'
 
 const InactiveUserUnAuthorized = () => {
@@ -24,7 +24,6 @@ const InactiveUserUnAuthorized = () => {
         backgroundColor='rgba(1,1,1,0.6)'
       >
         <Column
-          height="1/2"
           width="90%"
           backgroundColor='white'
           borderRadius="lg"
@@ -58,7 +57,10 @@ const InactiveUserUnAuthorized = () => {
           >
             <Button
               flex="1"
-              variant="warnSubtle" onPress={() => router.back()}>
+              variant="warnSubtle" onPress={() => {
+                if (router.canGoBack())
+                  router.back()
+              }}>
               OK
             </Button>
           </Row>
