@@ -1,8 +1,3 @@
-export enum StoreStatus {
-  OPEN = "OPEN",
-  CLOSED = "CLOSED",
-}
-
 export enum ProductUnit {
   PCS = "PCS",
   KG = "KG",

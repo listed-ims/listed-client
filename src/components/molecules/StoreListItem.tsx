@@ -16,7 +16,6 @@ interface StoreListItemProps extends IPressableProps {
   storeId?: number;
   userId?: number;
   name: string;
-  status: "open" | "closed";
   current: boolean;
 }
 
@@ -24,11 +23,9 @@ const StoreListItem = ({
   storeId,
   userId,
   name,
-  status,
   current,
   ...props
 }: StoreListItemProps) => {
-
   const { data: userMembership, isSuccess: userMembershipSuccess } =
     useGetUserMembership(storeId!, userId!);
 
@@ -44,10 +41,13 @@ const StoreListItem = ({
       mx="1"
     >
       <Row alignItems="center" justifyContent="space-between" space="2">
-        {current && 
-          <CheckedIcon/>
-        }
-        <Column flex="2" alignItems="flex-start">
+        <Row flex="2" alignItems="flex-start" space="4">
+          {current && <CheckedIcon />}
+          <Text fontSize="sm" fontWeight="semibold" color="darkText">
+            {name}
+          </Text>
+        </Row>
+        <Column flex="1" alignItems="flex-end">
           {current ? (
             <Badge colorScheme="success" variant="outline">
               CURRENT STORE
@@ -57,25 +57,11 @@ const StoreListItem = ({
               NEW INVITE
             </Badge>
           ) : null}
-          <Text fontSize="sm" fontWeight="semibold" color="darkText">
-            {name}
-          </Text>
           <Text fontSize="xs" color="muted.500">
             {toTitleCase(
               ownerOrCollaborator(userMembership?.permissions || [])
             )}
           </Text>
-        </Column>
-        <Column flex="1" alignItems="flex-end">
-          <Text fontSize="xs" color="muted.500">
-            Store Status
-          </Text>
-          <Badge
-            colorScheme={status === "open" ? "info" : "error"}
-            variant="solid"
-          >
-            {toTitleCase(status)}
-          </Badge>
         </Column>
       </Row>
     </Pressable>

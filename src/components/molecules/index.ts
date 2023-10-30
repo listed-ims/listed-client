@@ -6,7 +6,6 @@ export { default as TextField } from "./TextField";
 export { default as BarcodeField } from "./BarcodeField";
 export { default as ProductListItem } from "./ProductListItem";
 export { default as StoreListItem } from "./StoreListItem";
-export { default as StoreListFilterGroup } from "./StoreListFilterGroup";
 export { default as TextArea } from "./TextArea";
 export { default as CreateStoreButton } from "./CreateStoreButton";
 export { default as ProdcutListFilter } from "./ProdcutListFilter";
