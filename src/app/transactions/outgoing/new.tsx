@@ -10,6 +10,7 @@ import {
   ScreenContainer,
   OutProductItem,
   OutgoingNoProducts,
+  CheckoutModal,
 } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
@@ -23,7 +24,14 @@ import {
   useTheme,
 } from "native-base";
 import { stackHeaderStyles } from "@listed-styles";
-import { GET_OUTGOING_TRANSACTIONS, OutgoingCategory, Routes, GET_PRODUCT, GET_ANALYTICS_SUMMARY, GET_NOTIFICATIONS } from "@listed-constants";
+import {
+  GET_OUTGOING_TRANSACTIONS,
+  OutgoingCategory,
+  Routes,
+  GET_PRODUCT,
+  GET_ANALYTICS_SUMMARY,
+  GET_NOTIFICATIONS,
+} from "@listed-constants";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { getProductService } from "@listed-services";
 import {
@@ -33,23 +41,21 @@ import {
   ValidationRules,
 } from "@listed-types";
 import { useCreateOutgoingMutation, useFormValidation } from "@listed-hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { hasPermission, toCurrency } from "@listed-utils";
 import { useAuth } from "@listed-contexts";
 
 const NewOutgoing = () => {
   const { ids } = useLocalSearchParams();
   const { colors } = useTheme();
-  const { userMembership } = useAuth()
+  const { userMembership } = useAuth();
   const queryClient = useQueryClient();
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
   useEffect(() => {
-    if (!hasPermission(
-      userMembership!,
-      UserPermission.ADD_OUTGOING_SOLD
-    ))
-      router.replace(Routes.UNAUTHORIZED)
-  }, [userMembership])
+    if (!hasPermission(userMembership!, UserPermission.ADD_OUTGOING_SOLD))
+      router.replace(Routes.UNAUTHORIZED);
+  }, [userMembership]);
 
   const products = useQueries({
     queries: (ids?.toString().split(",") || []).map((id) => {
@@ -165,11 +171,12 @@ const NewOutgoing = () => {
     isLoading: createOutgoingLoading,
   } = useCreateOutgoingMutation({
     onSuccess: (data) => {
+      setShowCheckoutModal(false);
       router.setParams({ ids: "" });
       resetForm();
-      queryClient.invalidateQueries({ queryKey: [GET_OUTGOING_TRANSACTIONS] })
-      queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_SUMMARY] })
-      queryClient.invalidateQueries({ queryKey: [GET_NOTIFICATIONS] })
+      queryClient.invalidateQueries({ queryKey: [GET_OUTGOING_TRANSACTIONS] });
+      queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_SUMMARY] });
+      queryClient.invalidateQueries({ queryKey: [GET_NOTIFICATIONS] });
       router.push(`${Routes.OUTGOING_RECEIPT}?transactionId=${data.id}`);
     },
     onError: (error) => {
@@ -178,12 +185,9 @@ const NewOutgoing = () => {
   });
 
   const handleAuthorization = (permission: UserPermission) => {
-    if (!hasPermission(
-      userMembership!,
-      permission!
-    ))
-      router.replace(Routes.UNAUTHORIZED)
-  }
+    if (!hasPermission(userMembership!, permission!))
+      router.replace(Routes.UNAUTHORIZED);
+  };
 
   return (
     <ScreenContainer withHeader>
@@ -199,13 +203,15 @@ const NewOutgoing = () => {
                   variant="outline"
                   borderRadius="full"
                   startIcon={<ScanIcon color={colors.primary[700]} />}
-                  onPress={() => router.push({
-                    pathname: Routes.BARCODE,
-                    params: {
-                      nextRoute: Routes.NEW_OUTGOING,
-                      ids: ids ? ids : "",
-                    },
-                  })}
+                  onPress={() =>
+                    router.push({
+                      pathname: Routes.BARCODE,
+                      params: {
+                        nextRoute: Routes.NEW_OUTGOING,
+                        ids: ids ? ids : "",
+                      },
+                    })
+                  }
                 >
                   Scan
                 </Button>
@@ -227,7 +233,7 @@ const NewOutgoing = () => {
                   Add Product
                 </Button>
               </Row>
-              <Button size="lg" onPress={handleCreateOutgoing}>
+              <Button size="lg" onPress={() => setShowCheckoutModal(true)}>
                 <Row space={4}>
                   <Text color="white" fontWeight="500">
                     CHECKOUT
@@ -252,46 +258,41 @@ const NewOutgoing = () => {
                   label="SALES"
                   selected={formData.category === OutgoingCategory.SALES}
                   onPress={() => {
-                    handleAuthorization(UserPermission.ADD_OUTGOING_SOLD)
-                    handleInputChange(OutgoingCategory.SALES, "category")
-                  }
-                  }
+                    handleAuthorization(UserPermission.ADD_OUTGOING_SOLD);
+                    handleInputChange(OutgoingCategory.SALES, "category");
+                  }}
                 />
                 <SelectButton
                   label="DEFECTS"
                   selected={formData.category === OutgoingCategory.DEFECTS}
                   onPress={() => {
-                    handleAuthorization(UserPermission.ADD_OUTGOING_DEFECTS)
-                    handleInputChange(OutgoingCategory.DEFECTS, "category")
-                  }
-                  }
+                    handleAuthorization(UserPermission.ADD_OUTGOING_DEFECTS);
+                    handleInputChange(OutgoingCategory.DEFECTS, "category");
+                  }}
                 />
                 <SelectButton
                   label="EXPIRED"
                   selected={formData.category === OutgoingCategory.EXPIRED}
                   onPress={() => {
-                    handleAuthorization(UserPermission.ADD_OUTGOING_EXPIRED)
-                    handleInputChange(OutgoingCategory.EXPIRED, "category")
-                  }
-                  }
+                    handleAuthorization(UserPermission.ADD_OUTGOING_EXPIRED);
+                    handleInputChange(OutgoingCategory.EXPIRED, "category");
+                  }}
                 />
                 <SelectButton
                   label="LOST"
                   selected={formData.category === OutgoingCategory.LOST}
                   onPress={() => {
-                    handleAuthorization(UserPermission.ADD_OUTGOING_LOST)
-                    handleInputChange(OutgoingCategory.LOST, "category")
-                  }
-                  }
+                    handleAuthorization(UserPermission.ADD_OUTGOING_LOST);
+                    handleInputChange(OutgoingCategory.LOST, "category");
+                  }}
                 />
                 <SelectButton
                   label="CONSUMED"
                   selected={formData.category === OutgoingCategory.CONSUMED}
                   onPress={() => {
-                    handleAuthorization(UserPermission.ADD_OUTGOING_CONSUMED)
-                    handleInputChange(OutgoingCategory.CONSUMED, "category")
-                  }
-                  }
+                    handleAuthorization(UserPermission.ADD_OUTGOING_CONSUMED);
+                    handleInputChange(OutgoingCategory.CONSUMED, "category");
+                  }}
                 />
               </HStack>
             </ScrollView>
@@ -348,9 +349,14 @@ const NewOutgoing = () => {
           ) : (
             <OutgoingNoProducts />
           )}
+          <CheckoutModal
+            onConfirm={handleCreateOutgoing}
+            onCancel={() => setShowCheckoutModal(false)}
+            isOpen={showCheckoutModal}
+          />
         </Column>
-      </KeyboardAwareScroll >
-    </ScreenContainer >
+      </KeyboardAwareScroll>
+    </ScreenContainer>
   );
 };
 
