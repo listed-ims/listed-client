@@ -1,6 +1,4 @@
 import { AlertFilledSmall, Button } from "@listed-components/atoms";
-import { ModalContent } from "@listed-types";
-import { toTitleCase } from "@listed-utils";
 import { Column, Modal, Row, Text } from "native-base";
 import { InterfaceModalProps } from "native-base/lib/typescript/components/composites/Modal/types";
 
