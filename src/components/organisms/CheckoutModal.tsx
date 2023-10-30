@@ -18,7 +18,7 @@ const CheckoutModal = ({
         <Column alignItems="center" space={4}>
           <AlertFilledSmall />
           <Text fontSize="md" fontWeight="bold">
-            CONFIRM CHECKOUT
+            Confirm Checkout
           </Text>
         </Column>
       </Modal.Header>
