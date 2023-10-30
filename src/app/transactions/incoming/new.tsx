@@ -26,9 +26,10 @@ import { GET_ANALYTICS_SUMMARY, GET_INCOMING, Routes } from "@listed-constants";
 import { stackHeaderStyles } from "@listed-styles";
 import { dateToMMDDYY, hasPermission, localeStringToDate } from "@listed-utils";
 import { IncomingRequest, UserPermission, ValidationRules } from "@listed-types";
-import { useCreateIncomingMutation, useFormValidation } from "@listed-hooks";
+import { useCreateIncomingMutation, useFormValidation, useGetProductDetails } from "@listed-hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@listed-contexts";
+
 
 const NewIncoming = () => {
   const { colors } = useTheme();
@@ -40,6 +41,13 @@ const NewIncoming = () => {
   const queryClient = useQueryClient();
   const tomorrow = new Date();
   tomorrow.setDate(new Date().getDate() + 1);
+
+  const {
+    data: productDetails,
+    isError: productDetailsError,
+    isFetching: productDetailsFetching,
+    error: productDetailsErrorDetails,
+  } = useGetProductDetails(parseInt(productId as string));
 
   useEffect(() => {
     if (!hasPermission(
@@ -68,7 +76,16 @@ const NewIncoming = () => {
       },
       customErrorMessage: "Quantity must be greater than 0."
     },
-    "purchase price": { required: true },
+    "purchase price": { 
+      required: true,
+      custom(value) {
+        if (value && parseInt(value) >= productDetails?.salePrice!) {
+          return false; 
+        }
+        return true; 
+      },
+      customErrorMessage: "Sale price must be greater than purchase price."
+     },
     comment: { required: false, }
   }
 
@@ -132,7 +149,7 @@ const NewIncoming = () => {
       }
     });
 
-
+    
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Incoming")} />
