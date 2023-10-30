@@ -31,3 +31,5 @@ export { default as InviteReplyNotification } from "./InviteReplyNotification";
 export { default as LowStockNotification } from "./LowStockNotification";
 export { default as StoreInviteNotification } from "./StoreInviteNotification";
 export { default as CollaboratorsListLoadingSkeleton } from "./CollaboratorsListLoadingSkeleton";
+export { default as IncomingSelectProductLoadingSkeleton } from "./IncomingSelectProductLoadingSkeleton";
+export { default as IncomingReceiptLoadingSkeleton } from "./IncomingReceiptLoadingSkeleton";

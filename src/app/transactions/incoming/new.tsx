@@ -16,7 +16,7 @@ import {
   ScanIcon,
   SearchIcon
 } from "@listed-components/atoms";
-import { FormControl, TextArea, TextField } from "@listed-components/molecules";
+import { FormControl, IncomingReceiptLoadingSkeleton, TextArea, TextField } from "@listed-components/molecules";
 import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import RNDateTimePicker, {
@@ -149,6 +149,9 @@ const NewIncoming = () => {
       }
     });
 
+    if (createIncomingLoading){
+      return <IncomingReceiptLoadingSkeleton />
+    }
     
   return (
     <ScreenContainer withHeader>
