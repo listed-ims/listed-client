@@ -4,7 +4,7 @@ import { Column, Text, HStack, Box } from "native-base";
 import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
 import { BackIcon, Button, NewStoreIcon } from "@listed-components/atoms";
 import { FormControl, TextField } from "@listed-components/molecules";
-import { GET_STORES, GET_USER, Routes, StoreStatus } from "@listed-constants";
+import { GET_STORES, GET_USER, Routes } from "@listed-constants";
 import { StoreRequest, UserResponse } from "@listed-types";
 import { useCreateStoreMutation } from "@listed-hooks";
 import { useQueryClient } from "@tanstack/react-query";
@@ -42,7 +42,6 @@ const NewStore = () => {
     if (validate()) {
       createStoreService({
         name: formData.name,
-        status: StoreStatus.OPEN,
       } as StoreRequest);
     }
   };

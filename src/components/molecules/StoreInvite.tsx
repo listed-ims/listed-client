@@ -62,7 +62,7 @@ const StoreInvite = ({ storeDetails, storeMembership }: StoreInviteProps) => {
 
 
   return (
-    <Column space="4">
+    <Column>
       <Column backgroundColor="primary.700"
         alignItems="center"
         space="1"
@@ -94,32 +94,6 @@ const StoreInvite = ({ storeDetails, storeMembership }: StoreInviteProps) => {
             flex="1">
             DECLINE
           </Button>
-        </Row>
-      </Column>
-      <Column borderColor="muted.300"
-        borderRadius="lg"
-        borderWidth="1"
-        padding="4"
-        space="1"
-      >
-        <Text fontWeight="semibold"
-          marginBottom="1"
-          color="text.500">
-          STORE DETAILS
-        </Text>
-        <Row>
-          <Text flex="1">Store Owner:</Text>
-          <Text flex="1"
-            fontWeight="bold">
-            {storeDetails?.owner.name}
-          </Text>
-        </Row>
-        <Row>
-          <Text flex="1">Store Status:</Text>
-          <Text flex="1"
-            fontWeight="bold">
-            {toTitleCase(storeDetails?.status!)}
-          </Text>
         </Row>
       </Column>
       <DeclineInviteModal

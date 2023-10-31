@@ -1,35 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Column, FlatList, HStack, Text, useTheme } from "native-base";
 import { Stack, router } from "expo-router";
 import { NoStoreFound, ScreenContainer } from "@listed-components/organisms";
 import { AddIcon, Button } from "@listed-components/atoms";
-import {
-  StoreListFilterGroup,
-  StoreListItem,
-} from "@listed-components/molecules";
-import { Routes, StoreStatus } from "@listed-constants";
+import { StoreListItem } from "@listed-components/molecules";
+import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetStoreList } from "@listed-hooks";
 import { MembershipStatus } from "@listed-types";
 
 const Stores = () => {
-  const [filter, setFilter] = useState<"all" | "open" | "closed">("all");
-
   const { userDetails, userMembership } = useAuth();
 
   const {
     data: storeList,
     isError: storeListError,
     isFetching: storeListFetching,
-  } = useGetStoreList(
-    filter === "all"
-      ? undefined
-      : filter === "open"
-      ? StoreStatus.OPEN
-      : StoreStatus.CLOSED,
-    1,
-    100
-  );
+  } = useGetStoreList(undefined, 1, 100);
 
   const { colors } = useTheme();
 
@@ -41,30 +28,24 @@ const Stores = () => {
           <Text fontSize="xl" fontWeight="semibold">
             Stores
           </Text>
-          {(storeList && storeList.length > 0) || filter !== "all" ? (
-          <Button
-            size="sm"
-            px="4"
-            startIcon={<AddIcon color={colors.white} />}
-            borderRadius="full"
-            onPress={() => {
-              router.push(Routes.NEW_STORE);
-            }}
-          >
-            Add Store
-          </Button>
-          ) : undefined }
+          {storeList && storeList.length > 0 ? (
+            <Button
+              size="sm"
+              px="4"
+              startIcon={<AddIcon color={colors.white} />}
+              borderRadius="full"
+              onPress={() => {
+                router.push(Routes.NEW_STORE);
+              }}
+            >
+              Add Store
+            </Button>
+          ) : undefined}
         </HStack>
-        {(storeList && storeList.length > 0) || filter !== "all" ? (
-        <>
-        <StoreListFilterGroup
-          filter={filter}
-          handleSetFilter={(filter) => setFilter(filter)}
-        />
         <Box flex={1}>
           <FlatList
             contentContainerStyle={{ flexGrow: 1 }}
-            ListEmptyComponent={<NoStoreFound filter={filter}/>}
+            ListEmptyComponent={<NoStoreFound />}
             data={storeList?.sort((a, b) => {
               if (a.id === userDetails?.currentStoreId) return -1;
               if (b.id === userDetails?.currentStoreId) return 1;
@@ -75,8 +56,10 @@ const Stores = () => {
                 storeId={item.id}
                 userId={userDetails?.id}
                 name={item.name}
-                status={item.status == "OPEN" ? "open" : "closed"}
-                current={userDetails?.currentStoreId === item.id && userMembership?.membershipStatus !== MembershipStatus.PENDING}
+                current={
+                  userDetails?.currentStoreId === item.id &&
+                  userMembership?.membershipStatus !== MembershipStatus.PENDING
+                }
                 onPress={() => {
                   router.push(`${Routes.STORES}/${item.id}}`);
                 }}
@@ -84,10 +67,6 @@ const Stores = () => {
             )}
           />
         </Box>
-        </>
-        ) : (
-          <NoStoreFound />
-        )}
       </Column>
     </ScreenContainer>
   );

@@ -138,7 +138,7 @@ const Products = () => {
                     Stocks On Hand
                   </Text>
                   <Text fontSize="sm" fontWeight="medium">
-                    {storeDetails?.totalProducts}
+                    {/* {storeDetails?.totalProducts} */}
                   </Text>
                 </VStack>
                 <VStack justifyContent="flex-end">

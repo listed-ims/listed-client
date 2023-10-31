@@ -1,22 +1,16 @@
-import { StoreStatus } from "@listed-constants";
+import { StoreResponse } from "@listed-types";
 import { toCurrency } from "@listed-utils";
-import { VStack, Text, HStack, Divider } from "native-base";
+import { VStack, Text, Divider } from "native-base";
 import React from "react";
 
 interface StoreSummaryCardProps {
-  owner?: string;
-  status?: StoreStatus;
-  totalProducts?: number;
-  totalPriceValue?: number;
+  store: StoreResponse;
   isInvite: boolean;
 }
 
 const StoreSummaryCard = ({
-  owner,
-  status,
-  totalProducts,
-  totalPriceValue,
-  isInvite,
+  store,
+  isInvite
 }: StoreSummaryCardProps) => {
   return (
     <VStack
@@ -28,25 +22,15 @@ const StoreSummaryCard = ({
     >
       <VStack space="2">
         <Text fontSize="xs" fontWeight="semibold" color="muted.500">
-          STORE DETAILS
+          STORE OWNER
         </Text>
-        <VStack space="1">
-          <HStack>
-            <Text flex="2" fontSize="sm" color="darkText">
-              Store Owner:
-            </Text>
-            <Text flex="3" fontSize="sm" fontWeight="bold" color="darkText">
-              {owner}
-            </Text>
-          </HStack>
-          <HStack>
-            <Text flex="2" fontSize="sm" color="darkText">
-              Store Status:
-            </Text>
-            <Text flex="3" fontSize="sm" fontWeight="bold" color="darkText">
-              {status === StoreStatus.OPEN ? "Open" : "Closed"}
-            </Text>
-          </HStack>
+        <VStack>
+          <Text fontSize="sm" fontWeight="bold" color="darkText">
+            {store.owner.name}
+          </Text>
+          <Text fontSize="sm" fontWeight="medium" color="darkText">
+            {store.owner.username}
+          </Text>
         </VStack>
       </VStack>
       {!isInvite && (
@@ -54,26 +38,11 @@ const StoreSummaryCard = ({
           <Divider />
           <VStack space="2">
             <Text fontSize="xs" fontWeight="semibold" color="muted.500">
-              STORE PRODUCTS
+              INVENTORY VALUE
             </Text>
-            <VStack space="1">
-              <HStack>
-                <Text flex="2" fontSize="sm" color="darkText">
-                  Total Products:
-                </Text>
-                <Text flex="3" fontSize="sm" fontWeight="bold" color="darkText">
-                  {totalProducts === null ? 0 : totalProducts}
-                </Text>
-              </HStack>
-              <HStack>
-                <Text flex="2" fontSize="sm" color="darkText">
-                  Total Price Value:
-                </Text>
-                <Text flex="3" fontSize="sm" fontWeight="bold" color="darkText">
-                  {toCurrency(totalPriceValue as number)}
-                </Text>
-              </HStack>
-            </VStack>
+            <Text fontSize="sm" fontWeight="bold" color="darkText">
+              {toCurrency(store.inventoryValue as number)}
+            </Text>
           </VStack>
         </>
       )}
