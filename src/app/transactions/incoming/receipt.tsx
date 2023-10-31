@@ -3,7 +3,7 @@ import {
   IncomingReceiptIcon,
   ListedIcon,
 } from "@listed-components/atoms";
-import { IncomingReceiptDetails } from "@listed-components/molecules";
+import { IncomingReceiptDetails, IncomingReceiptLoadingSkeleton } from "@listed-components/molecules";
 import { ScreenContainer } from "@listed-components/organisms";
 import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
@@ -46,6 +46,10 @@ const IncomingReceipt = () => {
   );
 
   const userPermissions = userMembership?.permissions || [];
+
+  if(transactionFetching){
+    return <IncomingReceiptLoadingSkeleton />
+  }
 
   return (
     <ScreenContainer>

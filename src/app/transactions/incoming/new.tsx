@@ -16,7 +16,7 @@ import {
   ScanIcon,
   SearchIcon
 } from "@listed-components/atoms";
-import { FormControl, IncomingReceiptLoadingSkeleton, TextArea, TextField } from "@listed-components/molecules";
+import { FormControl, TextArea, TextField } from "@listed-components/molecules";
 import { KeyboardAwareScroll, ScreenContainer } from "@listed-components/organisms";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import RNDateTimePicker, {
@@ -149,16 +149,18 @@ const NewIncoming = () => {
       }
     });
 
-    if (createIncomingLoading){
-      return <IncomingReceiptLoadingSkeleton />
-    }
+  
     
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Incoming")} />
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
-          <Button size="lg"
+          <Button 
+            size="lg"
+            isLoading={createIncomingLoading}
+            isLoadingText="SUBMIT TRANSACTION"
+            spinnerPlacement="end"
             onPress={handleCreateIncoming}
           >SUBMIT TRANSACTION</Button>
         </Box>
