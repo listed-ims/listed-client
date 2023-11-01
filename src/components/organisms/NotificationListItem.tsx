@@ -31,7 +31,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { IPressableProps, Pressable } from "native-base";
 import ChangeStoreModal from "./ChangeStoreModal";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 interface NotificationListItemProps extends IPressableProps {
   notificationDetails: NotificationResponse;
@@ -260,4 +260,4 @@ const NotificationListItem = ({
   )
 }
 
-export default NotificationListItem;
+export default memo(NotificationListItem);
