@@ -27,7 +27,7 @@ const StoreListItem = ({
   ...props
 }: StoreListItemProps) => {
   const { data: userMembership, isSuccess: userMembershipSuccess } =
-    useGetUserMembership(storeId!, userId!);
+    useGetUserMembership(storeId!);
 
   return (
     <Pressable

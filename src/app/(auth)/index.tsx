@@ -37,7 +37,7 @@ const Login = () => {
     data: userMembership,
     isFetching: userMembershipFetching,
     isSuccess: userMembershipSuccess
-  } = useGetUserMembership(userDetails?.currentStoreId!, userDetails?.id!);
+  } = useGetUserMembership(userDetails?.currentStoreId!);
 
   useEffect(() => {
     if (userSuccess) {
@@ -95,10 +95,10 @@ const Login = () => {
       <Stack.Screen options={{ headerShown: false }} />
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
-          <Button 
-          onPress={() => { handleLogin() }}
-          isLoading = {loginLoading || userMembershipFetching || userDetailsFetching}
-          isLoadingText= "SIGNING IN"
+          <Button
+            onPress={() => { handleLogin() }}
+            isLoading={loginLoading || userMembershipFetching || userDetailsFetching}
+            isLoadingText="SIGNING IN"
           > SIGN IN </Button>
         </Box>
       }>

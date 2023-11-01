@@ -35,7 +35,6 @@ import { ownerOrCollaborator } from "@listed-utils";
 const StoreDetails = () => {
   const queryClient = useQueryClient();
   const [showCurrentStoreModal, setShowCurrentStoreModal] = useState(false);
-  const [showCloseStoreModal, setShowCloseStoreModal] = useState(false);
   const { userDetails, setUserDetails, setUserMembership } = useAuth();
   const { id } = useLocalSearchParams();
 
@@ -49,7 +48,7 @@ const StoreDetails = () => {
     data: storeMembership,
     isFetching: storeMembershipFetching,
     error: storeMembershipErrorDetails,
-  } = useGetUserMembership(parseInt(id as string), userDetails?.id!);
+  } = useGetUserMembership(parseInt(id as string));
 
   const handleOnMakeCurrent = () => {
     updateUser({
@@ -61,7 +60,7 @@ const StoreDetails = () => {
   };
 
   const {
-    data: newCurrentStore,
+    data: updatedUser,
     mutate: updateUser,
     isError: updateUserError,
     isLoading: updateUserLoading,
@@ -91,7 +90,7 @@ const StoreDetails = () => {
   });
 
   const { data: userMembership, isSuccess: userMembershipSuccess } =
-    useGetUserMembership(newCurrentStore?.currentStoreId!, userDetails?.id!);
+    useGetUserMembership(updatedUser?.currentStoreId!);
 
   useEffect(() => {
     if (userMembershipSuccess) {
@@ -118,22 +117,21 @@ const StoreDetails = () => {
               <Heading size="md">{storeDetails?.name}</Heading>
               {storeDetails?.id === userDetails?.currentStoreId &&
                 storeMembership?.membershipStatus !==
-                  MembershipStatus.PENDING && (
+                MembershipStatus.PENDING && (
                   <Badge colorScheme="success" variant="solid">
                     CURRENT STORE
                   </Badge>
                 )}
               {storeMembership?.membershipStatus !==
                 MembershipStatus.PENDING && (
-                <Text fontSize="xs" fontWeight="medium" color="darkText">
-                  {`${userDetails?.name}, you are ${
-                    ownerOrCollaborator(storeMembership?.permissions || []) ===
-                    UserPermission.OWNER
+                  <Text fontSize="xs" fontWeight="medium" color="darkText">
+                    {`${userDetails?.name}, you are ${ownerOrCollaborator(storeMembership?.permissions || []) ===
+                      UserPermission.OWNER
                       ? "the owner"
                       : "a collaborator"
-                  }!`}
-                </Text>
-              )}
+                      }!`}
+                  </Text>
+                )}
             </VStack>
             {storeMembership?.membershipStatus === MembershipStatus.PENDING && (
               <StoreInvite
@@ -149,7 +147,7 @@ const StoreDetails = () => {
             />
             {storeDetails?.id !== userDetails?.currentStoreId &&
               storeMembership?.membershipStatus !==
-                MembershipStatus.PENDING && (
+              MembershipStatus.PENDING && (
                 <MakeCurrentStoreCard onMakeCurrent={handleOnMakeCurrent} />
               )}
           </Column>

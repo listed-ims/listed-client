@@ -72,3 +72,16 @@ export const getCollaboratorDetailsService = async (id: number) => {
     throw error;
   }
 };
+
+export const getUserMembership = async (storeId?: number) => {
+  try {
+    const response = await axiosInstance.get("collaborators/membership", {
+      params: {
+        storeId: storeId,
+      },
+    });
+    return response.data as MembershipResponse;
+  } catch (error) {
+    throw error;
+  }
+};

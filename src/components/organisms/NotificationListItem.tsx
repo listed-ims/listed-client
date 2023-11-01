@@ -151,7 +151,6 @@ const NotificationListItem = ({
             })
             setShowChangeStoreModal(true);
           } else {
-            console.log(metaData.membershipId)
             router.push(`${Routes.COLLABORATORS}/${metaData.membershipId}`)
           }
         } else if (metaData.status === MembershipStatus.DECLINED) {
@@ -189,7 +188,7 @@ const NotificationListItem = ({
   }
 
   const {
-    data: newCurrentStore,
+    data: updatedUser,
     mutate: updateUser,
     isError: updateUserError,
     isLoading: updateUserLoading,
@@ -221,7 +220,7 @@ const NotificationListItem = ({
   });
 
   const { data: userMembership, isSuccess: userMembershipSuccess } =
-    useGetUserMembership(newCurrentStore?.currentStoreId!, userDetails?.id!);
+    useGetUserMembership(updatedUser?.currentStoreId!);
 
   useEffect(() => {
     if (updateUserSuccess) {
