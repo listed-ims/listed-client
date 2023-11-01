@@ -3,7 +3,6 @@ import {
   registrationService,
   updateUserService,
   validateTokenService,
-  validateUsernameService,
 } from "@listed-services";
 import {
   AuthenticationResponse,

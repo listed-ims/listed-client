@@ -74,13 +74,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       const inAuthRoute = segments[0] === '(auth)';
 
       if (
-        !isLoggedIn && !inAuthRoute
+        !Boolean(userMembership) && !inAuthRoute
       ) {
         router.replace(Routes.LOGIN);
-      } else if (isLoggedIn && inAuthRoute) {
+      } else if (Boolean(userMembership) && inAuthRoute) {
         router.replace(Routes.HOME);
       }
-    }, [isLoggedIn, segments, isNavigationReady]);
+    }, [userMembership, segments, isNavigationReady]);
   }
 
   useEffect(() => {

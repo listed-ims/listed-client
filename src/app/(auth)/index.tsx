@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Center, Column, View, Icon, Link, Pressable, Text, Row } from 'native-base'
 import { Stack, router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
@@ -7,14 +7,15 @@ import { LoginCredentials, ModalContent, ValidationRules } from '@listed-types';
 import { ScreenContainer, InvalidLoginModal, KeyboardAwareScroll } from '@listed-components/organisms';
 import { Button, ListedLogo } from '@listed-components/atoms';
 import { FormControl, TextField } from '@listed-components/molecules';
-import { useFormValidation, useUserLoginMutation } from '@listed-hooks';
+import { useFormValidation, useGetUserDetails, useGetUserMembership, useUserLoginMutation } from '@listed-hooks';
 import { Routes } from '@listed-constants';
-import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 
 const Login = () => {
   const [modalContent, setModalContent] = useState<ModalContent>({} as ModalContent)
   const [show, setShow] = React.useState(false);
   const [showModal, setShowModal] = useState(false);
+
+  const { login, setUserDetails, setUserMembership, isLoggedIn } = useAuth();
 
   const initialFormData = {
     username: "",
@@ -27,12 +28,32 @@ const Login = () => {
   }
 
   const {
+    data: userDetails,
+    isFetching: userDetailsFetching,
+    isSuccess: userSuccess,
+  } = useGetUserDetails(isLoggedIn);
+
+  const {
+    data: userMembership,
+    isFetching: userMembershipFetching,
+    isSuccess: userMembershipSuccess
+  } = useGetUserMembership(userDetails?.currentStoreId!, userDetails?.id!);
+
+  useEffect(() => {
+    if (userSuccess) {
+      setUserDetails(userDetails);
+    }
+    if (userMembershipSuccess) {
+      setUserMembership(userMembership);
+    }
+  }, [userDetails, userMembership]);
+
+  const {
     formData,
     errors,
     validate,
     handleInputChange
   } = useFormValidation(initialFormData, validationRules);
-  const { login } = useAuth();
 
   const closeModal = () => {
     setShowModal(false);
@@ -47,11 +68,10 @@ const Login = () => {
     }
   };
 
-  const { mutate: loginService, isError, isLoading } = useUserLoginMutation({
+  const { mutate: loginService, isError, isLoading: loginLoading } = useUserLoginMutation({
     onSuccess: (data) => {
       const token = data.token;
       login(token);
-      router.push(Routes.HOME);
     },
     onError: (error) => {
       if (error.code === "ERR_BAD_REQUEST") {
@@ -75,7 +95,11 @@ const Login = () => {
       <Stack.Screen options={{ headerShown: false }} />
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
-          <Button onPress={() => { handleLogin() }}> SIGN IN </Button>
+          <Button 
+          onPress={() => { handleLogin() }}
+          isLoading = {loginLoading || userMembershipFetching || userDetailsFetching}
+          isLoadingText= "SIGNING IN"
+          > SIGN IN </Button>
         </Box>
       }>
         <Column

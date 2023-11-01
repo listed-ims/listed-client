@@ -35,7 +35,11 @@ const Button = ({ children, ...props }: ButtonProps) => {
       _text: {
         ...commonTextStyle,
         color: "lightText"
-      }
+      },
+      _loading: {
+        backgroundColor: "primary.700"
+      },
+      spinnerPlacement: "end"
     },
     ghost: {
       _pressed: {
