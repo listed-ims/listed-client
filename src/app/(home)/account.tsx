@@ -2,7 +2,6 @@ import { AccountIcon, Button } from "@listed-components/atoms";
 import { LogoutModal, ScreenContainer } from "@listed-components/organisms";
 import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
-import { useGetUserDetails } from "@listed-hooks";
 import { router } from "expo-router";
 import {
   Box,
@@ -18,7 +17,7 @@ import {
 import { useState } from "react";
 
 const Account = () => {
-  const { logout } = useAuth();
+  const { logout, userDetails } = useAuth();
   const { colors } = useTheme();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
@@ -31,13 +30,6 @@ const Account = () => {
     logout();
     setShowLogoutModal(false);
   };
-
-  const {
-    data: userDetails,
-    isError: userError,
-    isFetching: userFetching,
-    isSuccess: userSuccess,
-  } = useGetUserDetails();
 
   return (
     <ScreenContainer>

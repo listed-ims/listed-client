@@ -16,21 +16,12 @@ import { Routes } from "@listed-constants";
 import {
   useGetAnalyticsSummary,
   useGetStoreDetails,
-  useGetUserDetails,
-  useGetUserMembership,
 } from "@listed-hooks";
 import { useAuth } from "@listed-contexts";
 import { MembershipStatus } from "@listed-types";
 
 const Home = () => {
-  const { setUserDetails, setUserMembership } = useAuth();
-
-  const {
-    data: userDetails,
-    isError: userError,
-    isFetching: userFetching,
-    isSuccess: userSuccess,
-  } = useGetUserDetails();
+  const { userDetails, userMembership } = useAuth();
 
   const {
     data: storeDetails,
@@ -44,27 +35,9 @@ const Home = () => {
     isFetching: analyticsSummaryFetching,
   } = useGetAnalyticsSummary(userDetails?.currentStoreId);
 
-  const {
-    data: userMembership,
-    isError: userMembershipError,
-    isFetching: userMembershipFetching,
-    isSuccess: userMembershipSuccess,
-  } = useGetUserMembership(userDetails?.currentStoreId!, userDetails?.id!);
-
   useEffect(() => {
-    if (userSuccess) {
-      setUserDetails(userDetails);
-    }
-    if (userMembershipSuccess) {
-      setUserMembership(userMembership);
-    }
-  }, [userDetails, userMembership]);
-
-  useEffect(() => {
-    if (userMembershipSuccess) {
-      if (userMembership?.membershipStatus === MembershipStatus.INACTIVE)
-        router.replace(Routes.UNAUTHORIZED_INACTIVE)
-    }
+    if (userMembership?.membershipStatus === MembershipStatus.INACTIVE)
+      router.replace(Routes.UNAUTHORIZED_INACTIVE)
   }, [userMembership])
 
   return (

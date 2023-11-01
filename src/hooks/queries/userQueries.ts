@@ -2,8 +2,8 @@ import { GET_USER, VALIDATE_USERNAME } from "@listed-constants";
 import { getUserService, validateUsernameService } from "@listed-services";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetUserDetails = () => {
-  return useQuery([GET_USER], getUserService);
+export const useGetUserDetails = (isLoggedIn: boolean) => {
+  return useQuery([GET_USER], getUserService, {enabled: isLoggedIn});
 };
 
 export const useValidateUsername = (username: string) => {
