@@ -1,6 +1,6 @@
 import { Column, Row, Skeleton } from "native-base";
 
-const IncomingReceiptLoadingSkeleton = () => {
+const ReceiptLoadingSkeleton = () => {
   const skeletonItems = Array.from({ length: 8 }).map((_, index) => (
     <Column padding="1" key={index} rounded="sm" space="1">
       <Row space="8" alignItems="center">
@@ -47,4 +47,4 @@ const IncomingReceiptLoadingSkeleton = () => {
   );
 };
 
-export default IncomingReceiptLoadingSkeleton;
+export default ReceiptLoadingSkeleton;

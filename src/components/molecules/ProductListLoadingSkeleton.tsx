@@ -1,6 +1,6 @@
 import { Column, Row, Skeleton } from "native-base";
 
-const IncomingSelectProductLoadingSkeleton = () => {
+const ProductListLoadingSkeleton = () => {
   const skeletonItems = Array.from({ length: 10 }).map((_, index) => (
     <Column
       padding="2"
@@ -25,4 +25,4 @@ const IncomingSelectProductLoadingSkeleton = () => {
   return <Column space="4">{skeletonItems}</Column>;
 };
 
-export default IncomingSelectProductLoadingSkeleton;
+export default ProductListLoadingSkeleton;

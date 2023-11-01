@@ -159,7 +159,7 @@ const NewIncoming = () => {
           <Button 
             size="lg"
             isLoading={createIncomingLoading}
-            isLoadingText="SUBMIT TRANSACTION"
+            isLoadingText="SUBMITTING TRANSACTION"
             spinnerPlacement="end"
             onPress={handleCreateIncoming}
           >SUBMIT TRANSACTION</Button>

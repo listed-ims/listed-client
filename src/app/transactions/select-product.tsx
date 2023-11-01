@@ -5,7 +5,7 @@ import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
   ProductListItem,
   HeaderSearchField,
-  IncomingSelectProductLoadingSkeleton,
+  ProductListLoadingSkeleton,
 } from "@listed-components/molecules";
 import { useGetProductList } from "src/hooks/queries";
 import { Routes } from "@listed-constants";
@@ -39,7 +39,7 @@ const SelectProduct = () => {
   }
 
   const emptyList = productListFetching
-  ? <IncomingSelectProductLoadingSkeleton />
+  ? <ProductListLoadingSkeleton />
   : <NoProductsFound />
 
   return (

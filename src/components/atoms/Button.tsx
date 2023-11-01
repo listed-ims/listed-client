@@ -8,7 +8,6 @@ type ValidVariants = "ghost" | "outline" | "solid" | "subtle" | "unstyled" | "su
 interface ButtonProps extends IButtonProps {
   children: ReactNode,
   variant?: VariantType<"Button"> | ValidVariants
-  isLoading?: boolean
 }
 
 const Button = ({ children, ...props }: ButtonProps) => {
