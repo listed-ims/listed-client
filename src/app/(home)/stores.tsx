@@ -1,24 +1,54 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Box, Column, FlatList, HStack, Text, useTheme } from "native-base";
 import { Stack, router } from "expo-router";
 import { NoStoreFound, ScreenContainer } from "@listed-components/organisms";
 import { AddIcon, Button } from "@listed-components/atoms";
-import { StoreListItem } from "@listed-components/molecules";
+import {
+  StoreListItem,
+  StoreListLoadingSkeleton,
+} from "@listed-components/molecules";
 import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { useGetStoreList } from "@listed-hooks";
-import { MembershipStatus } from "@listed-types";
+import { MembershipStatus, StoreResponse } from "@listed-types";
 
 const Stores = () => {
+  const { colors } = useTheme();
   const { userDetails, userMembership } = useAuth();
 
   const {
     data: storeList,
     isError: storeListError,
     isFetching: storeListFetching,
-  } = useGetStoreList(undefined, 1, 100);
+  } = useGetStoreList(
+    undefined,
+    1,
+    100
+  );
 
-  const { colors } = useTheme();
+  const data = storeList?.sort((a, b) => {
+    if (a.id === userDetails?.currentStoreId) return -1;
+    if (b.id === userDetails?.currentStoreId) return 1;
+    return 0;
+  });
+
+  const renderItem = useCallback((
+    { item }: { item: StoreResponse }
+  ) => (
+    <StoreListItem
+      storeId={item.id}
+      userId={userDetails?.id}
+      name={item.name}
+      current={userDetails?.currentStoreId === item.id && userMembership?.membershipStatus !== MembershipStatus.PENDING}
+      onPress={() => {
+        router.push(`${Routes.STORES}/${item.id}}`);
+      }}
+    />
+  ), [])
+  
+  const emptyList = storeListFetching
+    ? <StoreListLoadingSkeleton />
+    : <NoStoreFound />
 
   return (
     <ScreenContainer>
@@ -45,28 +75,12 @@ const Stores = () => {
         <Box flex={1}>
           <FlatList
             contentContainerStyle={{ flexGrow: 1 }}
-            ListEmptyComponent={<NoStoreFound />}
-            data={storeList?.sort((a, b) => {
-              if (a.id === userDetails?.currentStoreId) return -1;
-              if (b.id === userDetails?.currentStoreId) return 1;
-              return 0;
-            })}
-            renderItem={({ item }) => (
-              <StoreListItem
-                storeId={item.id}
-                userId={userDetails?.id}
-                name={item.name}
-                current={
-                  userDetails?.currentStoreId === item.id &&
-                  userMembership?.membershipStatus !== MembershipStatus.PENDING
-                }
-                onPress={() => {
-                  router.push(`${Routes.STORES}/${item.id}}`);
-                }}
-              />
-            )}
+            ListEmptyComponent={emptyList}
+            data={data}
+            renderItem={renderItem}
           />
         </Box>
+
       </Column>
     </ScreenContainer>
   );

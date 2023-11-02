@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DeleteProductModal, ScreenContainer } from '@listed-components/organisms'
-import { Column, Heading, Text } from 'native-base'
+import { Column, Heading, Text, useToast } from 'native-base'
 import { Button, CubeIcon } from '@listed-components/atoms'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { GET_PRODUCT, GET_PRODUCTS, Routes } from '@listed-constants'
@@ -8,7 +8,7 @@ import { stackHeaderStyles } from '@listed-styles'
 import { ScrollView } from 'react-native'
 import { useDeleteProductMutation, useGetProductDetails } from '@listed-hooks'
 import { useQueryClient } from '@tanstack/react-query'
-import { ProductDetail } from '@listed-components/molecules'
+import { ProductDetail, Toast } from '@listed-components/molecules'
 import { UserPermission } from '@listed-types'
 import { hasPermission } from '@listed-utils'
 import { useAuth } from '@listed-contexts'
@@ -20,7 +20,8 @@ const ProductDetails = () => {
   const { id } = useLocalSearchParams();
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
   const queryClient = useQueryClient();
-
+  const toast = useToast();
+  
   useEffect(() => {
     if (!hasPermission(
       userMembership!,
@@ -43,7 +44,6 @@ const ProductDetails = () => {
   } = useDeleteProductMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS] });
-      queryClient.invalidateQueries({ queryKey: [GET_PRODUCT, productDetails?.id] });
       setShowDeleteProductModal(false);
       router.push(Routes.PRODUCTS)
     },
@@ -54,7 +54,15 @@ const ProductDetails = () => {
   })
 
   const handleOnDelete = () => {
-    deleteProduct(productDetails?.id!)
+    if(productDetails && productDetails?.quantity  !== undefined && productDetails.quantity > 0){
+      toast.show({ 
+        render: () => {
+          return <Toast message='Product with stocks cannot be deleted.' hasStock= {true} />
+        }
+      });
+    }else{
+      setShowDeleteProductModal(true);
+    }
   };
 
   useEffect(() => {
@@ -95,11 +103,14 @@ const ProductDetails = () => {
                   }}>
                   EDIT
                 </Button>
-                <Button variant="warnOutline" onPress={() => setShowDeleteProductModal(true)}>DELETE</Button>
+                <Button variant="warnOutline" onPress={handleOnDelete}>DELETE</Button>
                 <DeleteProductModal
                   isOpen={showDeleteProductModal}
                   onCancel={() => setShowDeleteProductModal(false)}
-                  onDelete={handleOnDelete}
+                  onDelete={() => {
+                    deleteProduct(productDetails?.id!);
+                    setShowDeleteProductModal(false);
+                  }}
                 />
               </Column>
             </ScrollView>

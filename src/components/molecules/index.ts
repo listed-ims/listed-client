@@ -33,3 +33,6 @@ export { default as CollaboratorsListLoadingSkeleton } from "./CollaboratorsList
 export { default as ProductListLoadingSkeleton } from "./ProductListLoadingSkeleton";
 export { default as ReceiptLoadingSkeleton } from "./ReceiptLoadingSkeleton";
 export { default as ProductDetailsLoadingSkeleton } from "./ProductDetailsLoadingSkeleton";
+export { default as StoreListLoadingSkeleton } from "./StoreListLoadingSkeleton";
+export { default as StoreDetailsLoadingSkeleton } from "./StoreDetailsLoadingSkeleton";
+

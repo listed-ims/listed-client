@@ -20,13 +20,13 @@ const DeleteProductModal: React.FC<DeleteProductModalProps> = ({
           <Column alignItems="center" space={4}>
             <WarningIcon />
             <Text fontSize="md" fontWeight="bold">
-              DELETE PRODUCT
+              Confirm Delete Product
             </Text>
           </Column>
         </Modal.Header>
         <Modal.Body>
           <Text textAlign="center">
-            Are you Sure you want to delete this product?
+            Are you sure you want to delete this product?
           </Text>
         </Modal.Body>
         <Modal.Footer>
