@@ -1,12 +1,15 @@
 import { Button, WarningIcon } from "@listed-components/atoms"
-import { ModalContent } from "@listed-types";
 import { Column, Modal, Row, Text } from "native-base"
 import { InterfaceModalProps } from "native-base/lib/typescript/components/composites/Modal/types";
 
 interface RemoveCollaboratorModalProps extends InterfaceModalProps {
   onConfirm: () => void;
   onCancel: () => void;
-  modalContent: ModalContent
+  modalContent: {
+    header: string;
+    body: string;
+    type: "REMOVE" | "DECLINE";
+  }
 }
 
 const RemoveCollaboratorModal = ({
@@ -37,7 +40,7 @@ const RemoveCollaboratorModal = ({
         <Modal.Footer>
           <Row width="full" justifyContent="center" space={4}>
             <Button flex="1" variant="warnSubtle" onPress={onConfirm}>
-              CONFIRM
+              {modalContent.type === "REMOVE" ? "REMOVE" : "CANCEL INVITE"}
             </Button>
             <Button flex="1" variant="warnUnstyled" onPress={onCancel}>
               CANCEL
