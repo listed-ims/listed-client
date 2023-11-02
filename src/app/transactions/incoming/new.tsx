@@ -149,13 +149,18 @@ const NewIncoming = () => {
       }
     });
 
+  
     
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Incoming")} />
       <KeyboardAwareScroll elementOnTopOfKeyboard={
         <Box background="white" paddingTop="4" paddingBottom="6">
-          <Button size="lg"
+          <Button 
+            size="lg"
+            isLoading={createIncomingLoading}
+            isLoadingText="SUBMITTING TRANSACTION"
+            spinnerPlacement="end"
             onPress={handleCreateIncoming}
           >SUBMIT TRANSACTION</Button>
         </Box>

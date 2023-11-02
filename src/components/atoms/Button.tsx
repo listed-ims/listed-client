@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import { Button as NBButton, IButtonProps } from 'native-base'
 import { VariantType } from 'native-base/lib/typescript/components/types';
 
+
 type ValidVariants = "ghost" | "outline" | "solid" | "subtle" | "unstyled" | "subtle" | "warnSubtle" | "warnUnstyled" | "warnOutline" | "white" | "whiteOutline";
 
 interface ButtonProps extends IButtonProps {

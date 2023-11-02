@@ -5,6 +5,7 @@ import { Stack, router, useLocalSearchParams } from "expo-router";
 import {
   ProductListItem,
   HeaderSearchField,
+  ProductListLoadingSkeleton,
 } from "@listed-components/molecules";
 import { useGetProductList } from "src/hooks/queries";
 import { Routes } from "@listed-constants";
@@ -37,6 +38,10 @@ const SelectProduct = () => {
     });
   }
 
+  const emptyList = productListFetching
+  ? <ProductListLoadingSkeleton />
+  : <NoProductsFound />
+
   return (
     <ScreenContainer withHeader>
       <Stack.Screen
@@ -49,7 +54,7 @@ const SelectProduct = () => {
       <FlatList
         marginBottom="6"
         contentContainerStyle={{ flexGrow: 1 }}
-        ListEmptyComponent={<NoProductsFound />}
+        ListEmptyComponent={emptyList}
         ListHeaderComponent={
           <Box background="white" py="4">
             <Text fontSize="lg" fontWeight="semibold">

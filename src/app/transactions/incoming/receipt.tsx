@@ -3,7 +3,7 @@ import {
   IncomingReceiptIcon,
   ListedIcon,
 } from "@listed-components/atoms";
-import { IncomingReceiptDetails } from "@listed-components/molecules";
+import { IncomingReceiptDetails, ReceiptLoadingSkeleton} from "@listed-components/molecules";
 import { ScreenContainer } from "@listed-components/organisms";
 import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
@@ -47,11 +47,15 @@ const IncomingReceipt = () => {
 
   const userPermissions = userMembership?.permissions || [];
 
+  
+
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Box paddingTop="8" paddingBottom="6">
+      { transactionFetching
+        ? <ReceiptLoadingSkeleton/>
+        : <ScrollView showsVerticalScrollIndicator={false}>
+          <Box paddingTop="8" paddingBottom="6">
           <Text fontSize="sm" fontWeight="medium" textAlign="center">
             Transaction Receipt
           </Text>
@@ -96,6 +100,7 @@ const IncomingReceipt = () => {
           </Button>
         </Box>
       </ScrollView>
+       }
     </ScreenContainer>
   );
 };
