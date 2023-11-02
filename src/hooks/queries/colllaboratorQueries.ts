@@ -6,6 +6,7 @@ import {
 import {
   getCollaboratorDetailsService,
   getCollaboratorsService,
+  getUserMembership,
 } from "@listed-services";
 import { MembershipResponse, MembershipStatus } from "@listed-types";
 import { useQuery } from "@tanstack/react-query";
@@ -29,22 +30,13 @@ export const useGetCollaborators = (
   return query;
 };
 
-export const useGetUserMembership = (storeId: number, userId: number) => {
+export const useGetUserMembership = (storeId: number) => {
   return useQuery<MembershipResponse, AxiosError<{ message: string }>>(
-    [GET_MEMBERSHIP, { storeId, userId }],
-    () =>
-      getCollaboratorsService(
-        storeId,
-        undefined,
-        undefined,
-        undefined,
-        userId
-      ).then((response) => {
-        return response[0];
-      }),
+    [GET_MEMBERSHIP, storeId],
+    () => getUserMembership(storeId),
     {
       staleTime: fiveMinutes,
-      enabled: !!storeId && !!userId,
+      enabled: !!storeId,
     }
   );
 };
