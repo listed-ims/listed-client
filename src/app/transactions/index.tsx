@@ -1,6 +1,6 @@
 import { Button, OptionsIcon } from "@listed-components/atoms";
 import { Routes } from "@listed-constants";
-import { TransactionListItem } from "@listed-components/molecules";
+import { TransactionListItem,TransactionsListLoadingSkeleton } from "@listed-components/molecules";
 import {
   NoTransactions,
   ScreenContainer,
@@ -96,6 +96,7 @@ const transactions = () => {
 
     setIsBottomSheetVisible(false);
   };
+  
 
 
   return (
@@ -155,7 +156,9 @@ const transactions = () => {
         }
       </Column>
       <Box flex={1} paddingBottom="4">
-        {transaction === "incoming" && (incomingTransactions?.pages[0].length! > 0 || filtered) ? (
+      {transaction === "incoming" && (incomingTransactionsFetching || !incomingTransactions) ? (
+          <TransactionsListLoadingSkeleton />
+        ) : transaction === "incoming" && (incomingTransactions?.pages[0].length! > 0 || filtered) ? (
           <FlatList
             contentContainerStyle={{ flexGrow: 1 }}
             ListEmptyComponent={<NoTransactions filtered={true} />}
@@ -185,6 +188,8 @@ const transactions = () => {
                 incomingTransactionsFetchNextPage();
             }}
           />
+         ):  transaction === "outgoing" && (outgoingTransactionsFetching || !outgoingTransactions) ? (
+            <TransactionsListLoadingSkeleton />
         ) : transaction === "outgoing" && (outgoingTransactions?.pages[0].length! > 0 || filtered) ? (
           <FlatList
             contentContainerStyle={{ flexGrow: 1 }}

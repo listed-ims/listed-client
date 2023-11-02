@@ -1,5 +1,5 @@
 import { IncomingReceiptIcon } from "@listed-components/atoms";
-import { IncomingReceiptDetails } from "@listed-components/molecules";
+import { IncomingReceiptDetails, ReceiptLoadingSkeleton} from "@listed-components/molecules";
 import { ScreenContainer } from "@listed-components/organisms";
 import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
@@ -43,6 +43,10 @@ const transactiondetails = () => {
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Transaction Details")} />
       <ScrollView showsVerticalScrollIndicator={false}>
+      {transactionFetching ? (
+           <ReceiptLoadingSkeleton/>
+          ): (
+            <>
         <Column space="1" paddingTop="6" alignItems="center" justifyContent="center" display="flex">
           <IncomingReceiptIcon />
           <Text fontSize="md" fontWeight="bold" paddingTop="1">Incoming</Text>
@@ -50,9 +54,11 @@ const transactiondetails = () => {
             {dateToMonthDDYYYY(transactionDate) +
               " - " +
               dateToReadableTime(transactionDate)}
-          </Text>
+          </Text>   
         </Column>
-        <IncomingReceiptDetails incomingDetails={transactionDetails!} userPermissions={userPermissions!} />
+        <IncomingReceiptDetails incomingDetails={transactionDetails!} userPermissions={userPermissions!}/>
+         </>
+        )}
       </ScrollView>
     </ScreenContainer>
   );
