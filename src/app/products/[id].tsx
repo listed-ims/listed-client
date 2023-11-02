@@ -12,6 +12,7 @@ import { ProductDetail } from '@listed-components/molecules'
 import { UserPermission } from '@listed-types'
 import { hasPermission } from '@listed-utils'
 import { useAuth } from '@listed-contexts'
+import ProductDetailsLoadingSkeleton from '@listed-components/molecules/ProductDetailsLoadingSkeleton'
 
 
 const ProductDetails = () => {
@@ -67,7 +68,7 @@ const ProductDetails = () => {
       <Stack.Screen options={stackHeaderStyles("Product Details")} />
       {
         productDetailsFetching
-          ? <Text>Loading... </Text>
+          ? <ProductDetailsLoadingSkeleton />
           : <Column space="4" height="full" paddingTop="6">
             <ScrollView showsVerticalScrollIndicator={false}>
               <Column space="1" alignItems="center" marginBottom="2">
