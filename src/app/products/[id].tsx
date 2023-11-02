@@ -43,7 +43,7 @@ const ProductDetails = () => {
   } = useDeleteProductMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS] });
-      queryClient.invalidateQueries({ queryKey: [GET_PRODUCT, productDetails?.id] });
+      // queryClient.invalidateQueries({ queryKey: [GET_PRODUCT, productDetails?.id] });
       setShowDeleteProductModal(false);
       router.push(Routes.PRODUCTS)
     },
