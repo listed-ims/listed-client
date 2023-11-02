@@ -32,3 +32,5 @@ export { default as StoreInviteNotification } from "./StoreInviteNotification";
 export { default as CollaboratorsListLoadingSkeleton } from "./CollaboratorsListLoadingSkeleton";
 export { default as ProductListLoadingSkeleton } from "./ProductListLoadingSkeleton";
 export { default as ReceiptLoadingSkeleton } from "./ReceiptLoadingSkeleton";
+export { default as StoreListLoadingSkeleton } from "./StoreListLoadingSkeleton";
+export { default as StoreDetailsLoadingSkeleton } from "./StoreDetailsLoadingSkeleton";
