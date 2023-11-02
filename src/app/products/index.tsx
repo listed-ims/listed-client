@@ -64,6 +64,7 @@ const Products = () => {
     else if (filter === "all" && productList?.length! > 0)
       setNotProducts(false);
   }, [filter]);
+  }, [filter, productList]);
 
   const renderItem = useCallback((
     { item }: { item: ProductResponse }
