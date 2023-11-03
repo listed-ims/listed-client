@@ -22,7 +22,6 @@ export { default as ProductAlertCard } from "./ProductAlertCard";
 export { default as BottomSheet } from "./BottomSheet";
 export { default as DeclineInviteModal } from "../molecules/DeclineInviteModal";
 export { default as TransactionListItem } from "../molecules/TransactionListItem";
-export { default as NotificationListItem } from "./NotificationListItem";
 export { default as NotificationsFilter } from "./NotificationsFilter";
 export { default as CollaboratorRemovalNotification } from "./CollaboratorRemovalNotification";
 export { default as ExpirationNotification } from "./ExpirationNotification";
@@ -35,4 +34,4 @@ export { default as ReceiptLoadingSkeleton } from "./ReceiptLoadingSkeleton";
 export { default as ProductDetailsLoadingSkeleton } from "./ProductDetailsLoadingSkeleton";
 export { default as StoreListLoadingSkeleton } from "./StoreListLoadingSkeleton";
 export { default as StoreDetailsLoadingSkeleton } from "./StoreDetailsLoadingSkeleton";
-
+export { default as CollaboratorDetailsLoadingSkeleton } from "./CollaboratorDetailsLoadingSkeleton";
