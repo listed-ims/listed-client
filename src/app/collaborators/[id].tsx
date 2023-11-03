@@ -1,14 +1,14 @@
 import { Button, PeopleIcon } from "@listed-components/atoms"
 import { PermissionDetails, RemoveCollaboratorModal, ScreenContainer } from "@listed-components/organisms"
-import { GET_COLLABORATOR, GET_COLLABORATORS, Routes } from "@listed-constants"
+import { GET_COLLABORATOR, GET_COLLABORATORS, GET_NOTIFICATIONS, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
-import { useGetCollaboratorDetails, useUpdateUserMembershipStatusMutation } from "@listed-hooks"
+import { useGetCollaboratorDetails, useUpdateUserMembershipMutation } from "@listed-hooks"
 import { stackHeaderStyles } from "@listed-styles"
 import { MembershipStatus, ModalContent, UserPermission } from "@listed-types"
 import { hasPermission, ownerOrCollaborator, } from "@listed-utils"
 import { useQueryClient } from "@tanstack/react-query"
 import { Stack, router, useLocalSearchParams } from "expo-router"
-import { Badge, Center, Column, Heading, ScrollView, Text, useToast } from "native-base"
+import { Badge, Center, Column, Heading, ScrollView, Text } from "native-base"
 import { useEffect, useState } from "react"
 
 
@@ -39,10 +39,11 @@ const CollaboratorDetails = () => {
 
   const {
     mutate: updateMembershipStatus
-  } = useUpdateUserMembershipStatusMutation({
+  } = useUpdateUserMembershipMutation({
     onSuccess: (data) => {
       queryClient.invalidateQueries([GET_COLLABORATORS]);
       queryClient.setQueriesData([GET_COLLABORATOR, data.id], data);
+      queryClient.invalidateQueries([GET_NOTIFICATIONS])
       router.back();
     }
   })
@@ -50,9 +51,10 @@ const CollaboratorDetails = () => {
   const handleUpdateStatus = () => {
     updateMembershipStatus([
       Number(id),
+      undefined,
       isPending
         ? MembershipStatus.DECLINED
-        : MembershipStatus.INACTIVE
+        : MembershipStatus.INACTIVE,
     ])
   }
 
