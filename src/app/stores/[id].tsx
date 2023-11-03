@@ -29,7 +29,10 @@ import {
   UserRequest,
   UserResponse,
 } from "@listed-types";
-import { StoreInvite } from "@listed-components/molecules";
+import {
+  StoreDetailsLoadingSkeleton,
+  StoreInvite,
+} from "@listed-components/molecules";
 import { ownerOrCollaborator } from "@listed-utils";
 
 const StoreDetails = () => {
@@ -108,7 +111,7 @@ const StoreDetails = () => {
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Store Details")} />
       {storeMembershipFetching || storeFetching ? (
-        <Text>Loading... </Text>
+        <StoreDetailsLoadingSkeleton />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
           <Column space="4" height="full" py="6">
