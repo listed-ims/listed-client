@@ -17,7 +17,7 @@ const ReceiptLoadingSkeleton = () => {
   ));
 
   return (
-    <Column space="2" alignItems="">
+    <Column space="2" alignItems="center">
 
       <Column alignItems="center" marginTop="4">
         <Skeleton h="3" w="20" rounded="full" />
