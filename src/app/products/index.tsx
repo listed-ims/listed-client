@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Stack, router } from "expo-router";
 import { stackHeaderStyles } from "@listed-styles";
 import { NoProductsFound, ScreenContainer } from "@listed-components/organisms";
 import {
   ProdcutListFilter,
   ProductListItem,
+  ProductListLoadingSkeleton,
 } from "@listed-components/molecules";
 import {
   Column,
   HStack,
-  VStack,
-  Text,
   Box,
   FlatList,
   Divider,
@@ -22,7 +21,6 @@ import {
   Button,
   HeaderScanIcon,
   HeaderSearchIcon,
-  StocksIcon,
 } from "@listed-components/atoms";
 import { GET_PRODUCT, ProductFilter, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
@@ -55,12 +53,6 @@ const Products = () => {
     100
   );
 
-  const {
-    data: storeDetails,
-    isError: storeError,
-    isFetching: storeFetching,
-  } = useGetStoreDetails(userDetails?.currentStoreId);
-
   const handleSelectItem = (item: ProductResponse) => {
     queryClient.setQueryData([GET_PRODUCT, item.id], item);
     router.push(`${Routes.PRODUCTS}/${item.id}}`);
@@ -71,7 +63,20 @@ const Products = () => {
       setNotProducts(true);
     else if (filter === "all" && productList?.length! > 0)
       setNotProducts(false);
-  }, [filter]);
+  }, [filter, productList]);
+
+  const renderItem = useCallback((
+    { item }: { item: ProductResponse }
+  ) => (
+    <ProductListItem
+      product={item}
+      onPress={() => handleSelectItem(item)}
+    />
+  ), [])
+
+  const emptyList = productListFetching
+  ? <ProductListLoadingSkeleton />
+  : <NoProductsFound filter={noProducts ? "all" : filter}/>
 
   return (
     <ScreenContainer withHeader>
@@ -121,39 +126,10 @@ const Products = () => {
         <Box flex={1}>
           <FlatList
             contentContainerStyle={{ flexGrow: 1 }}
-            ListEmptyComponent={
-              <NoProductsFound filter={noProducts ? "all" : filter} />
-            }
-            ListHeaderComponent={() => (
-              <HStack
-                bg="muted.100"
-                p="2"
-                borderRadius="lg"
-                alignSelf="flex-start"
-                space="5"
-                mb={productList?.length! > 0 ? "4" : "0"}
-              >
-                <VStack justifyContent="space-between" space="1">
-                  <Text fontSize="2xs" fontWeight="medium" color="muted.600">
-                    Stocks On Hand
-                  </Text>
-                  <Text fontSize="sm" fontWeight="medium">
-                    {/* {storeDetails?.totalProducts} */}
-                  </Text>
-                </VStack>
-                <VStack justifyContent="flex-end">
-                  <StocksIcon />
-                </VStack>
-              </HStack>
-            )}
+            ListEmptyComponent={emptyList}
             ItemSeparatorComponent={() => <Divider />}
             data={productList}
-            renderItem={({ item }) => (
-              <ProductListItem
-                product={item}
-                onPress={() => handleSelectItem(item)}
-              />
-            )}
+            renderItem={renderItem}
           />
         </Box>
         {productList?.length! > 0 || (filter !== "all" && !noProducts) ? (
