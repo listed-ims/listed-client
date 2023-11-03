@@ -1,6 +1,6 @@
 import { Button, OptionsIcon } from "@listed-components/atoms";
 import { Routes } from "@listed-constants";
-import { TransactionListItem,TransactionsListLoadingSkeleton } from "@listed-components/molecules";
+import { TransactionListItem, TransactionsListLoadingSkeleton } from "@listed-components/molecules";
 import {
   NoTransactions,
   ScreenContainer,
@@ -96,8 +96,10 @@ const transactions = () => {
 
     setIsBottomSheetVisible(false);
   };
-  
 
+  const emptyList = incomingTransactionsFetching || outgoingTransactionsFetching
+    ? <TransactionsListLoadingSkeleton />
+    : <NoTransactions filtered={true} />
 
   return (
     <ScreenContainer withHeader>
@@ -156,71 +158,72 @@ const transactions = () => {
         }
       </Column>
       <Box flex={1} paddingBottom="4">
-      {transaction === "incoming" && (incomingTransactionsFetching || !incomingTransactions) ? (
+        {incomingTransactionsFetching ? (
           <TransactionsListLoadingSkeleton />
-        ) : transaction === "incoming" && (incomingTransactions?.pages[0].length! > 0 || filtered) ? (
-          <FlatList
-            contentContainerStyle={{ flexGrow: 1 }}
-            ListEmptyComponent={<NoTransactions filtered={true} />}
-            ItemSeparatorComponent={() => <Divider />}
-            data={incomingTransactions?.pages.flatMap((page) => page)}
-            renderItem={({ item }) => (
-              <TransactionListItem
-                onPress={() => {
-                  router.push(`${Routes.INCOMING}/${item.id}`);
-                }}
-                title={item.product.name}
-                name={item.user.name}
-                date={dateToMonthDDYYYY(
-                  new Date(item.transactionDate.toString())
-                )}
-                time={dateToReadableTime(
-                  new Date(item.transactionDate.toString())
-                )}
-              />
-            )}
-            onEndReachedThreshold={0.5}
-            onEndReached={() => {
-              if (
-                !incomingTransactionsFetching &&
-                incomingTransactionsHasNextPage
-              )
-                incomingTransactionsFetchNextPage();
-            }}
-          />
-         ):  transaction === "outgoing" && (outgoingTransactionsFetching || !outgoingTransactions) ? (
+        ) :
+          transaction === "incoming" && (incomingTransactions?.pages[0].length! > 0 || filtered) ? (
+            <FlatList
+              contentContainerStyle={{ flexGrow: 1 }}
+              ListEmptyComponent={emptyList}
+              ItemSeparatorComponent={() => <Divider />}
+              data={incomingTransactions?.pages.flatMap((page) => page)}
+              renderItem={({ item }) => (
+                <TransactionListItem
+                  onPress={() => {
+                    router.push(`${Routes.INCOMING}/${item.id}`);
+                  }}
+                  title={item.product.name}
+                  name={item.user.name}
+                  date={dateToMonthDDYYYY(
+                    new Date(item.transactionDate.toString())
+                  )}
+                  time={dateToReadableTime(
+                    new Date(item.transactionDate.toString())
+                  )}
+                />
+              )}
+              onEndReachedThreshold={0.5}
+              onEndReached={() => {
+                if (
+                  !incomingTransactionsFetching &&
+                  incomingTransactionsHasNextPage
+                )
+                  incomingTransactionsFetchNextPage();
+              }}
+            />
+          ) : outgoingTransactionsFetching ? (
             <TransactionsListLoadingSkeleton />
-        ) : transaction === "outgoing" && (outgoingTransactions?.pages[0].length! > 0 || filtered) ? (
-          <FlatList
-            contentContainerStyle={{ flexGrow: 1 }}
-            ListEmptyComponent={<NoTransactions filtered={true} />}
-            ItemSeparatorComponent={() => <Divider />}
-            data={outgoingTransactions?.pages.flatMap((page) => page)}
-            renderItem={({ item }) => (
-              <TransactionListItem
-                onPress={() => {
-                  router.push(`${Routes.OUTGOING}/${item.id}`);
-                }}
-                title={item.category}
-                name={item.user.name}
-                date={dateToMonthDDYYYY(
-                  new Date(item.transactionDate.toString())
-                )}
-                time={dateToReadableTime(
-                  new Date(item.transactionDate.toString())
-                )}
-              />
-            )}
-            onEndReachedThreshold={0.5}
-            onEndReached={() => {
-              if (
-                !outgoingTransactionsFetching &&
-                outgoingTransactionsHasNextPage
-              )
-                outgoingTransactionsFetchNextPage();
-            }}
-          />
-        ) : <NoTransactions />
+          ) : transaction === "outgoing" && (outgoingTransactions?.pages[0].length! > 0 || filtered) ? (
+            <FlatList
+              contentContainerStyle={{ flexGrow: 1 }}
+              ListEmptyComponent={emptyList}
+              ItemSeparatorComponent={() => <Divider />}
+              data={outgoingTransactions?.pages.flatMap((page) => page)}
+              renderItem={({ item }) => (
+                <TransactionListItem
+                  onPress={() => {
+                    router.push(`${Routes.OUTGOING}/${item.id}`);
+                  }}
+                  title={item.category}
+                  name={item.user.name}
+                  date={dateToMonthDDYYYY(
+                    new Date(item.transactionDate.toString())
+                  )}
+                  time={dateToReadableTime(
+                    new Date(item.transactionDate.toString())
+                  )}
+                />
+              )}
+              onEndReachedThreshold={0.5}
+              onEndReached={() => {
+                if (
+                  !outgoingTransactionsFetching &&
+                  outgoingTransactionsHasNextPage
+                )
+                  outgoingTransactionsFetchNextPage();
+              }}
+            />
+          ) : <NoTransactions />
         }
       </Box>
       <TransactionFilterModal
