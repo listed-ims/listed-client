@@ -237,7 +237,7 @@ const NotificationListItem = ({
         {...props}
         _pressed={{
           background:
-            notificationDetails.status === NotificationStatus.UNREAD ? "offWhite.500" : "muted.100",
+            notificationDetails.status === NotificationStatus.UNREAD ? "offWhite.600" : "muted.100",
         }}
         p="4"
         borderRadius="lg"
