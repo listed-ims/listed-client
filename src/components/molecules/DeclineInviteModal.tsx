@@ -20,7 +20,7 @@ const DeclineInviteModal = ({
         <Column alignItems="center" space="4">
           <WarningIcon />
           <Text fontSize="md" fontWeight="bold">
-            DECLINE INVITE
+            Confirm Decline Invite
           </Text>
         </Column>
       </Modal.Header>
@@ -32,7 +32,7 @@ const DeclineInviteModal = ({
       <Modal.Footer>
         <Row width="full" justifyContent="center" space={4}>
           <Button flex="1" variant="warnSubtle" onPress={onConfirm}>
-            CONFIRM
+            DECLINE
           </Button>
           <Button flex="1" variant="warnUnstyled" onPress={onCancel}>
             CANCEL

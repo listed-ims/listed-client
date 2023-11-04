@@ -85,3 +85,23 @@ export const getUserMembership = async (storeId?: number) => {
     throw error;
   }
 };
+
+export const acceptOrDeclineMembership = async (
+  id: number,
+  membershipStatus: MembershipStatus
+) => {
+  try {
+    const response = await axiosInstance.put(
+      `collaborators/membership/${id}`,
+      null,
+      {
+        params: {
+          membershipStatus: membershipStatus,
+        },
+      }
+    );
+    return response.data as MembershipResponse;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -72,15 +72,16 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       }
 
       const inAuthRoute = segments[0] === '(auth)';
+      const hasNoCurrentStore = userDetails && !userDetails?.currentStoreId
 
       if (
-        !Boolean(userMembership) && !inAuthRoute
+        (!hasNoCurrentStore && !Boolean(userMembership)) && !inAuthRoute
       ) {
         router.replace(Routes.LOGIN);
-      } else if (Boolean(userMembership) && inAuthRoute) {
+      } else if ((Boolean(userMembership) || hasNoCurrentStore) && inAuthRoute) {
         router.replace(Routes.HOME);
       }
-    }, [userMembership, segments, isNavigationReady]);
+    }, [userMembership, userDetails, segments, isNavigationReady]);
   }
 
   useEffect(() => {
@@ -103,9 +104,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   //TODO: handle token expiration and refresh
 
-  const login = (token: string) => {
-    storeToken(token);
-    setIsLoggedIn(true);
+  const login = async (token: string) => {
+    const tokenStored = await storeToken(token);
+    if (tokenStored)
+      setIsLoggedIn(tokenStored);
   }
 
   const logout = () => {

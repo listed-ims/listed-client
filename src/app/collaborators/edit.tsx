@@ -60,22 +60,9 @@ const CollaboratorEdit = () => {
       queryClient.setQueriesData([GET_COLLABORATOR, data.id], data);
       toast.show({
         render: () => {
-          return <Toast message="Collaborator permissions updated." />
-        }
-      });
-      router.back();
-    }
-  })
-
-  const {
-    mutate: updateCollaboratorStatus,
-  } = useUpdateUserMembershipMutation({
-    onSuccess: (data) => {
-      queryClient.invalidateQueries([GET_COLLABORATORS]);
-      queryClient.setQueriesData([GET_COLLABORATOR, data.id], data);
-      toast.show({
-        render: () => {
-          return <Toast message="Collaborator is invited again." />
+          return <Toast message={`${data.membershipStatus === MembershipStatus.PENDING
+            ? "Collaborator is invited again."
+            : "Collaborator permissions updated."}`} />
         }
       });
       router.back();
@@ -94,7 +81,7 @@ const CollaboratorEdit = () => {
 
   const handleInviteAgain = () => {
     if (validate()) {
-      updateCollaboratorStatus([
+      updateCollaborator([
         Number(id),
         formData.permissions,
         MembershipStatus.PENDING

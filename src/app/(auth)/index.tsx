@@ -14,6 +14,7 @@ const Login = () => {
   const [modalContent, setModalContent] = useState<ModalContent>({} as ModalContent)
   const [show, setShow] = React.useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false)
 
   const { login, setUserDetails, setUserMembership, isLoggedIn } = useAuth();
 
@@ -45,6 +46,7 @@ const Login = () => {
     }
     if (userMembershipSuccess) {
       setUserMembership(userMembership);
+      setLoadingButton(false);
     }
   }, [userDetails, userMembership]);
 
@@ -65,6 +67,7 @@ const Login = () => {
         username: formData.username,
         password: formData.password
       } as LoginCredentials);
+      setLoadingButton(true);
     }
   };
 
@@ -97,7 +100,7 @@ const Login = () => {
         <Box background="white" paddingTop="4" paddingBottom="6">
           <Button
             onPress={() => { handleLogin() }}
-            isLoading={loginLoading || userMembershipFetching || userDetailsFetching}
+            isLoading={userDetailsFetching || userMembershipFetching || loadingButton}
             isLoadingText="SIGNING IN"
           > SIGN IN </Button>
         </Box>

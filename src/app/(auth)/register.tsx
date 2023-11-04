@@ -1,17 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Center, Column, Link, Row, Text } from 'native-base'
 import { Stack, router } from 'expo-router'
 import { KeyboardAwareScroll, ScreenContainer } from '@listed-components/organisms'
 import { FormControl, TextField } from '@listed-components/molecules'
 import { Routes } from '@listed-constants'
 import { Button, ListedIcon } from '@listed-components/atoms'
-import { useDebounce, useFormValidation, useUserRegistrationMutation, useValidateUsername } from '@listed-hooks'
+import { useDebounce, useFormValidation, useGetUserDetails, useGetUserMembership, useUserRegistrationMutation, useValidateUsername } from '@listed-hooks'
 import { RegistrationCredentials, ValidationRules } from '@listed-types'
 import { useAuth } from '@listed-contexts'
 
 
 const Registration = () => {
-  const { login } = useAuth();
+  const { login, isLoggedIn, setUserDetails, setUserMembership } = useAuth();
+  const [loadingButton, setLoadingButton] = useState(false)
 
   const initialFormData = {
     name: "",
@@ -44,6 +45,28 @@ const Registration = () => {
     validationRules
   );
 
+  const {
+    data: userDetails,
+    isFetching: userDetailsFetching,
+    isSuccess: userSuccess,
+  } = useGetUserDetails(isLoggedIn);
+
+  const {
+    data: userMembership,
+    isFetching: userMembershipFetching,
+    isSuccess: userMembershipSuccess
+  } = useGetUserMembership(userDetails?.currentStoreId!);
+
+  useEffect(() => {
+    if (userSuccess) {
+      setUserDetails(userDetails);
+    }
+    if (userMembershipSuccess) {
+      setUserMembership(userMembership);
+      setLoadingButton(false);
+    }
+  }, [userDetails, userMembership]);
+
   const handleRegister = () => {
     if (validate() && usernameIsValid?.valid) {
       registrationService({
@@ -51,6 +74,7 @@ const Registration = () => {
         username: formData.username,
         password: formData.password
       } as RegistrationCredentials);
+      setLoadingButton(true);
     }
   };
 
@@ -66,7 +90,6 @@ const Registration = () => {
     onSuccess: (data) => {
       const token = data.token;
       login(token);
-      router.push(Routes.HOME);
     },
     onError: (error) => {
       console.log("User not created.");
@@ -82,6 +105,8 @@ const Registration = () => {
         <Box background="white" paddingTop="4" paddingBottom="6">
           <Button
             onPress={handleRegister}
+            isLoading={loadingButton}
+            isLoadingText="SIGNING UP"
           > SIGN UP </Button>
         </Box>
       }>

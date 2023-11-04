@@ -45,6 +45,7 @@ const StoreDetails = () => {
     data: storeDetails,
     isError: storeError,
     isFetching: storeFetching,
+    error: storeErrorDetails,
   } = useGetStoreDetails(parseInt(id as string));
 
   const {
@@ -102,10 +103,11 @@ const StoreDetails = () => {
   }, [userMembership]);
 
   useEffect(() => {
-    if (storeMembershipErrorDetails?.response?.status === 404) {
+    if (storeMembershipErrorDetails?.response?.status === 404
+      || storeErrorDetails?.response?.status === 404) {
       router.replace(Routes.COLLABORATOR_NOT_FOUND);
     }
-  }, [storeMembershipErrorDetails]);
+  }, [storeMembershipErrorDetails, storeErrorDetails]);
 
   return (
     <ScreenContainer withHeader>
