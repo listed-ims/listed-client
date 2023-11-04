@@ -5,11 +5,11 @@ import { GET_COLLABORATOR, GET_COLLABORATORS, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
 import { useGetCollaboratorDetails, useUpdateUserMembershipStatusMutation } from "@listed-hooks"
 import { stackHeaderStyles } from "@listed-styles"
-import { MembershipStatus, ModalContent, UserPermission } from "@listed-types"
+import { MembershipStatus, UserPermission } from "@listed-types"
 import { hasPermission, ownerOrCollaborator, } from "@listed-utils"
 import { useQueryClient } from "@tanstack/react-query"
 import { Stack, router, useLocalSearchParams } from "expo-router"
-import { Badge, Center, Column, Heading, ScrollView, Text, useToast } from "native-base"
+import { Badge, Center, Column, Heading, ScrollView, Text } from "native-base"
 import { useEffect, useState } from "react"
 
 
@@ -18,7 +18,7 @@ const CollaboratorDetails = () => {
   const { id } = useLocalSearchParams();
   const queryClient = useQueryClient();
   const [showRemoveModal, setShowRemoveModal] = useState(false)
-  const [modalContent, setModalContent] = useState<ModalContent>({} as ModalContent)
+  const [modalContent, setModalContent] = useState({} as any)
 
 
   useEffect(() => {
@@ -59,10 +59,11 @@ const CollaboratorDetails = () => {
 
   const handleCancelRemove = () => {
     setModalContent({
-      header: isPending ? "CANCEL INVITE" : "REMOVE COLLABORATOR",
+      header: isPending ? "Confirm Cancel Invite" : "Confirm Remove Collaborator",
       body: isPending
         ? "This will cancel the invitation to collaborator."
-        : "This wil remove the collaborator from the store."
+        : "This wil remove the collaborator from the store.",
+      type: isPending ? "DECLINE" : "REMOVE"
     })
     setShowRemoveModal(true);
   }

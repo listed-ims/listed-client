@@ -38,7 +38,8 @@ const Button = ({ children, ...props }: ButtonProps) => {
         color: "lightText"
       },
       _loading: {
-        backgroundColor: "primary.700"
+        backgroundColor: "primary.700",
+        opacity: "1"
       },
       spinnerPlacement: "end"
     },
