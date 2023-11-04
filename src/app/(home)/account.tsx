@@ -1,5 +1,5 @@
 import { AccountIcon, Button } from "@listed-components/atoms";
-import { LogoutModal, ScreenContainer } from "@listed-components/organisms";
+import { LogoutModal, PermissionDetails, ScreenContainer } from "@listed-components/organisms";
 import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { router } from "expo-router";
@@ -10,14 +10,14 @@ import {
   Divider,
   Heading,
   Row,
+  ScrollView,
   Text,
-  View,
   useTheme,
 } from "native-base";
 import { useState } from "react";
 
 const Account = () => {
-  const { logout, userDetails } = useAuth();
+  const { logout, userDetails, userMembership } = useAuth();
   const { colors } = useTheme();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
@@ -33,7 +33,8 @@ const Account = () => {
 
   return (
     <ScreenContainer>
-      <Column space="1" alignItems="center" marginBottom="8" marginTop="15">
+      <ScrollView showsVerticalScrollIndicator={false}>
+      <Column space="1" alignItems="center" marginY="8">
         <Center
           width="12"
           height="12"
@@ -47,7 +48,7 @@ const Account = () => {
         </Box>
       </Column>
 
-      <View>
+      
         <Text fontWeight="medium" color="text.500" marginBottom="1">
           ACCOUNT DETAILS
         </Text>
@@ -57,6 +58,7 @@ const Account = () => {
           borderRadius="sm"
           borderWidth="1"
           borderColor="muted.300"
+          marginBottom="4"
         >
           <Column alignItems="center">
             <Row paddingBottom="1">
@@ -80,11 +82,14 @@ const Account = () => {
             </Row>
           </Column>
         </Column>
-      </View>
+        <PermissionDetails permissions={userMembership?.permissions!} />
+      
 
-      <Button marginTop="6" variant="warnSubtle" onPress={handleLogout}>
+      <Column marginY="6">
+      <Button variant="warnSubtle" onPress={handleLogout}>
         LOGOUT
       </Button>
+      </Column>
       <LogoutModal
         isOpen={showLogoutModal}
         onCancel={() => setShowLogoutModal(false)}
@@ -94,6 +99,7 @@ const Account = () => {
           body: "You are about to logout of our system. Do you wish to proceed?",
         }}
       />
+      </ScrollView>
     </ScreenContainer>
   );
 };
