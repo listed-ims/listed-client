@@ -22,7 +22,7 @@ import { Stack, router, useLocalSearchParams } from "expo-router";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { GET_ANALYTICS_SUMMARY, GET_INCOMING, Routes } from "@listed-constants";
+import { GET_ANALYTICS_SUMMARY, GET_INCOMING, ProductUnit, Routes } from "@listed-constants";
 import { stackHeaderStyles } from "@listed-styles";
 import { dateToMMDDYY, hasPermission, localeStringToDate } from "@listed-utils";
 import { IncomingRequest, UserPermission, ValidationRules } from "@listed-types";
@@ -72,9 +72,13 @@ const NewIncoming = () => {
     quantity: {
       required: true,
       custom(value) {
-        return (value && parseInt(value) > 0)
+        if (productDetails?.unit === ProductUnit.KG) {
+          return true;
+        } else {  
+          return Number.isInteger(parseFloat(value));
+        }
       },
-      customErrorMessage: "Quantity must be greater than 0."
+      customErrorMessage: `Decimal values are not allowed for product unit ${productDetails?.unit}.`
     },
     "purchase price": { 
       required: true,
