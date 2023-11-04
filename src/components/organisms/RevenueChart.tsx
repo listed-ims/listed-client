@@ -1,9 +1,8 @@
 import { TrendingDownIcon } from "@listed-components/atoms";
 import { ChartNavigation, FrequencyFilter } from "@listed-components/molecules";
 import { Frequency } from "@listed-constants";
-import { Box, HStack, Text, VStack, useTheme } from "native-base";
+import { Box, HStack, Text, VStack, useTheme, View } from "native-base";
 import { useState } from "react";
-import { View } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 
 const mock_data = [
@@ -70,31 +69,39 @@ const RevenueChart = () => {
             onPrev={() => {}}
             onNext={() => {}}
           />
-          <View>
-            <LineChart
-              data={mock_data}
-              hideOrigin
-              curved
-              rulesColor={colors.primary[500]}
-              yAxisColor={colors.primary[700]}
-              xAxisColor={colors.primary[700]}
-              xAxisLabelTextStyle={{
-                color: colors.text[500],
-                fontSize: 10,
-                fontWeight: 500,
-              }}
-              yAxisTextStyle={{
-                color: colors.text[500],
-                fontSize: 10,
-                fontWeight: 500,
-              }}
-              dashWidth={1}
-              dashGap={8}
-              noOfSections={6}
-              stepValue={10}
-              maxValue={6 * 10}
-            />
-          </View>
+          <HStack w="full" justifyContent="center" alignItems="center">
+            <VStack alignItems="center">
+              <View>
+                <LineChart
+                  data={mock_data}
+                  hideOrigin
+                  curved
+                  rulesColor={colors.primary[500]}
+                  yAxisColor={colors.primary[700]}
+                  xAxisColor={colors.primary[700]}
+                  xAxisLabelTextStyle={{
+                    color: colors.text[500],
+                    fontSize: 10,
+                    fontWeight: 500,
+                  }}
+                  yAxisTextStyle={{
+                    color: colors.text[500],
+                    fontSize: 10,
+                    fontWeight: 500,
+                  }}
+                  dashWidth={1}
+                  dashGap={8}
+                  noOfSections={6}
+                  stepValue={10}
+                  stepHeight={23}
+                  maxValue={6 * 10}
+                />
+              </View>
+              <Text fontSize="2xs" fontWeight="medium" color="text.500" mt="1">
+                DATE RANGE
+              </Text>
+            </VStack>
+          </HStack>
           <HStack mt="2">
             <FrequencyFilter filter={filter} onFilter={handleSetFilter} />
           </HStack>

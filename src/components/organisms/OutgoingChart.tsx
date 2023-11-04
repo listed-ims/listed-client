@@ -1,9 +1,8 @@
 import { AlertOutlineIcon } from "@listed-components/atoms";
 import { ChartNavigation, FrequencyFilter } from "@listed-components/molecules";
 import { Frequency } from "@listed-constants";
-import { HStack, Text, VStack, useTheme } from "native-base";
+import { HStack, Text, VStack, useTheme, View } from "native-base";
 import React, { useState } from "react";
-import { View } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 
 const mock_data = [
@@ -34,7 +33,7 @@ const OutgoingChart = () => {
         Outgoing Products (not sales)
       </Text>
       <VStack space="2">
-        <HStack alignItems="center" space="4">
+        <HStack alignItems="center" space="2">
           <VStack>
             <Text fontSize="2xs" fontWeight="medium" color="text.500">
               Top Product Value
@@ -64,35 +63,44 @@ const OutgoingChart = () => {
             onPrev={() => {}}
             onNext={() => {}}
           />
-          <View>
-            <BarChart
-              data={data}
-              hideOrigin
-              rulesColor={colors.primary[500]}
-              yAxisColor={colors.primary[700]}
-              xAxisColor={colors.primary[700]}
-              xAxisLabelTextStyle={{
-                color: colors.text[500],
-                fontSize: 10,
-                fontWeight: 500,
-              }}
-              yAxisTextStyle={{
-                color: colors.text[500],
-                fontSize: 10,
-                fontWeight: 500,
-              }}
-              dashWidth={1}
-              dashGap={8}
-              noOfSections={6}
-              stepValue={10}
-              maxValue={6 * 10}
-              barBorderTopRightRadius={4}
-              barBorderTopLeftRadius={4}
-              barWidth={24}
-              barMarginBottom={4}
-              spacing={38}
-            />
-          </View>
+          <HStack w="full" justifyContent="center" alignItems="center">
+            <VStack alignItems="center">
+              <View ml="2">
+                <BarChart
+                  width={window.innerWidth}
+                  data={data}
+                  hideOrigin
+                  rulesColor={colors.primary[500]}
+                  yAxisColor={colors.primary[700]}
+                  xAxisColor={colors.primary[700]}
+                  xAxisLabelTextStyle={{
+                    color: colors.text[500],
+                    fontSize: 10,
+                    fontWeight: 500,
+                  }}
+                  yAxisTextStyle={{
+                    color: colors.text[500],
+                    fontSize: 10,
+                    fontWeight: 500,
+                  }}
+                  dashWidth={1}
+                  dashGap={8}
+                  noOfSections={6}
+                  stepValue={10}
+                  stepHeight={23}
+                  maxValue={6 * 10}
+                  barBorderTopRightRadius={4}
+                  barBorderTopLeftRadius={4}
+                  barWidth={24}
+                  barMarginBottom={4}
+                  spacing={38}
+                />
+              </View>
+              <Text fontSize="2xs" fontWeight="medium" color="text.500">
+                OUTGOING CATEGORY
+              </Text>
+            </VStack>
+          </HStack>
           <HStack mt="2">
             <FrequencyFilter filter={filter} onFilter={handleSetFilter} />
           </HStack>

@@ -1,8 +1,7 @@
 import { ChartNavigation, FrequencyFilter } from "@listed-components/molecules";
 import { Frequency } from "@listed-constants";
-import { Column, HStack, Text, VStack, useTheme } from "native-base";
+import { Column, HStack, Text, VStack, useTheme, View } from "native-base";
 import { useState } from "react";
-import { View } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 
 const mock_data = [
@@ -54,10 +53,9 @@ const BestsellingChart = () => {
         </VStack>
 
         <Column
-          space="1"
           borderRadius="lg"
           bgColor="offWhite.200"
-          p="4"
+          py="4"
           alignItems="center"
         >
           <ChartNavigation
@@ -66,38 +64,52 @@ const BestsellingChart = () => {
             onPrev={() => {}}
             onNext={() => {}}
           />
-
-          <View style={{ paddingBottom: 64 }}>
-            <BarChart
-              data={data}
-              horizontal
-              hideOrigin
-              rulesColor={colors.primary[500]}
-              yAxisColor={colors.muted[200]}
-              xAxisColor={colors.muted[200]}
-              xAxisLabelTextStyle={{
-                color: colors.text[500],
-                fontSize: 10,
-                fontWeight: 500,
-              }}
-              yAxisTextStyle={{
-                color: colors.text[500],
-                fontSize: 10,
-                fontWeight: 500,
-              }}
-              dashWidth={1}
-              dashGap={8}
-              noOfSections={5}
-              stepValue={10}
-              maxValue={10 * 5}
-              barBorderTopRightRadius={4}
-              barBorderTopLeftRadius={4}
-              barWidth={12}
-              barMarginBottom={4}
-              spacing={12}
-              height={250}
-            />
-          </View>
+          <HStack w="full" justifyContent="center" alignItems="center">
+            <VStack alignItems="center">
+              <View pb="8" mt="-4">
+                <BarChart
+                  data={data}
+                  horizontal
+                  hideOrigin
+                  rulesColor={colors.primary[500]}
+                  yAxisColor={colors.muted[200]}
+                  xAxisColor={colors.muted[200]}
+                  xAxisLabelTextStyle={{
+                    color: colors.text[500],
+                    fontSize: 10,
+                    fontWeight: 500,
+                  }}
+                  yAxisTextStyle={{
+                    color: colors.text[500],
+                    fontSize: 10,
+                    fontWeight: 500,
+                  }}
+                  dashWidth={1}
+                  dashGap={8}
+                  noOfSections={6}
+                  stepValue={10}
+                  stepHeight={38}
+                  maxValue={10 * 6}
+                  barBorderTopRightRadius={4}
+                  barBorderTopLeftRadius={4}
+                  barWidth={12}
+                  barMarginBottom={4}
+                  spacing={12}
+                  initialSpacing={0}
+                  endSpacing={10}
+                  height={250}
+                  yAxisLabelWidth={32}
+                  labelWidth={32}
+                  barStyle={{
+                    marginLeft: 10,
+                  }}
+                />
+              </View>
+              <Text fontSize="2xs" fontWeight="medium" color="text.500">
+                REVENUE IN Php
+              </Text>
+            </VStack>
+          </HStack>
           <HStack mt="2">
             <FrequencyFilter filter={filter} onFilter={handleSetFilter} />
           </HStack>

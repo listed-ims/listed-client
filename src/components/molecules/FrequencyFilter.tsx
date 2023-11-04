@@ -22,13 +22,14 @@ const FrequencyButton = ({ filter, onFilter }: FrequencyFilterProps) => {
             }`,
           }}
           _text={{
+            textTransform: "capitalize",
             fontSize: "2xs",
             fontWeight: "semibold",
             color: `${filter === frequency ? "lightText" : "darkText"}`,
           }}
           onPress={() => onFilter(frequency)}
         >
-          {frequency.slice(0, 1)}
+          {frequency}
         </Button>
       ))}
     </HStack>
