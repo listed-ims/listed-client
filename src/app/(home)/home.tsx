@@ -53,6 +53,7 @@ const Home = () => {
               <Text color="muted.400">Welcome</Text> {userDetails?.username}!
             </Text>
             <SummaryCard
+              isFetching={storeFetching || analyticsSummaryFetching}
               storeDetails={storeDetails!}
               analyticsSummaryDetails={analyticsSummaryDetails!}
             />
@@ -111,6 +112,7 @@ const Home = () => {
             </Text>
             <Row width="full" space="4">
               <ProductAlertCard
+                isFetching={analyticsSummaryFetching}
                 flex="1"
                 type="stocks"
                 alertDetails={{
@@ -118,6 +120,7 @@ const Home = () => {
                 }}
               />
               <ProductAlertCard
+                isFetching={analyticsSummaryFetching}
                 flex="1"
                 type="expiration"
                 alertDetails={{
