@@ -1,7 +1,7 @@
 import { Button, SmallMail } from "@listed-components/atoms"
 import DeclineInviteModal from "./DeclineInviteModal";
 import { GET_MEMBERSHIP, GET_STORES, GET_USER } from "@listed-constants";
-import { useUpdateUserMembershipStatusMutation } from "@listed-hooks";
+import { useAcceptOrDeclineMembershipMutation } from "@listed-hooks";
 import { MembershipResponse, MembershipStatus, StoreResponse } from "@listed-types"
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
@@ -41,13 +41,10 @@ const StoreInvite = ({ storeDetails, storeMembership }: StoreInviteProps) => {
     mutate: updateMembership,
     isLoading: updateMembershipLoading,
     isError: updateMembershipError,
-  } = useUpdateUserMembershipStatusMutation({
+  } = useAcceptOrDeclineMembershipMutation({
     onSuccess: (data) => {
       if (data.membershipStatus === MembershipStatus.ACTIVE) {
-        queryClient.invalidateQueries([GET_MEMBERSHIP, {
-          storeId: storeDetails?.id,
-          userId: storeMembership?.user.id,
-        }])
+        queryClient.invalidateQueries([GET_MEMBERSHIP, storeDetails.id])
       } else {
         queryClient.invalidateQueries([GET_STORES])
         queryClient.setQueryData([GET_MEMBERSHIP], undefined)
