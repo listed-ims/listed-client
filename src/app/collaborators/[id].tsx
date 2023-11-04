@@ -1,4 +1,5 @@
 import { Button, PeopleIcon } from "@listed-components/atoms"
+import { CollaboratorDetailsLoadingSkeleton } from "@listed-components/molecules"
 import { PermissionDetails, RemoveCollaboratorModal, ScreenContainer } from "@listed-components/organisms"
 import { GET_COLLABORATOR, GET_COLLABORATORS, Routes } from "@listed-constants"
 import { useAuth } from "@listed-contexts"
@@ -76,8 +77,8 @@ const CollaboratorDetails = () => {
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Collaborator Details")} />
       {
-        collaboratorDetailsFetching || !collaboratorDetails
-          ? <Text>Loading...</Text>
+        (collaboratorDetailsFetching || !collaboratorDetails)
+          ? <CollaboratorDetailsLoadingSkeleton />
           : <ScrollView showsVerticalScrollIndicator={false}>
             <Column space="1" alignItems="center"
               marginBottom="4"
