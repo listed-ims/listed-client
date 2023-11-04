@@ -40,15 +40,15 @@ const ProductAlertCard = ({
         marginBottom="2"
         justifyContent="space-evenly"
       >
-        { isFetching ? 
-            <Skeleton rounded="lg" h="8" width="20%" startColor="muted.300" />
-          :
+        {isFetching ? (
+          <Skeleton rounded="lg" h="8" width="20%" startColor="muted.300" />
+        ) : (
           <Text fontSize="2xl" fontWeight="bold" color="darkText">
-          {type === "stocks"
-            ? alertDetails.totalLowStock
-            : alertDetails.totalNearExpiry}
-        </Text>
-        }
+            {type === "stocks"
+              ? alertDetails.totalLowStock
+              : alertDetails.totalNearExpiry}
+          </Text>
+        )}
         <Text fontSize="md" fontWeight="xs" color="darkText">
           {alertDescription + "\nProducts"}
         </Text>

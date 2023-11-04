@@ -1,7 +1,4 @@
-import {
-  DataSummaryIcon,
-  StoreNameIcon,
-} from "@listed-components/atoms";
+import { DataSummaryIcon, StoreNameIcon } from "@listed-components/atoms";
 import { StoreResponse, SummaryResponse } from "@listed-types";
 import { toCurrency } from "@listed-utils";
 import { Column, Row, Skeleton, Text, View } from "native-base";
@@ -30,13 +27,13 @@ const SummaryCard = ({
       <Row width="full" alignItems="center" justifyContent="space-between">
         <Row alignItems="center" space="2">
           <StoreNameIcon />
-          { isFetching ? 
+          {isFetching ? (
             <Skeleton rounded="lg" h="6" width="60%" startColor="primary.500" />
-            :
-          <Text color="lightText" fontSize="xl" fontWeight="bold">
-            {storeDetails?.name}
-          </Text>
-          }
+          ) : (
+            <Text color="lightText" fontSize="xl" fontWeight="bold">
+              {storeDetails?.name}
+            </Text>
+          )}
         </Row>
         <Text color="lightText" fontSize="sm" fontWeight="regular">
           Today
@@ -54,25 +51,35 @@ const SummaryCard = ({
               Total Revenue
             </Text>
 
-            { isFetching ? 
-              <Skeleton rounded="lg" h="5" width="100%" startColor="primary.500" />
-            :
+            {isFetching ? (
+              <Skeleton
+                rounded="lg"
+                h="5"
+                width="100%"
+                startColor="primary.500"
+              />
+            ) : (
               <Text color="lightText" fontSize="lg" fontWeight="bold">
-              {toCurrency(analyticsSummaryDetails?.totalDailyRevenue)}
-            </Text>
-            }
+                {toCurrency(analyticsSummaryDetails?.totalDailyRevenue)}
+              </Text>
+            )}
           </View>
           <View>
             <Text color="lightText" fontSize="sm" fontWeight="medium">
               Total Items Sold
             </Text>
-            { isFetching ? 
-              <Skeleton rounded="lg" h="5" width="100%" startColor="primary.500" />
-            :
+            {isFetching ? (
+              <Skeleton
+                rounded="lg"
+                h="5"
+                width="100%"
+                startColor="primary.500"
+              />
+            ) : (
               <Text color="lightText" fontSize="lg" fontWeight="bold">
-              {`${analyticsSummaryDetails?.totalDailyItemsSold} products`}
-            </Text>
-            }
+                {`${analyticsSummaryDetails?.totalDailyItemsSold} products`}
+              </Text>
+            )}
           </View>
         </Column>
         <DataSummaryIcon />
