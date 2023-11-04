@@ -75,8 +75,8 @@ const Products = () => {
   ), [])
 
   const emptyList = productListFetching
-  ? <ProductListLoadingSkeleton />
-  : <NoProductsFound filter={noProducts ? "all" : filter}/>
+    ? <ProductListLoadingSkeleton />
+    : <NoProductsFound filter={noProducts ? "all" : filter} />
 
   return (
     <ScreenContainer withHeader>
@@ -84,11 +84,11 @@ const Products = () => {
         options={{
           ...stackHeaderStyles("Products"),
           headerRight: () => (
-            <HStack space="4" alignItems="center">
+            <HStack space="1" alignItems="center">
               <Pressable
-                padding="1"
+                padding="3"
                 borderRadius="full"
-                _pressed={{ background: "muted.100" }}
+                _pressed={{ background: "muted.200" }}
                 onPress={() =>
                   router.push({
                     pathname: Routes.SEARCH_PRODUCT,
@@ -96,13 +96,14 @@ const Products = () => {
                       nextRoute: Routes.PRODUCTS,
                     },
                   })
-                }>
+                }
+              >
                 <HeaderSearchIcon />
               </Pressable>
               <Pressable
-                padding="1"
+                padding="3"
                 borderRadius="full"
-                _pressed={{ background: "muted.100" }}
+                _pressed={{ background: "muted.200" }}
                 onPress={() =>
                   router.push({
                     pathname: Routes.BARCODE,
@@ -118,7 +119,7 @@ const Products = () => {
           ),
         }}
       />
-      <Column space="4" height="full" pt="4" py="6">
+      <Column space="4" height="full" pt="4" py="6" >
         <ProdcutListFilter
           filter={filter}
           handleSetFilter={(filter) => setFilter(filter)}
@@ -132,22 +133,24 @@ const Products = () => {
             renderItem={renderItem}
           />
         </Box>
-        {productList?.length! > 0 || (filter !== "all" && !noProducts) ? (
-          <Button
-            alignSelf="flex-end"
-            size="sm"
-            px="4"
-            startIcon={<AddIcon color={colors.white} />}
-            borderRadius="full"
-            onPress={() => {
-              router.push(Routes.NEW_PRODUCT);
-            }}
-          >
-            Add Product
-          </Button>
-        ) : undefined}
-      </Column>
-    </ScreenContainer>
+        {
+          productList?.length! > 0 || (filter !== "all" && !noProducts) ? (
+            <Button
+              alignSelf="flex-end"
+              size="sm"
+              px="4"
+              startIcon={<AddIcon color={colors.white} />}
+              borderRadius="full"
+              onPress={() => {
+                router.push(Routes.NEW_PRODUCT);
+              }}
+            >
+              Add Product
+            </Button>
+          ) : undefined
+        }
+      </Column >
+    </ScreenContainer >
   );
 };
 
