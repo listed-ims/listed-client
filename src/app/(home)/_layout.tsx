@@ -37,7 +37,6 @@ const HomeTabsNav = () => {
             tabBarLabel: ({ color }) => {
               return getTabBarLabel(route.name, color);
             },
-            detachInactiveScreens: true,
             tabBarButton: (props) => (
               <Pressable
                 {...props}

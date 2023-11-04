@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ScreenContainer } from '@listed-components/organisms'
-import { Column, Divider, FlatList, Input, Row, Text } from 'native-base'
+import { Column, Divider, FlatList, Input, Pressable, Row, Text } from 'native-base'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { BackIcon, SearchNotFound } from '@listed-components/atoms'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -91,7 +91,14 @@ const SearchProducts = () => {
               alignItems="center"
               paddingX="4"
             >
-              <BackIcon onPress={() => router.back()} />
+              <Pressable
+                padding="2"
+                borderRadius="full"
+                _pressed={{ background: "muted.200" }}
+                onPress={() => router.back()}
+              >
+                <BackIcon />
+              </Pressable>
               <Input
                 placeholder="Search products" variant="filled" size="lg"
                 autoFocus={true}
