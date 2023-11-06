@@ -85,7 +85,7 @@ const SearchProducts = () => {
         header() {
           return (
             <Row
-              paddingTop={insets.top}
+              paddingTop={insets.top / 4}
               space="4"
               justifyContent="center"
               alignItems="center"
