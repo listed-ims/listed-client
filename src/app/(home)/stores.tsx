@@ -21,7 +21,6 @@ const Stores = () => {
     isError: storeListError,
     isFetching: storeListFetching,
   } = useGetStoreList(
-    undefined,
     1,
     100
   );
@@ -45,7 +44,7 @@ const Stores = () => {
       }}
     />
   ), [])
-  
+
   const emptyList = storeListFetching
     ? <StoreListLoadingSkeleton />
     : <NoStoreFound />
