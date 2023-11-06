@@ -1,20 +1,19 @@
-import {
-  DataSummaryIcon,
-  StoreNameIcon,
-} from "@listed-components/atoms";
+import { DataSummaryIcon, StoreNameIcon } from "@listed-components/atoms";
 import { StoreResponse, SummaryResponse } from "@listed-types";
 import { toCurrency } from "@listed-utils";
-import { Column, Row, Text, View } from "native-base";
+import { Column, Row, Skeleton, Text, View } from "native-base";
 import React from "react";
 
 interface SummaryCardProps {
   storeDetails: StoreResponse;
   analyticsSummaryDetails: SummaryResponse;
+  isFetching: boolean;
 }
 
 const SummaryCard = ({
   storeDetails,
   analyticsSummaryDetails,
+  isFetching,
 }: SummaryCardProps) => {
   return (
     <Column
@@ -28,9 +27,13 @@ const SummaryCard = ({
       <Row width="full" alignItems="center" justifyContent="space-between">
         <Row alignItems="center" space="2">
           <StoreNameIcon />
-          <Text color="lightText" fontSize="xl" fontWeight="bold">
-            {storeDetails?.name}
-          </Text>
+          {isFetching ? (
+            <Skeleton rounded="lg" h="6" width="60%" startColor="primary.500" />
+          ) : (
+            <Text color="lightText" fontSize="xl" fontWeight="bold">
+              {storeDetails?.name}
+            </Text>
+          )}
         </Row>
         <Text color="lightText" fontSize="sm" fontWeight="regular">
           Today
@@ -47,17 +50,36 @@ const SummaryCard = ({
             <Text color="lightText" fontSize="sm" fontWeight="medium">
               Total Revenue
             </Text>
-            <Text color="lightText" fontSize="lg" fontWeight="bold">
-              {toCurrency(analyticsSummaryDetails?.totalDailyRevenue)}
-            </Text>
+
+            {isFetching ? (
+              <Skeleton
+                rounded="lg"
+                h="5"
+                width="100%"
+                startColor="primary.500"
+              />
+            ) : (
+              <Text color="lightText" fontSize="lg" fontWeight="bold">
+                {toCurrency(analyticsSummaryDetails?.totalDailyRevenue)}
+              </Text>
+            )}
           </View>
           <View>
             <Text color="lightText" fontSize="sm" fontWeight="medium">
               Total Items Sold
             </Text>
-            <Text color="lightText" fontSize="lg" fontWeight="bold">
-              {`${analyticsSummaryDetails?.totalDailyItemsSold} products`}
-            </Text>
+            {isFetching ? (
+              <Skeleton
+                rounded="lg"
+                h="5"
+                width="100%"
+                startColor="primary.500"
+              />
+            ) : (
+              <Text color="lightText" fontSize="lg" fontWeight="bold">
+                {`${analyticsSummaryDetails?.totalDailyItemsSold} products`}
+              </Text>
+            )}
           </View>
         </Column>
         <DataSummaryIcon />

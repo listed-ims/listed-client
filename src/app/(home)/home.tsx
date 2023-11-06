@@ -13,10 +13,7 @@ import {
   ScreenContainer,
 } from "@listed-components/organisms";
 import { Routes } from "@listed-constants";
-import {
-  useGetAnalyticsSummary,
-  useGetStoreDetails,
-} from "@listed-hooks";
+import { useGetAnalyticsSummary, useGetStoreDetails } from "@listed-hooks";
 import { useAuth } from "@listed-contexts";
 import { MembershipStatus } from "@listed-types";
 
@@ -37,14 +34,14 @@ const Home = () => {
 
   useEffect(() => {
     if (userMembership?.membershipStatus === MembershipStatus.INACTIVE)
-      router.replace(Routes.UNAUTHORIZED_INACTIVE)
-  }, [userMembership])
+      router.replace(Routes.UNAUTHORIZED_INACTIVE);
+  }, [userMembership]);
 
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
       {!userDetails?.currentStoreId ||
-        userMembership?.membershipStatus === MembershipStatus.PENDING ? (
+      userMembership?.membershipStatus === MembershipStatus.PENDING ? (
         <DashboardNoStore storeDetails={storeDetails!} />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -53,6 +50,7 @@ const Home = () => {
               <Text color="muted.400">Welcome</Text> {userDetails?.username}!
             </Text>
             <SummaryCard
+              isFetching={storeFetching || analyticsSummaryFetching}
               storeDetails={storeDetails!}
               analyticsSummaryDetails={analyticsSummaryDetails!}
             />
@@ -111,6 +109,7 @@ const Home = () => {
             </Text>
             <Row width="full" space="4">
               <ProductAlertCard
+                isFetching={analyticsSummaryFetching}
                 flex="1"
                 type="stocks"
                 alertDetails={{
@@ -118,6 +117,7 @@ const Home = () => {
                 }}
               />
               <ProductAlertCard
+                isFetching={analyticsSummaryFetching}
                 flex="1"
                 type="expiration"
                 alertDetails={{
