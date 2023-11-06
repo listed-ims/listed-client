@@ -280,7 +280,7 @@ const NewIncoming = () => {
               onChangeText={(value) => handleInputChange(value, "purchase price")}
               value={formData["purchase price"]}
               keyboardType="numeric"
-              placeholder="Enter purchase price per item" />
+              placeholder="Enter purchase price per unit" />
           </FormControl>
           <HStack>
             <FormControl
