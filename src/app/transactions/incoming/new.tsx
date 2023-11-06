@@ -273,7 +273,7 @@ const NewIncoming = () => {
           </FormControl>
 
           <FormControl
-            label="Purchase Price / Item"
+            label="Purchase Price / Unit"
             errorMessage={errors["purchase price"]}
             isInvalid={!!errors["purchase price"]}>
             <TextField

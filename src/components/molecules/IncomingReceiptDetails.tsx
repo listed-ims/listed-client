@@ -70,7 +70,7 @@ const IncomingReceiptDetails = ({
 
       <Row paddingBottom="1">
         <Text flex="1" fontSize="xs">
-          Purhase Price / Item:
+          Purhase Price / Unit:
         </Text>
         <Text flex="1" fontSize="xs" fontWeight="bold">
           {toCurrency(incomingDetails?.purchasePrice as number)}
