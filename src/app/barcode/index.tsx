@@ -1,4 +1,4 @@
-import { Column, Text, View } from "native-base"
+import { Column, Spinner, Text, View } from "native-base"
 import { Camera, CameraType } from 'expo-camera';
 import { StyleSheet } from "react-native"
 import { useEffect, useState } from "react";
@@ -31,8 +31,13 @@ const Barcode = () => {
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
+      if (status !== "granted") {
+        router.back();
+      } else {
+        setHasPermission(true);
+      }
+    })
+      ();
   }, []);
 
   const handleBarCodeScanned = ({ data }: any) => {
@@ -142,34 +147,43 @@ const Barcode = () => {
                 </Text>
               </View>
               {
-                queryResult.data && queryResult.isSuccess
-                  ? <ProductListItem
-                    borderWidth="1"
-                    borderColor="muted.400"
-                    borderRadius="sm"
-                    product={queryResult.data} />
-                  : (!queryResult.data && !barcodeOnlyRoutes.includes(nextRoute!)) &&
-                  <Column alignItems="center">
-                    <NotFound />
-                    <Text>No Product Found</Text>
-                  </Column>
+                queryResult.isFetching ?
+                  <View paddingY="8">
+                    <Spinner color="primary.700" size="lg" />
+                  </View>
+                  : queryResult.data && queryResult.isSuccess
+                    ? <ProductListItem
+                      borderWidth="1"
+                      borderColor="muted.400"
+                      borderRadius="sm"
+                      product={queryResult.data} />
+                    : (!queryResult.data && !barcodeOnlyRoutes.includes(nextRoute!)) &&
+                    <Column alignItems="center">
+                      <NotFound />
+                      <Text>No Product Found</Text>
+                    </Column>
               }
               {
-                ((queryResult.data && queryResult.isSuccess)
-                  || (scannedBarcode && barcodeOnlyRoutes.includes(nextRoute!)))
-                && <Button
-                  onPress={handleConfirm}
-                >
-                  CONFIRM
-                </Button>
+                !queryResult.isFetching &&
+                <>
+                  {
+                    ((queryResult.data && queryResult.isSuccess)
+                      || (scannedBarcode && barcodeOnlyRoutes.includes(nextRoute!)))
+                    && <Button
+                      onPress={handleConfirm}
+                    >
+                      CONFIRM
+                    </Button>
+                  }
+                  <Button
+                    variant={`${(queryResult.data !== null) ? "unstyled" : "solid"}`}
+                    onPress={() => {
+                      setScannedBarcode(undefined);
+                      setIsBottomSheetVisible(false);
+                    }}
+                  >{`${(queryResult.data !== null) ? "CANCEL" : "TRY AGAIN"}`}</Button>
+                </>
               }
-              <Button
-                variant={`${(queryResult.data !== null) ? "unstyled" : "solid"}`}
-                onPress={() => {
-                  setScannedBarcode(undefined);
-                  setIsBottomSheetVisible(false);
-                }}
-              >{`${(queryResult.data !== null) ? "CANCEL" : "TRY AGAIN"}`}</Button>
             </Column>
           </BottomSheet>
         </SafeAreaView>
