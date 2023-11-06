@@ -21,3 +21,6 @@ export { default as NoTransactions } from "./NoTransactions";
 export { default as NotificationListItem } from "./NotificationListItem";
 export { default as ChangeStoreModal } from "./ChangeStoreModal";
 export { default as CheckoutModal } from "./CheckoutModal";
+export { default as RevenueChart } from "./RevenueChart";
+export { default as BestsellingChart } from "./BestsellingChart";
+export { default as OutgoingChart } from "./OutgoingChart";

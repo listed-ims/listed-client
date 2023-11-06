@@ -74,4 +74,6 @@ export { default as AnalyticsIcon } from "./AnalyticsIcon"
 export { default as LargeNotFound } from "./LargeNotFound";
 export { default as AlertFilledSmall } from "./AlertFilledSmall";
 export { default as SearchNotFound } from "./SearchNotFound";
-
+export { default as TrendingDownIcon } from "./TrendingDownIcon";
+export { default as CaretForwardIcon } from "./CaretForwardIcon";
+export { default as CaretBackIcon } from "./CaretBackIcon";

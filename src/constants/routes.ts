@@ -25,4 +25,5 @@ export enum Routes {
   SEARCH_PRODUCT = "/search",
   UNAUTHORIZED_INACTIVE = "/unauthorized/inactive",
   UNAUTHORIZED = "/unauthorized",
+  ANALYTICS = "/analytics",
 }

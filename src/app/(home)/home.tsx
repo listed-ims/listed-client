@@ -78,7 +78,12 @@ const Home = () => {
               Inventory Management
             </Text>
             <Row width="full" space="3">
-              <MainButtons flex="1" type="analytics" />
+              <MainButtons 
+                flex="1" type="analytics"
+                onPress={() => {
+                  router.push(Routes.ANALYTICS);
+                }}
+              />
               <MainButtons
                 flex="1"
                 type="products"

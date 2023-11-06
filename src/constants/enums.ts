@@ -24,3 +24,8 @@ export enum PermissionCategory {
   INCOMING = "INCOMING",
   TRANSACTIONS = "TRANSACTIONS",
 }
+
+export enum Frequency {
+  MONTHLY = "MONTHLY",
+  WEEKLY = "WEEKLY",
+}
