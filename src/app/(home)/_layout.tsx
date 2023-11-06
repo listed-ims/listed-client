@@ -3,6 +3,7 @@ import { Stack, Tabs } from 'expo-router';
 import { AccountIcon, HomeIcon, NotificationsIcon, StoresIcon } from '@listed-components/atoms';
 import { useTheme, Text } from 'native-base';
 import { toTitleCase } from '@listed-utils';
+import { Platform, Pressable } from 'react-native';
 
 
 const getTabBarLabel = (name: string, color: string) => {
@@ -30,14 +31,28 @@ const HomeTabsNav = () => {
             headerShown: false,
             tabBarStyle: {
               height: 56,
-              paddingBottom: 8,
-              paddingTop: 8,
             },
             tabBarActiveTintColor: colors.primary[700],
             tabBarInactiveTintColor: colors.black,
             tabBarLabel: ({ color }) => {
               return getTabBarLabel(route.name, color);
-            }
+            },
+            tabBarButton: (props) => (
+              <Pressable
+                {...props}
+                android_ripple={{ color: colors.muted[200], radius: 48 }}
+                style={({ pressed }) => [
+                  {
+                    paddingTop: 8,
+                    paddingBottom: 8,
+                    borderColor: colors.muted[200],
+                    opacity: Platform.OS === 'ios' ? (pressed ? 0.6 : 1) : 1
+                  },
+                  props.style,
+                ]}
+              />
+            ),
+
           };
         }
       }>

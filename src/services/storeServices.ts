@@ -1,6 +1,5 @@
 import { StoreRequest, StoreResponse } from "@listed-types";
 import { axiosInstance } from "./axios";
-import { StoreStatus } from "@listed-constants";
 
 export const getStoreService = async (storeId?: number) => {
   try {
@@ -12,14 +11,12 @@ export const getStoreService = async (storeId?: number) => {
 };
 
 export const getStoresService = async (
-  status?: StoreStatus,
   pageNumber?: number,
   pageSize?: number
 ) => {
   try {
     const response = await axiosInstance.get(`stores`, {
       params: {
-        status: status,
         pageNumber: pageNumber,
         pageSize: pageSize,
       },

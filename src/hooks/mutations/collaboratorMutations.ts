@@ -1,4 +1,5 @@
 import {
+  acceptOrDeclineMembership,
   addCollaboratorService,
   updateCollaboratorService,
 } from "@listed-services";
@@ -25,7 +26,7 @@ export const useUpdateUserMembershipMutation = (
   mutationOptions: MutationOptions<
     MembershipResponse,
     AxiosError<{ message: string }>,
-    [number, UserPermission[], MembershipStatus | undefined]
+    [number, UserPermission[] | undefined, MembershipStatus | undefined]
   >
 ) => {
   return useMutation(
@@ -35,7 +36,7 @@ export const useUpdateUserMembershipMutation = (
   );
 };
 
-export const useUpdateUserMembershipStatusMutation = (
+export const useAcceptOrDeclineMembershipMutation = (
   mutationOptions: MutationOptions<
     MembershipResponse,
     AxiosError<{ message: string }>,
@@ -43,7 +44,7 @@ export const useUpdateUserMembershipStatusMutation = (
   >
 ) => {
   return useMutation(
-    ([id, membershipStatus]) => updateCollaboratorService(id, membershipStatus),
+    ([id, membershipStatus]) => acceptOrDeclineMembership(id, membershipStatus),
     mutationOptions
   );
 };

@@ -2,7 +2,7 @@ export interface UserResponse {
   id: number;
   name: string;
   username: string;
-  currentStoreId: number;
+  currentStoreId?: number;
 }
 
 export interface LoginCredentials {
@@ -25,5 +25,5 @@ export interface UserRequest {
   name: string;
   username: string;
   password: string;
-  currentStoreId: number
+  currentStoreId: number;
 }

@@ -11,17 +11,21 @@ import {
 import { GET_MEMBERSHIP, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import {
+  useAcceptOrDeclineMembershipMutation,
   useGetStoreDetails,
-  useUpdateUserMembershipStatusMutation,
 } from "@listed-hooks";
-import { MembershipStatus } from "@listed-types";
+import { MembershipStatus, StoreResponse, UserResponse } from "@listed-types";
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Box, Center, Column, Heading, Row, Text } from "native-base";
 import { useState } from "react";
 
-const DashboardNoStore = () => {
-  const { userMembership, setUserMembership, userDetails } = useAuth();
+interface DashboardNoStoreProps {
+  storeDetails: StoreResponse;
+}
+
+const DashboardNoStore = ({ storeDetails }: DashboardNoStoreProps) => {
+  const { userMembership, setUserMembership, userDetails, setUserDetails } = useAuth();
   const [showDeclineInviteModal, setShowDeclineInviteModal] = useState(false);
   const queryClient = useQueryClient();
 
@@ -42,19 +46,15 @@ const DashboardNoStore = () => {
     mutate: updateMembership,
     isLoading: updateMembershipLoading,
     isError: updateMembershipError,
-  } = useUpdateUserMembershipStatusMutation({
+  } = useAcceptOrDeclineMembershipMutation({
     onSuccess: (data) => {
-      setUserMembership(data);
-      if (data.membershipStatus !== MembershipStatus.DECLINED) {
-        queryClient.invalidateQueries([GET_MEMBERSHIP]);
-        router.replace(Routes.HOME);
+      queryClient.invalidateQueries([GET_MEMBERSHIP, userDetails?.currentStoreId]);
+      if (data.membershipStatus === MembershipStatus.DECLINED) {
+        setUserDetails({ ...userDetails!, currentStoreId: undefined });
       }
+      setUserMembership(data);
     },
   });
-
-  const { data: storeDetails } = useGetStoreDetails(
-    userDetails?.currentStoreId
-  );
 
   return (
     <Column>

@@ -100,7 +100,7 @@ const Login = () => {
         <Box background="white" paddingTop="4" paddingBottom="6">
           <Button
             onPress={() => { handleLogin() }}
-            isLoading={loadingButton}
+            isLoading={userDetailsFetching || userMembershipFetching || loadingButton}
             isLoadingText="SIGNING IN"
           > SIGN IN </Button>
         </Box>

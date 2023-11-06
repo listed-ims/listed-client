@@ -40,9 +40,9 @@ const Home = () => {
   return (
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
-      {userDetails?.currentStoreId === null ||
+      {!userDetails?.currentStoreId ||
       userMembership?.membershipStatus === MembershipStatus.PENDING ? (
-        <DashboardNoStore />
+        <DashboardNoStore storeDetails={storeDetails!} />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
           <Column marginTop="6" space="2">
