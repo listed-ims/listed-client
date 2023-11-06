@@ -4,10 +4,10 @@ import React from "react";
 
 interface FrequencyFilterProps {
   filter: Frequency;
-  onFilter: (filter: Frequency) => void;
+  onFilterChange: (filter: Frequency) => void;
 }
 
-const FrequencyButton = ({ filter, onFilter }: FrequencyFilterProps) => {
+const FrequencyButton = ({ filter, onFilterChange }: FrequencyFilterProps) => {
   return (
     <HStack space="2">
       {Object.values(Frequency).map((frequency, index) => (
@@ -27,7 +27,7 @@ const FrequencyButton = ({ filter, onFilter }: FrequencyFilterProps) => {
             fontWeight: "semibold",
             color: `${filter === frequency ? "lightText" : "darkText"}`,
           }}
-          onPress={() => onFilter(frequency)}
+          onPress={() => onFilterChange(frequency)}
         >
           {frequency}
         </Button>

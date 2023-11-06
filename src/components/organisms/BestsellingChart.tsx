@@ -1,120 +1,105 @@
 import { ChartNavigation, FrequencyFilter } from "@listed-components/molecules";
 import { Frequency } from "@listed-constants";
-import { Column, HStack, Text, VStack, useTheme, View } from "native-base";
-import { useState } from "react";
-import { BarChart } from "react-native-gifted-charts";
+import { ProductSalesResponse } from "@listed-types";
+import { toCurrency } from "@listed-utils";
+import { Column, HStack, Text, VStack, useTheme, Box } from "native-base";
 
-const mock_data = [
-  { value: 50, label: "Premium Smartphone X" },
-  { value: 48, label: "Wireless Noise-Canceling Headphones" },
-  { value: 30, label: "Ultra HD 4K Smart TV" },
-  { value: 26, label: "Laptop Pro Series" },
-  { value: 25, label: "Coffee Maker Deluxe" },
-  { value: 19, label: "Designer Leather Handbag" },
-  { value: 11, label: "Professional DSLR Camera" },
-  { value: 10, label: "Gaming Console Elite" },
-  { value: 9, label: "Fitness Tracker Pro" },
-  { value: 7, label: "Smart Home Speaker System" },
-];
+interface BestsellingChartProps {
+  data: ProductSalesResponse[];
+  filter: Frequency;
+  dateRange: string;
+  onFilterChange: (filter: Frequency) => void;
+  onPageChange: (direction: "next" | "prev") => void;
+}
 
-const BestsellingChart = () => {
+const BestsellingChart = ({
+  data,
+  filter,
+  dateRange,
+  onFilterChange,
+  onPageChange,
+}: BestsellingChartProps) => {
   const { colors } = useTheme();
-  const [filter, setFilter] = useState(Frequency.WEEKLY);
-
-  const handleSetFilter = (filter: Frequency) => {
-    setFilter(filter);
-  };
-
-  const data = mock_data.map((product, index) => {
-    return {
-      ...product,
-      frontColor: index % 2 !== 0 ? colors.primary[300] : colors.primary[700],
-    };
-  });
 
   return (
-    <VStack space="1">
+    <VStack space="2">
       <Text fontSize="lg" fontWeight="semibold" color="text.500">
         Bestselling Products
       </Text>
-      <VStack space="2">
-        <VStack>
-          <Text fontSize="2xs" fontWeight="medium" color="text.500">
-            Top Product
-          </Text>
-          <HStack space="2" alignItems="center">
-            <Text fontSize="md" fontWeight="semibold" color="darkText">
-              Nature's Spring
-            </Text>
-            <Text fontSize="2xs" fontWeight="medium" color="text.500">
-              Revenue: Php 625.00
-            </Text>
-          </HStack>
-        </VStack>
-
-        <Column
-          borderRadius="lg"
-          bgColor="offWhite.200"
-          py="4"
-          alignItems="center"
-        >
-          <ChartNavigation
-            title="Weekly Top 10"
-            subtitle="Sept 4 - Today"
-            onPrev={() => {}}
-            onNext={() => {}}
-          />
-          <HStack w="full" justifyContent="center" alignItems="center">
-            <VStack alignItems="center">
-              <View pb="8" mt="-4">
-                <BarChart
-                  data={data}
-                  horizontal
-                  hideOrigin
-                  rulesColor={colors.primary[500]}
-                  yAxisColor={colors.muted[200]}
-                  xAxisColor={colors.muted[200]}
-                  xAxisLabelTextStyle={{
-                    color: colors.text[500],
-                    fontSize: 10,
-                    fontWeight: 500,
-                  }}
-                  yAxisTextStyle={{
-                    color: colors.text[500],
-                    fontSize: 10,
-                    fontWeight: 500,
-                  }}
-                  dashWidth={1}
-                  dashGap={8}
-                  noOfSections={6}
-                  stepValue={10}
-                  stepHeight={38}
-                  maxValue={10 * 6}
-                  barBorderTopRightRadius={4}
-                  barBorderTopLeftRadius={4}
-                  barWidth={12}
-                  barMarginBottom={4}
-                  spacing={12}
-                  initialSpacing={0}
-                  endSpacing={10}
-                  height={250}
-                  yAxisLabelWidth={32}
-                  labelWidth={32}
-                  barStyle={{
-                    marginLeft: 10,
-                  }}
-                />
-              </View>
-              <Text fontSize="2xs" fontWeight="medium" color="text.500">
-                REVENUE IN Php
+      <Column alignItems="center" space="2">
+        <ChartNavigation
+          title={`${filter} Top 10`}
+          subtitle={dateRange}
+          onPrev={() => onPageChange("prev")}
+          onNext={() => onPageChange("next")}
+        />
+        {data?.map((i, index) => (
+          <HStack
+            key={index}
+            space="4"
+            bgColor={index === 0 ? colors.primary[700] : colors.offWhite[400]}
+            width="full"
+            py={index === 0 ? "4" : "1"}
+            px="4"
+            borderRadius="lg"
+            alignItems="center"
+          >
+            <Box
+              bgColor={colors.white}
+              w={index === 0 ? "8" : "7"}
+              h={index === 0 ? "8" : "7"}
+              justifyContent="center"
+              alignItems="center"
+              borderRadius="full"
+            >
+              <Text
+                color={colors.primary[700]}
+                fontWeight="semibold"
+                fontSize="md"
+              >
+                {index + 1}
               </Text>
-            </VStack>
+            </Box>
+            <HStack justifyContent="space-between" flex="1">
+              <VStack>
+                <Text
+                  color={index === 0 ? colors.white : colors.primary[700]}
+                  fontWeight={index === 0 ? "semibold" : "medium"}
+                  fontSize={index === 0 ? "md" : "sm"}
+                >
+                  {i.product.name}
+                </Text>
+                <Text
+                  fontSize="xs"
+                  fontWeight="medium"
+                  color={index === 0 ? colors.white : colors.primary[700]}
+                >{`Unit Sold: ${
+                  i.totalUnitSold
+                } ${i.product.unit.toLowerCase()}`}</Text>
+              </VStack>
+              <VStack alignItems="flex-end">
+                <Text
+                  fontSize={index === 0 ? "sm" : "xs"}
+                  fontWeight="medium"
+                  color={index === 0 ? colors.white : colors.primary[700]}
+                >
+                  Profit
+                </Text>
+                <Text
+                  color={index === 0 ? colors.white : colors.primary[700]}
+                  fontWeight={index === 0 ? "semibold" : "medium"}
+                  fontSize={index === 0 ? "md" : "sm"}
+                >
+                  {toCurrency(i.totalSales)}
+                </Text>
+              </VStack>
+            </HStack>
           </HStack>
-          <HStack mt="2">
-            <FrequencyFilter filter={filter} onFilter={handleSetFilter} />
-          </HStack>
-        </Column>
-      </VStack>
+        ))}
+        <HStack>
+          <FrequencyFilter filter={filter} onFilterChange={onFilterChange} />
+        </HStack>
+      </Column>
     </VStack>
   );
 };

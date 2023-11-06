@@ -31,6 +31,9 @@ import {
   GET_PRODUCT,
   GET_ANALYTICS_SUMMARY,
   GET_NOTIFICATIONS,
+  GET_ANALYTICS_REVENUE,
+  GET_ANALYTICS_TOP_PRODUCTS,
+  GET_ANALYTICS_OUTGOING_VALUE,
 } from "@listed-constants";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { getProductService } from "@listed-services";
@@ -176,6 +179,11 @@ const NewOutgoing = () => {
       resetForm();
       queryClient.invalidateQueries({ queryKey: [GET_OUTGOING_TRANSACTIONS] });
       queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_SUMMARY] });
+      queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_REVENUE] });
+      queryClient.invalidateQueries({ queryKey: [GET_ANALYTICS_TOP_PRODUCTS] });
+      queryClient.invalidateQueries({
+        queryKey: [GET_ANALYTICS_OUTGOING_VALUE],
+      });
       queryClient.invalidateQueries({ queryKey: [GET_NOTIFICATIONS] });
       router.push(`${Routes.OUTGOING_RECEIPT}?transactionId=${data.id}`);
     },
