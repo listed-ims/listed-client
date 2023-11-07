@@ -55,7 +55,7 @@ const Home = () => {
               analyticsSummaryDetails={analyticsSummaryDetails!}
             />
           </Column>
-          
+
           <Row width="full" space="4" pt="8">
             <TransactionButton
               flexGrow="1"
@@ -72,14 +72,15 @@ const Home = () => {
               }}
             />
           </Row>
-          
+
           <Column space="2" pt="8">
             <Text fontWeight="medium" fontSize="sm">
               Inventory Management
             </Text>
             <Row width="full" space="3">
-              <MainButtons 
-                flex="1" type="analytics"
+              <MainButtons
+                flex="1"
+                type="analytics"
                 onPress={() => {
                   router.push(Routes.ANALYTICS);
                 }}
@@ -107,7 +108,7 @@ const Home = () => {
               />
             </Row>
           </Column>
-          
+
           <Column space="2" pt="8">
             <Text fontWeight="medium" fontSize="sm">
               Product Alerts

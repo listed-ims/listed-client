@@ -23,22 +23,18 @@ const SummaryCard = ({
       borderRadius="lg"
       background="primary.700"
     >
-        <Row width="full" alignItems="center" space="4">
-          <StoreNameIcon />
-          {isFetching ? (
-            <Skeleton rounded="lg" h="6" width="60%" startColor="primary.500" />
-          ) : (
-            <Text color="lightText" fontSize="lg" fontWeight="bold">
-              {storeDetails?.name}
-            </Text>
-          )}
-        </Row>
+      <Row width="full" alignItems="center" space="4">
+        <StoreNameIcon />
+        {isFetching ? (
+          <Skeleton rounded="lg" h="6" width="60%" startColor="primary.500" />
+        ) : (
+          <Text color="lightText" fontSize="lg" fontWeight="bold">
+            {storeDetails?.name}
+          </Text>
+        )}
+      </Row>
       <Divider my="1" />
-      <Row
-        width="full"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      <Row width="full" justifyContent="space-between" alignItems="center">
         <Column space="2" alignItems="flex-start">
           <Box bgColor="offWhite.700" p="1" borderRadius="4">
             <Text color="primary.700" fontSize="xs" fontWeight="medium">
