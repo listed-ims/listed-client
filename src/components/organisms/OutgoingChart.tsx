@@ -1,31 +1,36 @@
 import { AlertOutlineIcon } from "@listed-components/atoms";
 import { ChartNavigation, FrequencyFilter } from "@listed-components/molecules";
 import { Frequency } from "@listed-constants";
+import { convertToNextNearesttHundred, toCurrency } from "@listed-utils";
 import { HStack, Text, VStack, useTheme, View } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BarChart } from "react-native-gifted-charts";
+import { itemType as BarItemType } from "react-native-gifted-charts/src/BarChart/types";
 
-const mock_data = [
-  { value: 50, label: "Defects" },
-  { value: 30, label: "Expired" },
-  { value: 45, label: "Lost" },
-  { value: 26, label: "Consumed" },
-];
+interface OutgingChartProps {
+  data: BarItemType[];
+  filter: Frequency;
+  dateRange: string;
+  onFilterChange: (filter: Frequency) => void;
+  onPageChange: (direction: "next" | "prev") => void;
+}
 
-const OutgoingChart = () => {
+const OutgoingChart = ({
+  data,
+  filter,
+  dateRange,
+  onFilterChange,
+  onPageChange,
+}: OutgingChartProps) => {
   const { colors } = useTheme();
-  const [filter, setFilter] = useState(Frequency.WEEKLY);
+  const [maxValue, setMaxValue] = useState(100);
 
-  const handleSetFilter = (filter: Frequency) => {
-    setFilter(filter);
-  };
-
-  const data = mock_data.map((product, index) => {
-    return {
-      ...product,
-      frontColor: index % 2 !== 0 ? colors.primary[300] : colors.primary[700],
-    };
-  });
+  useEffect(() => {
+    data?.map((i) => {
+      const convertedValue = convertToNextNearesttHundred(i.value);
+      convertedValue > maxValue ? setMaxValue(convertedValue) : null;
+    });
+  }, [data]);
 
   return (
     <VStack space="1">
@@ -36,10 +41,16 @@ const OutgoingChart = () => {
         <HStack alignItems="center" space="2">
           <VStack>
             <Text fontSize="2xs" fontWeight="medium" color="text.500">
-              Top Product Value
+              Total Products Value
             </Text>
             <Text fontSize="md" fontWeight="semibold" color="darkText">
-              Php 1000.00
+              {toCurrency(
+                data
+                  ? data.reduce((accumulator, i) => {
+                      return accumulator + i.value;
+                    }, 0)
+                  : 0
+              )}
             </Text>
           </VStack>
           <HStack flex="1" alignItems="center" space="1">
@@ -58,16 +69,15 @@ const OutgoingChart = () => {
           alignItems="center"
         >
           <ChartNavigation
-            title="Monthly Ougoing"
-            subtitle="Sept 4 - Today"
-            onPrev={() => {}}
-            onNext={() => {}}
+            title={`${filter} Outgoing`}
+            subtitle={dateRange}
+            onPrev={() => onPageChange("prev")}
+            onNext={() => onPageChange("next")}
           />
           <HStack w="full" justifyContent="center" alignItems="center">
             <VStack alignItems="center">
               <View ml="2">
                 <BarChart
-                  width={window.innerWidth}
                   data={data}
                   hideOrigin
                   rulesColor={colors.primary[500]}
@@ -85,10 +95,10 @@ const OutgoingChart = () => {
                   }}
                   dashWidth={1}
                   dashGap={8}
-                  noOfSections={6}
-                  stepValue={10}
+                  noOfSections={5}
+                  stepValue={maxValue / 5}
                   stepHeight={23}
-                  maxValue={6 * 10}
+                  maxValue={maxValue}
                   barBorderTopRightRadius={4}
                   barBorderTopLeftRadius={4}
                   barWidth={24}
@@ -102,7 +112,7 @@ const OutgoingChart = () => {
             </VStack>
           </HStack>
           <HStack mt="2">
-            <FrequencyFilter filter={filter} onFilter={handleSetFilter} />
+            <FrequencyFilter filter={filter} onFilterChange={onFilterChange} />
           </HStack>
         </VStack>
       </VStack>

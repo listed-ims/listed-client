@@ -1,31 +1,46 @@
-import { TrendingDownIcon } from "@listed-components/atoms";
+import { TrendingDownIcon, TrendingUpIcon } from "@listed-components/atoms";
 import { ChartNavigation, FrequencyFilter } from "@listed-components/molecules";
 import { Frequency } from "@listed-constants";
+import { convertToNextNearesttHundred, toCurrency } from "@listed-utils";
 import { Box, HStack, Text, VStack, useTheme, View } from "native-base";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LineChart } from "react-native-gifted-charts";
+import { itemType as LineItemType } from "react-native-gifted-charts/src/LineChart/types";
 
-const mock_data = [
-  { value: 15, label: "24-30" },
-  { value: 30, label: "1-7" },
-  { value: 23, label: "8-14" },
-  { value: 40, label: "15-21" },
-  { value: 16, label: "22-28" },
-  { value: 40, label: "29-4" },
-];
+interface RevenueChartProps {
+  data: LineItemType[];
+  filter: Frequency;
+  dateRange: string;
+  onFilterChange: (filter: Frequency) => void;
+  onPageChange: (direction: "next" | "prev") => void;
+}
 
-const RevenueChart = () => {
+const RevenueChart = ({
+  data,
+  filter,
+  dateRange,
+  onFilterChange,
+  onPageChange,
+}: RevenueChartProps) => {
   const { colors } = useTheme();
-  const [filter, setFilter] = useState(Frequency.WEEKLY);
+  const [maxValue, setMaxValue] = useState(100);
 
-  const handleSetFilter = (filter: Frequency) => {
-    setFilter(filter);
-  };
+  useEffect(() => {
+    data?.map((i) => {
+      const convertedValue = convertToNextNearesttHundred(i.value);
+      convertedValue > maxValue ? setMaxValue(convertedValue) : null;
+    });
+  }, [data]);
+
+  const increased =
+    data &&
+    data.length > 1 &&
+    data[data.length - 1].value > data[data.length - 2].value;
 
   return (
     <VStack space="1">
       <Text fontSize="lg" fontWeight="semibold" color="text.500">
-        Revenue
+        Gross Profit
       </Text>
       <VStack space="2">
         <HStack alignItems="center" justifyContent="space-between">
@@ -35,24 +50,35 @@ const RevenueChart = () => {
                 This week
               </Text>
               <Text fontSize="md" fontWeight="semibold" color="darkText">
-                Php 1000.00
+                {toCurrency(data ? data[data.length - 1].value : 0)}
               </Text>
             </VStack>
             <Box
               borderRadius="md"
-              bgColor="error.50"
+              bgColor={increased ? "success.50" : "error.50"}
               p="1"
               justifyContent="center"
               alignItems="center"
               h="auto"
               w="auto"
             >
-              <TrendingDownIcon />
+              {increased ? <TrendingUpIcon /> : <TrendingDownIcon />}
             </Box>
           </HStack>
           <Text fontSize="xs" fontWeight="medium" color="text.500">
-            <Text color="error.500">- Php 12 </Text>
-            from last week
+            <Text color={increased ? "primary.700" : "error.500"}>
+              {`${increased ? "+" : "-"} ${toCurrency(
+                data
+                  ? data.length > 1
+                    ? Math.abs(
+                        data[data.length - 1].value -
+                          data[data.length - 2].value
+                      )
+                    : data[0].value
+                  : 0
+              )}`}{" "}
+            </Text>
+            {`from last ${filter === Frequency.MONTHLY ? "month" : "week"}`}
           </Text>
         </HStack>
         <VStack
@@ -64,46 +90,44 @@ const RevenueChart = () => {
           justifyContent="center"
         >
           <ChartNavigation
-            title="Weekly Top 10"
-            subtitle="Sept 4 - Today"
-            onPrev={() => {}}
-            onNext={() => {}}
+            title={`${filter} Profit`}
+            subtitle={dateRange}
+            onPrev={() => onPageChange("prev")}
+            onNext={() => onPageChange("next")}
           />
-          <HStack w="full" justifyContent="center" alignItems="center">
-            <VStack alignItems="center">
-              <View>
-                <LineChart
-                  data={mock_data}
-                  hideOrigin
-                  curved
-                  rulesColor={colors.primary[500]}
-                  yAxisColor={colors.primary[700]}
-                  xAxisColor={colors.primary[700]}
-                  xAxisLabelTextStyle={{
-                    color: colors.text[500],
-                    fontSize: 10,
-                    fontWeight: 500,
-                  }}
-                  yAxisTextStyle={{
-                    color: colors.text[500],
-                    fontSize: 10,
-                    fontWeight: 500,
-                  }}
-                  dashWidth={1}
-                  dashGap={8}
-                  noOfSections={6}
-                  stepValue={10}
-                  stepHeight={23}
-                  maxValue={6 * 10}
-                />
-              </View>
-              <Text fontSize="2xs" fontWeight="medium" color="text.500" mt="1">
-                DATE RANGE
-              </Text>
-            </VStack>
-          </HStack>
+          <VStack alignItems="center">
+            <View>
+              <LineChart
+                data={data}
+                hideOrigin
+                rulesColor={colors.primary[500]}
+                yAxisColor={colors.primary[700]}
+                xAxisColor={colors.primary[700]}
+                xAxisLabelTextStyle={{
+                  color: colors.text[500],
+                  fontSize: 10,
+                  fontWeight: 500,
+                }}
+                yAxisTextStyle={{
+                  color: colors.text[500],
+                  fontSize: 10,
+                  fontWeight: 500,
+                }}
+                dashWidth={1}
+                dashGap={8}
+                noOfSections={5}
+                stepValue={maxValue / 5}
+                stepHeight={23}
+                maxValue={maxValue}
+                overflowBottom={100}
+              />
+            </View>
+            <Text fontSize="2xs" fontWeight="medium" color="text.500" mt="1">
+              DATE RANGE
+            </Text>
+          </VStack>
           <HStack mt="2">
-            <FrequencyFilter filter={filter} onFilter={handleSetFilter} />
+            <FrequencyFilter filter={filter} onFilterChange={onFilterChange} />
           </HStack>
         </VStack>
       </VStack>
