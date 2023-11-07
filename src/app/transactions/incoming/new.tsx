@@ -273,14 +273,14 @@ const NewIncoming = () => {
           </FormControl>
 
           <FormControl
-            label="Purchase Price / Item"
+            label="Purchase Price / Unit"
             errorMessage={errors["purchase price"]}
             isInvalid={!!errors["purchase price"]}>
             <TextField
               onChangeText={(value) => handleInputChange(value, "purchase price")}
               value={formData["purchase price"]}
               keyboardType="numeric"
-              placeholder="Enter purchase price per item" />
+              placeholder="Enter purchase price per unit" />
           </FormControl>
           <HStack>
             <FormControl
