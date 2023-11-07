@@ -68,13 +68,10 @@ const RevenueChart = ({
           <Text fontSize="xs" fontWeight="medium" color="text.500">
             <Text color={increased ? "primary.700" : "error.500"}>
               {`${increased ? "+" : "-"} ${toCurrency(
-                data
-                  ? data.length > 1
-                    ? Math.abs(
-                        data[data.length - 1].value -
-                          data[data.length - 2].value
-                      )
-                    : data[0].value
+                data && data.length > 1
+                  ? Math.abs(
+                      data[data.length - 1].value - data[data.length - 2].value
+                    )
                   : 0
               )}`}{" "}
             </Text>
