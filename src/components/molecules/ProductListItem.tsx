@@ -26,7 +26,7 @@ const ProductListItem = ({ product, showCheckbox, isChecked, ...props }: Product
           (isChecked ? <CheckedIcon /> : <UncheckedIcon />)
         }
         <HStack flex="1" alignItems="flex-end" justifyContent="space-between">
-          <VStack>
+          <VStack flex= "1">
             <Text fontSize="sm" fontWeight="medium">
               {name}
             </Text>

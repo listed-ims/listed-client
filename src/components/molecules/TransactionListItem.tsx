@@ -12,12 +12,12 @@ const TransactionListItem = ( {title,name,date,time, ...props}: TransactionListI
   
   return (
     <Pressable {...props} _pressed={{ background: "muted.200" }}>
-    <Row justifyContent="space-between" alignItems="flex-start" padding="2">
+    <Row justifyContent="space-between" alignItems="center" padding="2">
       <Column>
-      <Text fontSize="sm" fontWeight="medium">{toTitleCase(String(title))}</Text>
+      <Text fontSize="sm" fontWeight="medium">{title}</Text>
       <Text fontSize="xs" fontWeight="medium" color="muted.600">by: {name}</Text>
       </Column>
-      <Column>
+      <Column alignItems= "flex-end">
       <Text fontSize="xs" fontWeight="medium" color="muted.600" lineHeight="15px">{date}</Text>
       <Text fontSize="xs" fontWeight="medium" color="muted.600" lineHeight="15px">{time}</Text>
       </Column>
