@@ -25,6 +25,10 @@ const SummaryCard = ({
     >
       <Row width="full" alignItems="center" space="4">
         <StoreNameIcon />
+        <Column>
+        <Text color="lightText" fontSize="sm" fontWeight="medium">
+          Store Name
+        </Text>
         {isFetching ? (
           <Skeleton rounded="lg" h="6" width="60%" startColor="primary.500" />
         ) : (
@@ -32,6 +36,7 @@ const SummaryCard = ({
             {storeDetails?.name}
           </Text>
         )}
+        </Column>
       </Row>
       <Divider my="1" />
       <Row width="full" justifyContent="space-between" alignItems="center">
