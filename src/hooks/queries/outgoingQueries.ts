@@ -53,6 +53,8 @@ export const useGetOutgoingTransactions = (
       enabled: !!storeId,
       getNextPageParam: (lastPage, pages) =>
         lastPage.length < pageSize! ? undefined : pages.length + 1,
+      getPreviousPageParam: (firstPage, pages) =>
+        pages.length === 1 ? undefined : pages.length - 1,
     }
   );
 };

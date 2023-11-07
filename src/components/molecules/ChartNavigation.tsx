@@ -16,19 +16,24 @@ const ChartNavigation = ({
 }: ChartNavigationProps) => {
   return (
     <HStack>
-      <IconButton variant="unstyled">
-        <CaretBackIcon onPress={onPrev} />
+      <IconButton variant="unstyled" onPress={onPrev}>
+        <CaretBackIcon />
       </IconButton>
       <VStack alignItems="center">
-        <Text fontSize="sm" fontWeight="medium" color="darkText">
+        <Text
+          fontSize="sm"
+          fontWeight="medium"
+          color="darkText"
+          textTransform="capitalize"
+        >
           {title}
         </Text>
         <Text fontSize="xs" fontWeight="medium" color="text.500">
           {subtitle}
         </Text>
       </VStack>
-      <IconButton variant="unstyled">
-        <CaretForwardIcon onPress={onNext} />
+      <IconButton variant="unstyled" onPress={onNext}>
+        <CaretForwardIcon />
       </IconButton>
     </HStack>
   );
