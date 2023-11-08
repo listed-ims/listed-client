@@ -55,8 +55,8 @@ const Home = () => {
               analyticsSummaryDetails={analyticsSummaryDetails!}
             />
           </Column>
-          <View marginY={4} />
-          <Row width="full" space="4">
+
+          <Row width="full" space="4" pt="8">
             <TransactionButton
               flexGrow="1"
               type="incoming"
@@ -72,14 +72,15 @@ const Home = () => {
               }}
             />
           </Row>
-          <View marginY={3} />
-          <Column space="2">
+
+          <Column space="2" pt="8">
             <Text fontWeight="medium" fontSize="sm">
               Inventory Management
             </Text>
             <Row width="full" space="3">
-              <MainButtons 
-                flex="1" type="analytics"
+              <MainButtons
+                flex="1"
+                type="analytics"
                 onPress={() => {
                   router.push(Routes.ANALYTICS);
                 }}
@@ -107,8 +108,8 @@ const Home = () => {
               />
             </Row>
           </Column>
-          <View marginY={3} />
-          <Column space="2">
+
+          <Column space="2" pt="8">
             <Text fontWeight="medium" fontSize="sm">
               Product Alerts
             </Text>
