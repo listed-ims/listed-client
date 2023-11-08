@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SplashScreen, Stack } from 'expo-router'
 import { NativeBaseProvider } from 'native-base'
 import { useFonts } from 'expo-font'
 import { theme } from '@listed-styles';
 import { AuthProvider } from '@listed-contexts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import LottieView from 'lottie-react-native';
 
-
-SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
   const [fontsLoaded] = useFonts({
@@ -22,14 +21,25 @@ const RootLayout = () => {
     "Inter-Black": require("../assets/fonts/Inter-Black.otf"),
   });
 
+  const [isReady, setIsReady] = useState(false);
+  const [animationFinished, setAnimationFinished] = useState(false);
+
   useEffect(() => {
     if (fontsLoaded) {
       SplashScreen.hideAsync();
+      setIsReady(true);
     }
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) {
-    return null;
+  if (!isReady || !animationFinished) {
+    return <LottieView
+      source={require('./../assets/lottie_splash.json')}
+      autoPlay
+      speed={.60}
+      loop={false}
+      resizeMode='contain'
+      onAnimationFinish={() => setAnimationFinished(true)}
+    />
   }
 
   const queryClient = new QueryClient();
