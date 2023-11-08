@@ -6,6 +6,7 @@ import { theme } from '@listed-styles';
 import { AuthProvider } from '@listed-contexts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import LottieView from 'lottie-react-native';
+import 'expo-dev-client';
 
 
 const RootLayout = () => {
