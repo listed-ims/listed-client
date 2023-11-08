@@ -1,5 +1,9 @@
 import { AccountIcon, Button } from "@listed-components/atoms";
-import { LogoutModal, PermissionDetails, ScreenContainer } from "@listed-components/organisms";
+import {
+  LogoutModal,
+  PermissionDetails,
+  ScreenContainer,
+} from "@listed-components/organisms";
 import { Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
 import { router } from "expo-router";
@@ -34,21 +38,20 @@ const Account = () => {
   return (
     <ScreenContainer>
       <ScrollView showsVerticalScrollIndicator={false}>
-      <Column space="1" alignItems="center" marginY="8">
-        <Center
-          width="12"
-          height="12"
-          backgroundColor="primary.700"
-          borderRadius="full"
-        >
-          <AccountIcon color={colors.white} selected={true} />
-        </Center>
-        <Box>
-          <Heading fontSize="md">{userDetails?.name}</Heading>
-        </Box>
-      </Column>
+        <Column space="1" alignItems="center" marginY="8">
+          <Center
+            width="12"
+            height="12"
+            backgroundColor="primary.700"
+            borderRadius="full"
+          >
+            <AccountIcon color={colors.white} selected={true} />
+          </Center>
+          <Box>
+            <Heading fontSize="md">{userDetails?.name}</Heading>
+          </Box>
+        </Column>
 
-      
         <Text fontWeight="medium" color="text.500" marginBottom="1">
           ACCOUNT DETAILS
         </Text>
@@ -82,23 +85,25 @@ const Account = () => {
             </Row>
           </Column>
         </Column>
-        <PermissionDetails permissions={userMembership?.permissions!} />
-      
+        {userMembership?.permissions && userDetails?.currentStoreId !== null && (
+          <PermissionDetails permissions={userMembership?.permissions!} />
+        )}
 
-      <Column marginY="6">
-      <Button variant="warnSubtle" onPress={handleLogout}>
-        LOGOUT
-      </Button>
-      </Column>
-      <LogoutModal
-        isOpen={showLogoutModal}
-        onCancel={() => setShowLogoutModal(false)}
-        onConfirm={handleConfirmLogout}
-        modalContent={{
-          header: "Confirm Logout",
-          body: "You are about to logout of our system. Do you wish to proceed?",
-        }}
-      />
+        <Column marginY="6">
+          <Button variant="warnSubtle" onPress={handleLogout}>
+            LOGOUT
+          </Button>
+        </Column>
+
+        <LogoutModal
+          isOpen={showLogoutModal}
+          onCancel={() => setShowLogoutModal(false)}
+          onConfirm={handleConfirmLogout}
+          modalContent={{
+            header: "Confirm Logout",
+            body: "You are about to logout of our system. Do you wish to proceed?",
+          }}
+        />
       </ScrollView>
     </ScreenContainer>
   );
