@@ -81,7 +81,7 @@ const ProductDetails = () => {
             <ScrollView showsVerticalScrollIndicator={false}>
               <Column space="1" alignItems="center" marginBottom="2">
                 <CubeIcon />
-                <Heading size="md">{productDetails?.name} </Heading>
+                <Heading textAlign="center" size="md">{productDetails?.name} </Heading>
                 <Text color="darkText" fontSize="xs" fontWeight="md" >{productDetails?.variant} </Text>
               </Column>
 
