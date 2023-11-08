@@ -77,6 +77,7 @@ const Login = () => {
       login(token);
     },
     onError: (error) => {
+      setLoadingButton(false);
       if (error.code === "ERR_BAD_REQUEST") {
         setModalContent({
           header: "We couldn't log you in.",
