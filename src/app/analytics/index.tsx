@@ -6,18 +6,219 @@ import {
 } from "@listed-components/organisms";
 import { Frequency } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
-import {
-  useGetAnalyticsOutgoingValue,
-  useGetAnalyticsRevenue,
-  useGetAnalyticsTopProducts,
-} from "@listed-hooks";
 import { stackHeaderStyles } from "@listed-styles";
 import { Stack } from "expo-router";
 import { ScrollView, VStack, useTheme, Text } from "native-base";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { itemType as LineItemType } from "react-native-gifted-charts/src/LineChart/types";
 import { itemType as BarItemType } from "react-native-gifted-charts/src/BarChart/types";
-import { dateToDay, toTitleCase, truncate } from "@listed-utils";
+import { dateToDay, toTitleCase } from "@listed-utils";
+import { ProductSalesResponse, TopProductResponse } from "@listed-types";
+
+const revenues = [
+  {
+    startDate: "2023-11-05",
+    endDate: "2023-11-11",
+    revenue: 3500,
+    totalPages: 2
+  },
+  {
+    startDate: "2023-10-29",
+    endDate: "2023-11-04",
+    revenue: 5500,
+    totalPages: 2
+  },
+  {
+    startDate: "2023-10-22",
+    endDate: "2023-10-28",
+    revenue: 1500,
+    totalPages: 2
+  },
+  {
+    startDate: "2023-10-15",
+    endDate: "2023-10-21",
+    revenue: 4000,
+    totalPages: 2
+  },
+  {
+    startDate: "2023-10-08",
+    endDate: "2023-10-14",
+    revenue: 2500,
+    totalPages: 2
+  },
+  {
+    startDate: "2023-10-01",
+    endDate: "2023-10-07",
+    revenue: 3000,
+    totalPages: 2
+  } 
+]
+
+const topProducts = [
+  {
+    startDate: new Date("2023-11-05"),
+    endDate: new Date("2023-11-11"),
+    products: [
+      {
+        product: {
+          id: 4,
+          name: "Dr. Pepper",
+          barcode: "",
+          variant: "355 ml",
+          salePrice: 25,
+          threshold: 8,
+          unit: "PCS"
+        },
+        totalSales: 15,
+        totalUnitSold: 3
+      },
+      {
+        product: {
+          id: 14,
+          name: "Minute Maid Apple Juice",
+          barcode: "",
+          variant: "450 ml",
+          salePrice: 28,
+          threshold: 10,
+          unit: "PCS"
+        },
+        totalSales: 12,
+        totalUnitSold: 4
+      },
+      {
+        product: {
+          id: 10,
+          name: "Tropicana Orange Juice",
+          barcode: "",
+          variant: "1 liter",
+          salePrice: 35,
+          threshold: 5,
+          unit: "PCS"
+        },
+        totalSales: 10,
+        totalUnitSold: 2
+      },
+      {
+        product: {
+          id: 13,
+          name: "Lipton Iced Tea",
+          barcode: "",
+          variant: "500 ml",
+          salePrice: 20,
+          threshold: 15,
+          unit: "PCS"
+        },
+        totalSales: 10,
+        totalUnitSold: 5
+      },
+      {
+        product: {
+          id: 11,
+          name: "Aquafina Water",
+          barcode: "",
+          variant: "1 liter",
+          salePrice: 45,
+          threshold: 10,
+          unit: "PCS"
+        },
+        totalSales: 10,
+        totalUnitSold: 1
+      },
+      {
+        product: {
+          id: 2,
+          name: "Pepsi",
+          barcode: "",
+          variant: "500 ml",
+          salePrice: 23,
+          threshold: 15,
+          unit: "PCS"
+        },
+        totalSales: 9,
+        totalUnitSold: 3
+      },
+      {
+        product: {
+          id: 16,
+          name: "Mountain Dew",
+          barcode: "",
+          variant: "330 ml",
+          salePrice: 30,
+          threshold: 12,
+          unit: "PCS"
+        },
+        totalSales: 5,
+        totalUnitSold: 1
+      },
+      {
+        product: {
+          id: 6,
+          name: "Fanta",
+          barcode: "",
+          variant: "500 ml",
+          salePrice: 20,
+          threshold: 15,
+          unit: "PCS"
+        },
+        totalSales: 5,
+        totalUnitSold: 1
+      },
+      {
+        product: {
+          id: 15,
+          name: "7UP",
+          barcode: "",
+          variant: "330 ml",
+          salePrice: 20,
+          threshold: 5,
+          unit: "PCS"
+        },
+        totalSales: 5,
+        totalUnitSold: 1
+      },
+      {
+        product: {
+          id: 3,
+          name: "Sprite",
+          barcode: "",
+          variant: "330 ml",
+          salePrice: 18,
+          threshold: 20,
+          unit: "PCS"
+        },
+        totalSales: 3,
+        totalUnitSold: 1
+      }
+    ] as ProductSalesResponse[],
+    totalPages: 8
+  }
+] as TopProductResponse[];
+
+const outgoingValue = [
+  {
+    startDate: "2023-11-05",
+    endDate: "2023-11-11",
+    categories: [
+      {
+        category: "CONSUMED",
+        value: 15
+      },
+      {
+        category: "DEFECTS",
+        value: 10
+      },
+      {
+        category: "EXPIRED",
+        value: 25
+      },
+      {
+        category: "LOST",
+        value: 5
+      }
+    ],
+    totalPages: 8
+  }
+];
 
 const Analytics = () => {
   const { userDetails } = useAuth();
@@ -30,39 +231,6 @@ const Analytics = () => {
   const [revenuePage, setRevenuePage] = useState(1);
   const [topProductsPage, setTopProductsPage] = useState(1);
   const [outgoingValuePage, setOutgoingValuePage] = useState(1);
-
-  const {
-    data: revenues,
-    isError: revenuesError,
-    isFetching: revenuesFetching,
-  } = useGetAnalyticsRevenue(
-    userDetails?.currentStoreId!,
-    revenueFilter,
-    revenuePage,
-    6
-  );
-
-  const {
-    data: topProducts,
-    isError: topProductsError,
-    isFetching: topProductsFetching,
-  } = useGetAnalyticsTopProducts(
-    userDetails?.currentStoreId!,
-    topProductsFilter,
-    topProductsPage,
-    1
-  );
-
-  const {
-    data: outgoingValue,
-    isError: outgoingValuesError,
-    isFetching: outgoingValuesFetching,
-  } = useGetAnalyticsOutgoingValue(
-    userDetails?.currentStoreId!,
-    outgoingValueFilter,
-    outgoingValuePage,
-    1
-  );
 
   const revenueChartData = revenues
     ?.map((revenue) => {
@@ -137,7 +305,7 @@ const Analytics = () => {
   return (
     <ScreenContainer withHeader>
       <Stack.Screen options={stackHeaderStyles("Analytics")} />
-      {revenuesFetching && topProductsFetching && outgoingChartData ? (
+      {false ? (
         <Text>Loading...</Text>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
