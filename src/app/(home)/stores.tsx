@@ -20,34 +20,41 @@ const Stores = () => {
     data: storeList,
     isError: storeListError,
     isFetching: storeListFetching,
-  } = useGetStoreList(
-    1,
-    100
+    hasNextPage: storeListHasNextPage,
+    fetchNextPage: storeListFetchNextPage,
+  } = useGetStoreList(50);
+
+  const data = storeList?.pages
+    .flatMap((page) => page)
+    .sort((a, b) => {
+      if (a.id === userDetails?.currentStoreId) return -1;
+      if (b.id === userDetails?.currentStoreId) return 1;
+      return 0;
+    });
+
+  const renderItem = useCallback(
+    ({ item }: { item: StoreResponse }) => (
+      <StoreListItem
+        storeId={item.id}
+        userId={userDetails?.id}
+        name={item.name}
+        current={
+          userDetails?.currentStoreId === item.id &&
+          userMembership?.membershipStatus !== MembershipStatus.PENDING
+        }
+        onPress={() => {
+          router.push(`${Routes.STORES}/${item.id}}`);
+        }}
+      />
+    ),
+    [userDetails]
   );
 
-  const data = storeList?.sort((a, b) => {
-    if (a.id === userDetails?.currentStoreId) return -1;
-    if (b.id === userDetails?.currentStoreId) return 1;
-    return 0;
-  });
-
-  const renderItem = useCallback((
-    { item }: { item: StoreResponse }
-  ) => (
-    <StoreListItem
-      storeId={item.id}
-      userId={userDetails?.id}
-      name={item.name}
-      current={userDetails?.currentStoreId === item.id && userMembership?.membershipStatus !== MembershipStatus.PENDING}
-      onPress={() => {
-        router.push(`${Routes.STORES}/${item.id}}`);
-      }}
-    />
-  ), [])
-
-  const emptyList = storeListFetching
-    ? <StoreListLoadingSkeleton />
-    : <NoStoreFound />
+  const emptyList = storeListFetching ? (
+    <StoreListLoadingSkeleton />
+  ) : (
+    <NoStoreFound />
+  );
 
   return (
     <ScreenContainer>
@@ -57,7 +64,7 @@ const Stores = () => {
           <Text fontSize="xl" fontWeight="semibold">
             Stores
           </Text>
-          {storeList && storeList.length > 0 ? (
+          {storeList && storeList.pages[0].length > 0 ? (
             <Button
               size="sm"
               px="4"
@@ -77,9 +84,13 @@ const Stores = () => {
             ListEmptyComponent={emptyList}
             data={data}
             renderItem={renderItem}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => {
+              if (!storeListFetching && storeListHasNextPage)
+                storeListFetchNextPage();
+            }}
           />
         </Box>
-
       </Column>
     </ScreenContainer>
   );
