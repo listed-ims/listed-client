@@ -23,14 +23,15 @@ const SelectProduct = () => {
     data: productList,
     isError: productListError,
     isFetching: productListFetching,
+    hasNextPage: productListHasNextPage,
+    fetchNextPage: productListFetchNextPage,
   } = useGetProductList(
     userDetails?.currentStoreId as number,
     undefined,
     undefined,
     ProductFilter.WITH_STOCK,
     undefined,
-    1,
-    100
+    50,
   );
 
   const [showCheckboxes, setShowCheckboxes] = useState(false);
@@ -50,10 +51,7 @@ const SelectProduct = () => {
         1
       );
     } else {
-      queryClient.setQueryData(
-        [GET_PRODUCT, product.id],
-        product
-      );
+      queryClient.setQueryData([GET_PRODUCT, product.id], product);
       updatedSelectedProducts.push(product.id);
     }
     setSelectedProducts(updatedSelectedProducts);
@@ -78,11 +76,19 @@ const SelectProduct = () => {
         ids: ids ? ids : "",
       },
     });
-  }
+  };
 
-  const emptyList = productListFetching
-    ? <ProductListLoadingSkeleton />
-    : <NoProductsFound/>
+  const data = productList?.pages
+    .flatMap((page) => page)
+    .filter(
+      (product) => !ids?.toString().split(",").includes(product.id.toString())
+    );
+
+  const emptyList = productListFetching ? (
+    <ProductListLoadingSkeleton />
+  ) : (
+    <NoProductsFound />
+  );
 
   return (
     <ScreenContainer withHeader>
@@ -101,7 +107,7 @@ const SelectProduct = () => {
             <Text fontSize="lg" fontWeight="semibold" py={4}>
               Select Product
             </Text>
-            {productList && productList.length > 0 ? (
+            {productList && productList.pages[0].length > 0 ? (
               <Text fontSize="sm" fontWeight="medium" pb={4}>
                 Selected Products: {selectedProducts.length}
               </Text>
@@ -109,10 +115,7 @@ const SelectProduct = () => {
           </Box>
         }
         ItemSeparatorComponent={() => <Divider />}
-        data={productList?.filter(
-          (product) =>
-            !ids?.toString().split(",").includes(product.id.toString())
-        )}
+        data={data}
         renderItem={({ item }) => (
           <ProductListItem
             product={item}
@@ -136,7 +139,12 @@ const SelectProduct = () => {
             }}
           />
         )}
-        marginBottom={4}
+        marginBottom="6"
+        onEndReachedThreshold={0.5}
+        onEndReached={() => {
+          if (!productListFetching && productListHasNextPage)
+            productListFetchNextPage();
+        }}
       />
       {showCheckboxes && (
         <Box background="white" pb="6">

@@ -24,7 +24,7 @@ import {
 } from "@listed-components/atoms";
 import { GET_PRODUCT, ProductFilter, Routes } from "@listed-constants";
 import { useAuth } from "@listed-contexts";
-import { useGetProductList, useGetStoreDetails } from "src/hooks/queries";
+import { useGetProductList } from "src/hooks/queries";
 import { ProductResponse } from "@listed-types";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -39,6 +39,8 @@ const Products = () => {
     data: productList,
     isError: productListError,
     isFetching: productListFetching,
+    hasNextPage: productListHasNextPage,
+    fetchNextPage: productListFetchNextPage,
   } = useGetProductList(
     userDetails?.currentStoreId as number,
     undefined,
@@ -46,11 +48,10 @@ const Products = () => {
     filter === "all"
       ? undefined
       : filter === "low stock"
-        ? ProductFilter.LOW_STOCK
-        : ProductFilter.NO_STOCK,
+      ? ProductFilter.LOW_STOCK
+      : ProductFilter.NO_STOCK,
     undefined,
-    1,
-    100
+    50,
   );
 
   const handleSelectItem = (item: ProductResponse) => {
@@ -59,24 +60,26 @@ const Products = () => {
   };
 
   useEffect(() => {
-    if (filter === "all" && productList?.length! === 0)
+    if (filter === "all" && productList?.pages[0].length! === 0)
       setNotProducts(true);
-    else if (filter === "all" && productList?.length! > 0)
+    else if (filter === "all" && productList?.pages[0].length! > 0)
       setNotProducts(false);
   }, [filter, productList]);
 
-  const renderItem = useCallback((
-    { item }: { item: ProductResponse }
-  ) => (
-    <ProductListItem
-      product={item}
-      onPress={() => handleSelectItem(item)}
-    />
-  ), [])
+  const data = productList?.pages.flatMap((page) => page);
 
-  const emptyList = productListFetching
-    ? <ProductListLoadingSkeleton />
-    : <NoProductsFound filter={noProducts ? "all" : filter} />
+  const renderItem = useCallback(
+    ({ item }: { item: ProductResponse }) => (
+      <ProductListItem product={item} onPress={() => handleSelectItem(item)} />
+    ),
+    []
+  );
+
+  const emptyList = productListFetching ? (
+    <ProductListLoadingSkeleton />
+  ) : (
+    <NoProductsFound filter={noProducts ? "all" : filter} />
+  );
 
   return (
     <ScreenContainer withHeader>
@@ -119,7 +122,7 @@ const Products = () => {
           ),
         }}
       />
-      <Column space="4" height="full" pt="4" py="6" >
+      <Column space="4" height="full" pt="4" py="6">
         <ProdcutListFilter
           filter={filter}
           handleSetFilter={(filter) => setFilter(filter)}
@@ -129,28 +132,32 @@ const Products = () => {
             contentContainerStyle={{ flexGrow: 1 }}
             ListEmptyComponent={emptyList}
             ItemSeparatorComponent={() => <Divider />}
-            data={productList}
+            data={data}
             renderItem={renderItem}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => {
+              if (!productListFetching && productListHasNextPage)
+                productListFetchNextPage();
+            }}
           />
         </Box>
-        {
-          productList?.length! > 0 || (filter !== "all" && !noProducts) ? (
-            <Button
-              alignSelf="flex-end"
-              size="sm"
-              px="4"
-              startIcon={<AddIcon color={colors.white} />}
-              borderRadius="full"
-              onPress={() => {
-                router.push(Routes.NEW_PRODUCT);
-              }}
-            >
-              Add Product
-            </Button>
-          ) : undefined
-        }
-      </Column >
-    </ScreenContainer >
+        {productList?.pages[0].length! > 0 ||
+        (filter !== "all" && !noProducts) ? (
+          <Button
+            alignSelf="flex-end"
+            size="sm"
+            px="4"
+            startIcon={<AddIcon color={colors.white} />}
+            borderRadius="full"
+            onPress={() => {
+              router.push(Routes.NEW_PRODUCT);
+            }}
+          >
+            Add Product
+          </Button>
+        ) : undefined}
+      </Column>
+    </ScreenContainer>
   );
 };
 
