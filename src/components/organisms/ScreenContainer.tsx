@@ -18,7 +18,7 @@ const ScreenContainer = ({ children, withHeader = false }: ScreenContainerProps)
     }}
       edges={edges}
     >
-      <StatusBar backgroundColor="white" />
+      <StatusBar style='dark' backgroundColor="white" />
       {children}
     </SafeAreaView >
   )
