@@ -1,5 +1,5 @@
-import { Stack, router } from "expo-router";
-import React, { useEffect } from "react";
+import { Stack, router, useFocusEffect } from "expo-router";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
   MainButtons,
   ProductAlertCard,
@@ -19,6 +19,7 @@ import { MembershipStatus } from "@listed-types";
 
 const Home = () => {
   const { userDetails, userMembership } = useAuth();
+  const firstMount = useRef(true)
 
   const {
     data: storeDetails,
@@ -30,7 +31,19 @@ const Home = () => {
     data: analyticsSummaryDetails,
     isError: analyticsSummaryError,
     isFetching: analyticsSummaryFetching,
+    refetch: refetchAnalyticsSummary,
   } = useGetAnalyticsSummary(userDetails?.currentStoreId);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (firstMount.current) {
+        firstMount.current = false;
+        return;
+      }
+
+      refetchAnalyticsSummary()
+    }, [refetchAnalyticsSummary])
+  )
 
   useEffect(() => {
     if (userMembership?.membershipStatus === MembershipStatus.INACTIVE)
@@ -41,7 +54,7 @@ const Home = () => {
     <ScreenContainer>
       <Stack.Screen options={{ headerShown: false }} />
       {!userDetails?.currentStoreId ||
-      userMembership?.membershipStatus === MembershipStatus.PENDING ? (
+        userMembership?.membershipStatus === MembershipStatus.PENDING ? (
         <DashboardNoStore storeDetails={storeDetails!} />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
