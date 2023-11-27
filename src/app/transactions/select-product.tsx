@@ -19,14 +19,15 @@ const SelectProduct = () => {
     data: productList,
     isError: productListError,
     isFetching: productListFetching,
+    hasNextPage: productListHasNextPage,
+    fetchNextPage: productListFetchNextPage,
   } = useGetProductList(
     userDetails?.currentStoreId as number,
     undefined,
     undefined,
     undefined,
     undefined,
-    1,
-    100
+    50,
   );
 
   const handleSearch = () => {
@@ -36,11 +37,15 @@ const SelectProduct = () => {
         nextRoute: route,
       },
     });
-  }
+  };
 
-  const emptyList = productListFetching
-  ? <ProductListLoadingSkeleton />
-  : <NoProductsFound />
+  const data = productList?.pages.flatMap((page) => page);
+
+  const emptyList = productListFetching ? (
+    <ProductListLoadingSkeleton />
+  ) : (
+    <NoProductsFound />
+  );
 
   return (
     <ScreenContainer withHeader>
@@ -63,22 +68,31 @@ const SelectProduct = () => {
           </Box>
         }
         ItemSeparatorComponent={() => <Divider />}
-        data={productList}
+        data={data}
         renderItem={({ item }) => (
           <ProductListItem
             product={item}
             onPress={() => {
               router.push({
-                pathname: route === Routes.NEW_INCOMING ? Routes.NEW_INCOMING : Routes.TRANSACTIONS,
+                pathname:
+                  route === Routes.NEW_INCOMING
+                    ? Routes.NEW_INCOMING
+                    : Routes.TRANSACTIONS,
                 params: {
                   productId: item.id,
-                  product: `${item.name}${item.variant ? ` - ${item.variant}` : ""
-                    }`,
+                  product: `${item.name}${
+                    item.variant ? ` - ${item.variant}` : ""
+                  }`,
                 },
               });
             }}
           />
         )}
+        onEndReachedThreshold={0.5}
+        onEndReached={() => {
+          if (!productListFetching && productListHasNextPage)
+            productListFetchNextPage();
+        }}
       />
     </ScreenContainer>
   );

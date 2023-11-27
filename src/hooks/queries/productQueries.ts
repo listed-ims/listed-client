@@ -10,7 +10,7 @@ import {
   validateBarcodeService,
 } from "@listed-services";
 import { ProductResponse } from "@listed-types";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export const useGetProductList = (
@@ -19,24 +19,24 @@ export const useGetProductList = (
   keyword?: string,
   filter?: ProductFilter,
   sort?: string,
-  pageNumber?: number,
   pageSize?: number
 ) => {
-  return useQuery(
-    [
-      GET_PRODUCTS,
-      { storeId, barcode, keyword, filter, sort, pageNumber, pageSize },
-    ],
-    () =>
+  return useInfiniteQuery(
+    [GET_PRODUCTS, { storeId, barcode, keyword, filter, sort, pageSize }],
+    ({ pageParam = 1 }) =>
       getProductsService(
         storeId,
         barcode,
         keyword,
         filter,
         sort,
-        pageNumber,
+        pageParam,
         pageSize
-      )
+      ),
+    {
+      getNextPageParam: (lastPage, pages) =>
+        lastPage.length < pageSize! ? undefined : pages.length + 1,
+    }
   );
 };
 
