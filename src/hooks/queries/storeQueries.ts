@@ -1,7 +1,7 @@
 import { GET_STORE, GET_STORES } from "@listed-constants";
 import { getStoreService, getStoresService } from "@listed-services";
 import { StoreResponse } from "@listed-types";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export const useGetStoreDetails = (storeId?: number) => {
@@ -14,8 +14,13 @@ export const useGetStoreDetails = (storeId?: number) => {
   );
 };
 
-export const useGetStoreList = (pageNumber?: number, pageSize?: number) => {
-  return useQuery([GET_STORES, { pageNumber, pageSize }], () =>
-    getStoresService(pageNumber, pageSize)
+export const useGetStoreList = (pageSize?: number) => {
+  return useInfiniteQuery(
+    [GET_STORES, { pageSize }],
+    ({ pageParam = 1 }) => getStoresService(pageParam, pageSize),
+    {
+      getNextPageParam: (lastPage, pages) =>
+        lastPage.length < pageSize! ? undefined : pages.length + 1,
+    }
   );
 };
