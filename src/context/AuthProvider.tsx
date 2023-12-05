@@ -11,9 +11,9 @@ import { clearToken, storeToken } from '@listed-services';
 import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 import { getItemAsync } from 'expo-secure-store';
 import { AUTH_TOKEN_KEY, Routes } from '@listed-constants';
-import { useTokenValidationMutation } from '@listed-hooks';
 import { MembershipResponse, UserResponse } from '@listed-types';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTokenValidationMutation } from 'src/hooks/mutations';
 
 interface AuthContextProps {
   isLoggedIn: boolean;
